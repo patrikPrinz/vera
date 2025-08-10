@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint packages/*/src/**/*.ts",
+    "format": "prettier --write 'packages/*/src/**/*.{ts,js,json,md}'",
+    "lint:fix": "eslint --fix packages/*/src/**/*.ts",
+    "format:check": "prettier 'packages/*/src/**/*.{ts,js,json,md}'"
   },
   "keywords": [],
   "author": "",
