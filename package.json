@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint packages/*/src/**/*.ts",
-    "format": "prettier --write 'packages/*/src/**/*.{ts,js,json,md}'",
+    "lint:check": "eslint packages/*/src/**/*.ts",
+    "format:fix": "prettier --write 'packages/*/src/**/*.{ts,js,json,md}'",
     "lint:fix": "eslint --fix packages/*/src/**/*.ts",
     "format:check": "prettier 'packages/*/src/**/*.{ts,js,json,md}'"
   },
