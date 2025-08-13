@@ -6,7 +6,7 @@ WORKDIR /app
 RUN corepack enable && corepack prepare pnpm@10 --activate
 
 # Copy workspace (root) files
-COPY pnpm-workspace.yaml package.json tsconfig.base.json ./
+COPY pnpm-workspace.yml package.json tsconfig.base.json ./
 # Copy server package files
 COPY packages/server/package.json packages/server/tsconfig.json ./packages/server/
 # Install deps (filtered for server)
