@@ -1,4 +1,12 @@
-.vscode
+.vscode/
 
-node_modules
-dist
+node_modules/
+dist/
+build/
+out/
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+*.log
+
+.env
