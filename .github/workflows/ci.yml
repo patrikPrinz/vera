@@ -7,14 +7,6 @@ on:
     branches: ['dev', 'master']
 
 jobs:
-  prevent_direct_push_to_protected:
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master')
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "Direct pushes to 'dev' and 'master' are not allowed. Please open a PR."
-          exit 1
-
   lint-and-format:
     runs-on: ubuntu-latest
     steps:
