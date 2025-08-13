@@ -4,22 +4,28 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint:check": "eslint packages/*/src/**/*.ts",
-    "format:fix": "prettier --write 'packages/*/src/**/*.{ts,js,json,md}'",
-    "lint:fix": "eslint --fix packages/*/src/**/*.ts",
-    "format:check": "prettier 'packages/*/src/**/*.{ts,js,json,md}'"
+    "build": "pnpm -r build",
+    "dev": "pnpm --filter server dev",
+    "lint": "eslint packages/*/src/**/*.ts",
+    "format": "prettier -w 'packages/*/src/**/*.{ts,js,json,md}'",
+    "ci:lint": "eslint --fix packages/*/src/**/*.ts --max-warnings=0",
+    "ci:format": "prettier -c 'packages/*/src/**/*.{ts,js,json,md}'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.11.0",
   "devDependencies": {
+    "@eslint/js": "^9.33.0",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
-    "@typescript-eslint/parser": "^8.32.1",
+    "@typescript-eslint/parser": "^8.39.1",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.0",
+    "globals": "^16.3.0",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.3"
-  }
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.39.1"
+  },
+  "private": true
 }

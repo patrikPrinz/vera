@@ -1,14 +1,28 @@
-const eslintPluginPrettier = require("eslint-plugin-prettier");
-const { defineConfig } = require("eslint/config");
+// eslint.config.js
+const js = require('@eslint/js')
+const tsParser = require('@typescript-eslint/parser')
+const prettier = require('eslint-config-prettier')
+const globals = require('globals')
 
-module.exports = defineConfig([
-	{
-    plugins: {
-      eslintPluginPrettier
+/** @type {import('eslint').Linter.FlatConfig[]} */
+module.exports = [
+  // Ignoruj buildy, lockfile a env
+  { ignores: ['**/node_modules/**', '**/dist/**', 'pnpm-lock.yaml', '.env*'] },
+
+  // Výchozí ESLint pravidla
+  js.configs.recommended,
+
+  // TS: jen parser (bez pravidel) + Node globály
+  {
+    files: ['packages/*/src/**/*.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
+      globals: { ...globals.node, ...globals.es2024 }
     },
-    files: ["packages/*/src/**/*.ts"],
-		rules: {
-			"prefer-const": "error"
-		},
-	},
-]);
+    rules: {}
+  },
+
+  // Vypne potenciální kolize se stylem (Prettier)
+  prettier
+]
