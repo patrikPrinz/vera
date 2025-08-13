@@ -23,8 +23,7 @@ jobs:
         with:
           node-version: 22
           cache: 'pnpm'
-      - run: corepack enable && corepack prepare pnpm@10 --activate
-      - run: pnpm install
+      - uses: pnpm/action-setup@v4
       - name: ESLint
         run: pnpm ci:lint
       - name: Prettier check
