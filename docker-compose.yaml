@@ -1,0 +1,25 @@
+services:
+  server:
+    build:
+      context: .
+      dockerfile: packages/server/Dockerfile
+      target: runtime   # produkční stage
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    profiles: ['prod']
+
+  server-dev:
+    build:
+      context: .
+      dockerfile: packages/server/Dockerfile
+      target: dev       # vývojová stage
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./packages/server/src:/app/packages/server/src
+    command: pnpm --filter server dev
+    profiles: ['dev']
