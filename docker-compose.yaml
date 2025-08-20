@@ -23,3 +23,15 @@ services:
       - ./packages/server/src:/app/packages/server/src
     command: pnpm --filter server dev
     profiles: ['dev']
+
+  elastic-search-dev:
+    image: elasticsearch:9.1.2
+    container_name: es-dev
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=false
+    ports:
+      - 9200:9200
