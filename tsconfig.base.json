@@ -9,11 +9,7 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
 
-    "module": "NodeNext",
     "sourceMap": true,
-
     "composite": true,
-
-    "lib": ["es2022"]
   }
 }
