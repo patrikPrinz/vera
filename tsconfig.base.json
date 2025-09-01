@@ -4,7 +4,7 @@
     "skipLibCheck": true,
     "allowJs": true,
     "resolveJsonModule": true,
-    "target": "es2022",
+    "target": "es2020",
     "moduleDetection": "force",
     "isolatedModules": true,
     "verbatimModuleSyntax": true,

@@ -10,3 +10,9 @@ tsconfig.tsbuildinfo
 *.log
 
 .env
+
+# from vue.js
+.DS_Store
+
+/tests/e2e/videos/
+/tests/e2e/screenshots/

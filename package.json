@@ -4,29 +4,37 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "pnpm -r build",
-    "dev": "pnpm --filter server dev",
-    "lint": "eslint packages/*/src/**/*.ts",
-    "format": "prettier -w 'packages/*/src/**/*.{ts,js,json,md}'",
-    "ci:lint": "eslint --fix packages/*/src/**/*.ts --max-warnings=0",
-    "ci:format": "prettier -c 'packages/*/src/**/*.{ts,js,json,md}'"
+    "build": "pnpm -r run build",
+    "dev": "pnpm -r run dev",
+    "lint": "eslint packages/*/{src,tests}/**/*.{ts,tsx,vue}",
+    "format": "prettier -w 'packages/*/{src,tests}/**/*.{ts,js,json,md}'",
+    "ci:lint": "eslint --fix packages/*/{src,tests}/**/*.{ts,tsx,vue} --max-warnings=0",
+    "ci:format": "prettier -c 'packages/*/{src,tests}/**/*.{ts,js,json,md}'"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.11.0",
   "devDependencies": {
-    "@eslint/js": "^9.33.0",
-    "@types/node": "^24.2.1",
-    "@typescript-eslint/eslint-plugin": "^8.39.1",
-    "@typescript-eslint/parser": "^8.39.1",
-    "eslint": "^9.33.0",
+    "@eslint/js": "^9.34.0",
+    "@types/node": "^24.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
+    "eslint": "^9.34.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin": "^1.0.1",
     "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-vue": "^10.4.0",
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.39.1"
+    "tslib": "^2.8.1",
+    "typescript": "^4.9.5",
+    "typescript-eslint": "^8.41.0",
+    "vite": "^7.1.3",
+    "vue-eslint-parser": "^10.2.0"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "vue": "^3.5.20"
+  }
 }
