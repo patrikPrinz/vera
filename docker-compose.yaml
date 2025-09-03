@@ -24,6 +24,31 @@ services:
     command: pnpm --filter server dev
     profiles: ['dev']
 
+  frontend:
+    build:
+      context: .
+      dockerfile: packages/frontend/Dockerfile
+      target: runtime   # produkční stage
+    ports:
+      - "8082:80"
+    environment:
+      - NODE_ENV=production
+    profiles: ['prod']
+
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: packages/frontend/Dockerfile
+      target: dev       # vývojová stage
+    ports:
+      - "8082:3001"
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./packages/frontend/src:/app/packages/frontend/src
+    command: pnpm --filter frontend dev
+    profiles: ['dev']
+
   elastic-search-dev:
     image: elasticsearch:9.1.2
     container_name: es-dev

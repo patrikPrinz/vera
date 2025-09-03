@@ -16,7 +16,7 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml tsconfig.base.json ./
 # Kopie manifestů jen pro server (a případně jeho tsconfig)
 COPY packages/server/package.json packages/server/tsconfig.json ./packages/server/
 # Instalace workspace závislostí pouze pro server a jeho závislé balíčky
-RUN pnpm install --filter server... --no-optional --no-frozen-lockfile
+RUN pnpm install --filter server... --no-frozen-lockfile
 
 # ---- builder: produkční build artefaktů ----
 FROM deps AS builder
