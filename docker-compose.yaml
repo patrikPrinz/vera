@@ -1,5 +1,6 @@
 services:
   server:
+    restart: "on-failure:10"
     build:
       context: .
       dockerfile: packages/server/Dockerfile
@@ -21,7 +22,6 @@ services:
       - NODE_ENV=development
     volumes:
       - ./packages/server/src:/app/packages/server/src
-    command: pnpm --filter server dev
     profiles: ['dev']
 
   frontend:
@@ -46,7 +46,6 @@ services:
       - NODE_ENV=development
     volumes:
       - ./packages/frontend/src:/app/packages/frontend/src
-    command: pnpm --filter frontend dev
     profiles: ['dev']
 
   elastic-search-dev:
