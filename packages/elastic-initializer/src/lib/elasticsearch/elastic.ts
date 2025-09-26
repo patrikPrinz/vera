@@ -9,8 +9,7 @@ export async function initializeIndex(
   if (!exists) {
     console.log(`Creating index ${index.index}...`);
     await connection.indices.create(index);
-  }
-  else {
+  } else {
     console.log(`Skipping. Index ${index.index} already exists.`);
   }
 }
