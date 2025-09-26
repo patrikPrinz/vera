@@ -48,9 +48,9 @@ services:
       - ./packages/frontend/src:/app/packages/frontend/src
     profiles: ['dev']
 
-  elastic-search-dev:
+  elastic-search:
     image: elasticsearch:9.1.2
-    container_name: es-dev
+    #container_name: es
     environment:
       - discovery.type=single-node
       - ELASTIC_USERNAME=elastic
@@ -63,3 +63,23 @@ services:
       - ES_JAVA_OPTS=-Xms1g -Xmx1g
     ports:
       - 9200:9200
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+      
+
+  elastic-initializer:
+    build: 
+      context: .
+      dockerfile: packages/elastic-initializer/Dockerfile
+      target: dev
+    depends_on:
+      - elastic-search
+    environment:
+      - ELASTIC_NODE=http://elastic-search:9200
+      - ELASTIC_USERNAME=elastic
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    volumes:
+      - ./packages/elastic-initializer/src:/app/packages/elastic-initializer/src
+
+volumes:
+  esdata:
