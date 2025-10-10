@@ -23,7 +23,7 @@ COPY packages/server/package.json \
   packages/server/tsconfig.json \
   ./packages/server/
 
-RUN pnpm install --filter server
+RUN pnpm install --filter server --no-frozen-lockfile
 
 
 # build: run typescript build to create production artifacts

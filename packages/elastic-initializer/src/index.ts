@@ -29,13 +29,12 @@ const MAPPINGS: estypes.IndicesCreateRequest[] = [
     index: 'bible',
     mappings: {
       properties: {
-        language: { type: 'keyword' },
         translation: { type: 'keyword' },
-        book: { type: 'keyword' },
+        book: { type: 'integer' },
         chapter: { type: 'integer' },
         verse: { type: 'integer' },
-        is_header: { type: 'boolean' },
         text: { type: 'text' },
+        is_header: { type: 'boolean' },
       },
     },
   },
