@@ -1,1 +1,2 @@
-export * from './bible_repository.js';
+export * from './bible.repository.js';
+export * from './bible.routes.js';
