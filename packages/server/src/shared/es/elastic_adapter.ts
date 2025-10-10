@@ -83,7 +83,10 @@ export default class ElasticAdapter implements ElasticPort {
     }
   }
 
-  async search<T>(index: string, query: estypes.QueryDslQueryContainer): Promise<T[] | undefined> {
+  async search<T>(
+    index: string,
+    query: estypes.QueryDslQueryContainer,
+  ): Promise<T[] | undefined> {
     try {
       const data = await this.client.search<T>({
         index: index,
@@ -92,38 +95,41 @@ export default class ElasticAdapter implements ElasticPort {
       });
 
       console.log(data);
-  
+
       return data.hits.hits
-      .map(hit => hit._source)
-      .filter((src): src is T => src !== undefined);
+        .map((hit) => hit._source)
+        .filter((src): src is T => src !== undefined);
     } catch (err) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
         return undefined;
       }
       throw err;
+    }
   }
-}
 
-  async aggregate<T>(index: string, aggregation: estypes.AggregationsAggregationContainer, query: estypes.QueryDslQueryContainer = undefined): Promise<estypes.AggregationsAggregate> {
+  async aggregate(
+    index: string,
+    aggregation: estypes.AggregationsAggregationContainer,
+    query: estypes.QueryDslQueryContainer = undefined,
+  ): Promise<estypes.AggregationsAggregate> {
     try {
       const data = await this.client.search({
         index: index,
         query: query,
         aggs: {
-          "myAgg": aggregation
+          myAgg: aggregation,
         },
         _source: true,
       });
-  
+
       return data.aggregations?.myAgg;
     } catch (err) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
         return undefined;
       }
       throw err;
+    }
   }
-}
-
 
   async delete(index: string, id: string): Promise<void> {
     await this.client.delete({ index: index, id: id });

@@ -21,8 +21,8 @@ export default class BibleRepository {
   public async getTranslationVerses(translation: string) {
     const query = {
       match: {
-        translation: translation
-      }
+        translation: translation,
+      },
     };
     return await this.adapter.search(this.index, query);
   }
@@ -30,13 +30,19 @@ export default class BibleRepository {
   public async getTranslations(): Promise<Array<BibleTranslation>> {
     const query = {
       terms: {
-        field: "translation"
-      }
+        field: 'translation',
+      },
     };
-    const data = await this.adapter.aggregate(this.index, query) as estypes.AggregationsStringTermsAggregate;
-    const buckets = data.buckets || [];
-    const translations: Array<BibleTranslation> = (buckets as Array<any>).map((element) => ({
-      translation: element.key
+    const data = (await this.adapter.aggregate(
+      this.index,
+      query,
+    )) as estypes.AggregationsStringTermsAggregate;
+    const buckets: estypes.AggregationsBuckets<estypes.AggregationsStringTermsBucket> =
+      data.buckets || [];
+    const translations: Array<BibleTranslation> = (
+      buckets as Array<estypes.AggregationsStringTermsBucket>
+    ).map((element) => ({
+      translation: element.key as string,
     }));
     return translations;
   }
@@ -46,6 +52,6 @@ export default class BibleRepository {
   }
 
   public async insertTranslation(data: Array<BibleVerse>): Promise<void> {
-    
+    await this.bulkInsert(data);
   }
 }

@@ -1,3 +1,3 @@
-export function fileToString(file) {
+export function fileToString() {
   return '';
 }
