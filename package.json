@@ -6,6 +6,7 @@
   "scripts": {
     "build": "pnpm -r run build",
     "dev": "pnpm -r run dev",
+    "test:unit": "pnpm --filter server run test:unit",
     "lint": "eslint packages/*/{src,tests}/**/*.{ts,tsx,vue}",
     "format": "prettier -w 'packages/*/{src,tests}/**/*.{ts,js,json,md}'",
     "ci:lint": "eslint --fix packages/*/{src,tests}/**/*.{ts,tsx,vue} --max-warnings=0",
