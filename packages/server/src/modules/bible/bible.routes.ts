@@ -16,14 +16,15 @@ import { elasticAdapter } from '../../shared/es/elastic_provider.js';
 
 export const router: Router = express.Router();
 
-const controller = new BibleController(new BibleRepository(elasticAdapter));
+const controller = new BibleController();
 
-router.get('/translations', async (_req, res) => {
-  const result = await controller.getTranslations();
-  res.send(result);
-});
+router.get('/text/verse/:id', controller.getVerse);
+router.get('/translations', controller.getTranslations);
+router.get('/translation/:translation/books', controller.getBooks);
+router.get('/translation/:translation/book/:book/chapters', controller.getChapters);
+router.get('/translation/:translation/book/:book/chapter/:chapter/verses', controller.getVerses);
 
 router.get('/test-data', async (_req, res) => {
-  const result = await controller.parseData();
+  const result = await controller.parseData(_req, res);
   res.send(result);
 });

@@ -12,6 +12,11 @@ abstract class TranslationParser {
     this.rawData = data;
   }
 
+  // TODO: Renumber protestant books and drop orthodox.
+  protected renumberBooks(data: BibleVerse[]): BibleVerse[] {
+    return data;
+  }
+
   public async getData(): Promise<BibleVerse[]> {
     if (this.data.length == 0) {
       this.data = await this.parseData();
@@ -78,9 +83,9 @@ export class TranslationParserXml extends TranslationParser {
             const verseId: unknown = verse.$.vnumber;
             const verseData = {
               translation: translationCode,
-              book: bookId as number,
-              chapter: chapterId as number,
-              verse: verseId as number,
+              book: Number(bookId),
+              chapter: Number(chapterId),
+              verse: Number(verseId),
               text: verse._,
               isHeader: false,
             };

@@ -111,7 +111,7 @@ export default class ElasticAdapter implements ElasticPort {
     index: string,
     aggregation: estypes.AggregationsAggregationContainer,
     query: estypes.QueryDslQueryContainer = undefined,
-  ): Promise<estypes.AggregationsAggregate> {
+  ): Promise<estypes.AggregationsAggregate | undefined> {
     try {
       const data = await this.client.search({
         index: index,

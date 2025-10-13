@@ -10,12 +10,14 @@ export interface BibleVerse {
 
 export interface BibleChapter {
   translation: string;
-  book: string;
+  book: number;
+  chapter: number;
   verses?: BibleVerse[];
 }
 
 export interface BibleBook {
   translation: string;
+  book: number;
   chapters?: BibleChapter[];
 }
 
