@@ -1,5 +1,5 @@
-import { BibleVerse } from "../bible.types.js";
-import { TranslationParserXml } from "./translation_parser.js";
+import { BibleVerse } from '../bible.types.js';
+import { TranslationParserXml } from './translation_parser.js';
 
 const sampleXml = `
     <?xml version="1.0" encoding="utf-8"?>
@@ -8,7 +8,7 @@ const sampleXml = `
     <date>2009-01-23</date>
     <title>Czech Ekumenicky Cesky preklad</title>
     <creator>Pan Tau</creator>
-    <description>Czech Ekumenicky Cesky preklad: Bible Pismo svate Stareho i Noveho Zakona podle ekumenickeho vydani z r. 1985 (c) Ekumenicka\par rada cirkvi v CR.</description>
+    <description>Czech Ekumenicky Cesky preklad: Bible Pismo svate Stareho i Noveho Zakona podle ekumenickeho vydani z r. 1985 (c) Ekumenicka par rada cirkvi v CR.</description>
     <publisher>graphic artist</publisher>
     <contributors>Sword Project</contributors>
     <type>bible text</type>
@@ -28,19 +28,19 @@ const sampleXml = `
 `;
 
 const goodXml: BibleVerse[] = [
-    {
-        translation: 'CZECEP',
-        book: 1,
-        chapter: 1,
-        verse: 1,
-        text: "Na počátku stvořil Bůh nebe a zemi.",
-        isHeader: false
-    }
+  {
+    translation: 'CZECEP',
+    book: 1,
+    chapter: 1,
+    verse: 1,
+    text: 'Na počátku stvořil Bůh nebe a zemi.',
+    isHeader: false,
+  },
 ];
 
 describe('Test XML parser.', () => {
   test('Test testing', async () => {
-      const parser = new TranslationParserXml(sampleXml);
-      expect(await parser.getData()).toEqual(goodXml);
+    const parser = new TranslationParserXml(sampleXml);
+    expect(await parser.getData()).toEqual(goodXml);
   });
 });
