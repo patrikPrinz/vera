@@ -1,7 +1,11 @@
 import { estypes } from '@elastic/elasticsearch';
 import ElasticAdapter from '../../shared/es/elastic_adapter.js';
-import { BibleBook, BibleChapter, BibleTranslation, BibleVerse } from './bible.types.js';
-import { match } from 'assert';
+import {
+  BibleBook,
+  BibleChapter,
+  BibleTranslation,
+  BibleVerse,
+} from './bible.types.js';
 
 export default class BibleRepository {
   protected index: string;
@@ -20,7 +24,9 @@ export default class BibleRepository {
     };
   }
 
-  public async getTranslationVerses(translation: string): Promise<BibleVerse[]> {
+  public async getTranslationVerses(
+    translation: string,
+  ): Promise<BibleVerse[]> {
     const query = {
       match: {
         translation: translation,
@@ -54,21 +60,25 @@ export default class BibleRepository {
 
   public async getBooks(translation: string): Promise<BibleBook[]> {
     const query = {
-      match: { translation: translation }
+      match: { translation: translation },
     };
     const aggregation = {
       terms: {
-        field: "book",
+        field: 'book',
       },
       aggs: {
         sort_buckets: {
           bucket_sort: {
-            sort: [{ _key: "asc" }]
-          }
-        }
-      }
+            sort: [{ _key: 'asc' }],
+          },
+        },
+      },
     };
-    const data = (await this.adapter.aggregate(this.index, aggregation, query))  as estypes.AggregationsStringTermsAggregate;
+    const data = (await this.adapter.aggregate(
+      this.index,
+      aggregation,
+      query,
+    )) as estypes.AggregationsStringTermsAggregate;
 
     const buckets: estypes.AggregationsBuckets<estypes.AggregationsStringTermsBucket> =
       data.buckets || [];
@@ -83,28 +93,35 @@ export default class BibleRepository {
     return books;
   }
 
-  public async getChapters(translation: string, book: number): Promise<BibleChapter[]> {
+  public async getChapters(
+    translation: string,
+    book: number,
+  ): Promise<BibleChapter[]> {
     const query = {
       bool: {
         must: [
           { match: { translation: translation } },
-          { match: { book: book} }
-        ]
-      }
+          { match: { book: book } },
+        ],
+      },
     };
     const aggregation = {
       terms: {
-        field: "chapter",
+        field: 'chapter',
       },
       aggs: {
         sort_buckets: {
           bucket_sort: {
-            sort: [{ _key: "asc" }]
-          }
-        }
-      }
+            sort: [{ _key: 'asc' }],
+          },
+        },
+      },
     };
-    const data = (await this.adapter.aggregate(this.index, aggregation, query))  as estypes.AggregationsStringTermsAggregate;
+    const data = (await this.adapter.aggregate(
+      this.index,
+      aggregation,
+      query,
+    )) as estypes.AggregationsStringTermsAggregate;
 
     const buckets: estypes.AggregationsBuckets<estypes.AggregationsStringTermsBucket> =
       data.buckets || [];
@@ -113,29 +130,38 @@ export default class BibleRepository {
       buckets as Array<estypes.AggregationsStringTermsBucket>
     ).map((element) => ({
       translation: translation,
-      book: book as number,
-      chapter: element.key as number
+      book: book,
+      chapter: element.key as number,
     }));
 
     return chapters;
   }
 
-  public async getVerses(translation: string, book: number, chapter: number): Promise<BibleVerse[]> {
+  public async getVerses(
+    translation: string,
+    book: number,
+    chapter: number,
+  ): Promise<BibleVerse[]> {
     const query = {
       bool: {
         must: [
-          { match: {
-            translation: translation,
-          }},
-          { match: {
-            book: book
-          }},
-          { match: {
-            chapter: chapter
-          }}
-        ]
-      }
-      
+          {
+            match: {
+              translation: translation,
+            },
+          },
+          {
+            match: {
+              book: book,
+            },
+          },
+          {
+            match: {
+              chapter: chapter,
+            },
+          },
+        ],
+      },
     };
     return await this.adapter.search(this.index, query);
   }

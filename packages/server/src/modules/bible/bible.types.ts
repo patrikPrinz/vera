@@ -1,3 +1,6 @@
+import type { Request } from 'express';
+import type BibleRepository from './bible.repository.js';
+
 export interface BibleVerse {
   id?: string;
   translation: string;
@@ -24,4 +27,8 @@ export interface BibleBook {
 export interface BibleTranslation {
   translation: string;
   books?: BibleBook[];
+}
+
+export interface InjectionRequest extends Request {
+  repository: BibleRepository;
 }

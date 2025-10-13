@@ -1,7 +1,5 @@
 import express from 'express';
 
-import { elasticAdapter } from './shared/es/index.js';
-import ElasticPort from './shared/es/elastic_port.js';
 import { bibleServiceInjector, router } from './modules/bible/index.js';
 
 const app = express();

@@ -1,9 +1,14 @@
-import { elasticAdapter } from "../../shared/es/elastic_provider.js";
-import BibleRepository from "./bible.repository.js";
+import BibleRepository from './bible.repository.js';
+import { Response, NextFunction } from 'express';
 
-export const bibleServiceInjector = async (req, _res, next) => {
-    req.services = {
-        bibleRepository: new BibleRepository(elasticAdapter)
-    };
-    next();
+import { elasticAdapter } from '../../shared/es/elastic_provider.js';
+import { InjectionRequest } from './bible.types.js';
+
+export const bibleServiceInjector = (
+  req: InjectionRequest,
+  _res: Response,
+  next: NextFunction,
+) => {
+  req.repository = new BibleRepository(elasticAdapter);
+  next();
 };
