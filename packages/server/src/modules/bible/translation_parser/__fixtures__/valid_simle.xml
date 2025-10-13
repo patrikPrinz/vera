@@ -1,8 +1,4 @@
-import { BibleVerse } from "../bible.types.js";
-import { TranslationParserXml } from "./translation_parser.js";
-
-const sampleXml = `
-    <?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
     <XMLBIBLE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="zef2005.xsd" version="2.0.1.18" status="v" biblename="Czech Ekumenicky Cesky preklad" type="x-bible" revision="0">
   <INFORMATION>
     <date>2009-01-23</date>
@@ -25,22 +21,3 @@ const sampleXml = `
     </CHAPTER>
   </BIBLEBOOK>
 </XMLBIBLE>
-`;
-
-const goodXml: BibleVerse[] = [
-    {
-        translation: 'CZECEP',
-        book: 1,
-        chapter: 1,
-        verse: 1,
-        text: "Na počátku stvořil Bůh nebe a zemi.",
-        isHeader: false
-    }
-];
-
-describe('Test XML parser.', () => {
-  test('Test testing', async () => {
-      const parser = new TranslationParserXml(sampleXml);
-      expect(await parser.getData()).toEqual(goodXml);
-  });
-});

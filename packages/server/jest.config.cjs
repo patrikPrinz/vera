@@ -13,5 +13,8 @@ module.exports = {
       useESM: true,
     },
   },
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
 };
