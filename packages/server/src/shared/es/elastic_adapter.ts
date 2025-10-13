@@ -94,8 +94,6 @@ export default class ElasticAdapter implements ElasticPort {
         _source: true,
       });
 
-      console.log(data);
-
       return data.hits.hits
         .map((hit) => hit._source)
         .filter((src): src is T => src !== undefined);

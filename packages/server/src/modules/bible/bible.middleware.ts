@@ -5,6 +5,5 @@ export const bibleServiceInjector = async (req, _res, next) => {
     req.services = {
         bibleRepository: new BibleRepository(elasticAdapter)
     };
-    console.log(req);
     next();
 };
