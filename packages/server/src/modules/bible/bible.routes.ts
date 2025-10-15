@@ -28,7 +28,4 @@ router.get(
   controller.getVerses,
 );
 
-router.get('/test-data', async (_req, res) => {
-  const result = await controller.parseData(_req, res);
-  res.send(result);
-});
+router.get('/test-data', controller.parseData);

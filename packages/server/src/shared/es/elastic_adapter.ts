@@ -64,7 +64,7 @@ export default class ElasticAdapter implements ElasticPort {
     await this.client.bulk({ body: data });
   }
 
-  async get<T>(index: string, id: string): Promise<T | undefined> {
+  async get(index: string, id: string): Promise<unknown> {
     try {
       const data = await this.client.get({
         index: index,
@@ -74,7 +74,7 @@ export default class ElasticAdapter implements ElasticPort {
       if (!data.found) {
         return undefined;
       }
-      return data._source as T;
+      return data._source;
     } catch (err: unknown) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
         return undefined;
@@ -83,20 +83,18 @@ export default class ElasticAdapter implements ElasticPort {
     }
   }
 
-  async search<T>(
+  async search(
     index: string,
     query: estypes.QueryDslQueryContainer,
-  ): Promise<T[] | undefined> {
+  ): Promise<estypes.SearchHit[] | undefined> {
     try {
-      const data = await this.client.search<T>({
+      const data = await this.client.search({
         index: index,
         query: query,
         _source: true,
       });
 
-      return data.hits.hits
-        .map((hit) => hit._source)
-        .filter((src): src is T => src !== undefined);
+      return data.hits.hits;
     } catch (err) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
         return undefined;

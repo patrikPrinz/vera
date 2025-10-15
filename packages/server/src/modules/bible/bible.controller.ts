@@ -72,13 +72,14 @@ export default class BibleController {
   getVerse = async (req: InjectionRequest, res: Response) => {
     try {
       const data = await req.repository.getVerseById(req.params.id);
+      console.log(data);
       res.send(data);
     } catch (_error) {
       res.status(500).json({ error: 'Server error.' });
     }
   };
 
-  public async parseData(req: InjectionRequest, _res: Response) {
+  parseData = async(req: InjectionRequest, res: Response) => {
     const testData = `
             <?xml version="1.0" encoding="utf-8"?>
 <XMLBIBLE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="zef2005.xsd" version="2.0.1.18" status="v" biblename="Czech Ekumenicky Cesky preklad" type="x-bible" revision="0">
@@ -104,6 +105,6 @@ export default class BibleController {
     const data = await parser.getData();
 
     await req.repository.bulkInsert(data);
-    return data;
+    res.send(data);
   }
 }

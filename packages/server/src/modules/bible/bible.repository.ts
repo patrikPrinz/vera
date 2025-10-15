@@ -16,12 +16,19 @@ export default class BibleRepository {
     this.adapter = adapter;
   }
 
-  public async getVerseById(id: string): Promise<BibleVerse> {
-    const data = await this.adapter.get<BibleVerse>(this.index, id);
+  public async getVerseById(id: string): Promise<BibleVerse | undefined> {
+    const data = (await this.adapter.get(this.index, id)) as BibleVerse;
+    if (data === undefined) {
+      return undefined;
+    }
     return {
-      ...data,
-      id,
-    };
+      id: id,
+      book: Number(data.book),
+      chapter: Number(data.chapter),
+      verse: Number(data.verse),
+      text: data.text,
+      isHeader: data.isHeader,
+    } as BibleVerse;
   }
 
   public async getTranslationVerses(
@@ -32,7 +39,22 @@ export default class BibleRepository {
         translation: translation,
       },
     };
-    return await this.adapter.search(this.index, query);
+    const data = await this.adapter.search(this.index, query);
+    if (data === undefined) {
+      return [];
+    }
+    const verses = data.map((element) => {
+      const fields = element._source as BibleVerse;
+      return {
+        id: element._id,
+        book: Number(fields.book),
+        chapter: Number(fields.chapter),
+        verse: Number(fields.verse),
+        text: fields.text,
+        isHeader: fields.isHeader,
+      } as BibleVerse;
+    });
+    return verses;
   }
 
   public async getTranslations(): Promise<Array<BibleTranslation>> {
@@ -46,12 +68,10 @@ export default class BibleRepository {
       query,
     )) as estypes.AggregationsStringTermsAggregate;
 
-    const buckets: estypes.AggregationsBuckets<estypes.AggregationsStringTermsBucket> =
-      data.buckets || [];
+    const buckets = (data.buckets ||
+      []) as estypes.AggregationsStringTermsBucket[];
 
-    const translations: Array<BibleTranslation> = (
-      buckets as Array<estypes.AggregationsStringTermsBucket>
-    ).map((element) => ({
+    const translations: BibleTranslation[] = buckets.map((element) => ({
       translation: element.key as string,
     }));
 
@@ -80,12 +100,10 @@ export default class BibleRepository {
       query,
     )) as estypes.AggregationsStringTermsAggregate;
 
-    const buckets: estypes.AggregationsBuckets<estypes.AggregationsStringTermsBucket> =
-      data.buckets || [];
+    const buckets = (data.buckets ||
+      []) as estypes.AggregationsStringTermsBucket[];
 
-    const books: BibleBook[] = (
-      buckets as Array<estypes.AggregationsStringTermsBucket>
-    ).map((element) => ({
+    const books: BibleBook[] = buckets.map((element) => ({
       translation: translation,
       book: element.key as number,
     }));
@@ -123,12 +141,10 @@ export default class BibleRepository {
       query,
     )) as estypes.AggregationsStringTermsAggregate;
 
-    const buckets: estypes.AggregationsBuckets<estypes.AggregationsStringTermsBucket> =
-      data.buckets || [];
+    const buckets = (data.buckets ||
+      []) as estypes.AggregationsStringTermsBucket[];
 
-    const chapters: BibleChapter[] = (
-      buckets as Array<estypes.AggregationsStringTermsBucket>
-    ).map((element) => ({
+    const chapters: BibleChapter[] = buckets.map((element) => ({
       translation: translation,
       book: book,
       chapter: element.key as number,
@@ -163,7 +179,24 @@ export default class BibleRepository {
         ],
       },
     };
-    return await this.adapter.search(this.index, query);
+    const data = await this.adapter.search(this.index, query);
+    console.log(data);
+    if (data === undefined) {
+      return [];
+    }
+    const verses = data.map((element) => {
+      const fields = element._source as BibleVerse;
+      console.log(fields);
+      return {
+        id: element._id,
+        book: Number(fields.book),
+        chapter: Number(fields.chapter),
+        verse: Number(fields.verse),
+        text: fields.text,
+        isHeader: fields.isHeader,
+      } as BibleVerse;
+    });
+    return verses;
   }
 
   public async bulkInsert(data: Array<BibleVerse>): Promise<void> {
