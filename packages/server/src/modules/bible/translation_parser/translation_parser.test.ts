@@ -9,7 +9,13 @@ function loadFixture(file: string) {
   return data;
 }
 
-const xmlSamples = [[loadFixture('valid_simple.xml'), xmlData.valid_simple.data, xmlData.valid_simple.metadata]];
+const xmlSamples = [
+  [
+    loadFixture('valid_simple.xml'),
+    xmlData.valid_simple.data,
+    xmlData.valid_simple.metadata,
+  ],
+];
 
 describe('Test XML parser.', () => {
   test.each(xmlSamples)('Test XML parser', async (input, data, metadata) => {
