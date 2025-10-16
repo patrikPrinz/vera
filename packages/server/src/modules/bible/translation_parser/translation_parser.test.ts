@@ -1,46 +1,20 @@
-import { BibleVerse } from '../bible.types.js';
 import { TranslationParserXml } from './translation_parser.js';
 
-const sampleXml = `
-    <?xml version="1.0" encoding="utf-8"?>
-    <XMLBIBLE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="zef2005.xsd" version="2.0.1.18" status="v" biblename="Czech Ekumenicky Cesky preklad" type="x-bible" revision="0">
-  <INFORMATION>
-    <date>2009-01-23</date>
-    <title>Czech Ekumenicky Cesky preklad</title>
-    <creator>Pan Tau</creator>
-    <description>Czech Ekumenicky Cesky preklad: Bible Pismo svate Stareho i Noveho Zakona podle ekumenickeho vydani z r. 1985 (c) Ekumenicka par rada cirkvi v CR.</description>
-    <publisher>graphic artist</publisher>
-    <contributors>Sword Project</contributors>
-    <type>bible text</type>
-    <identifier>CZECEP</identifier>
-    <source>http://www.crosswire.org/sword/servlet/SwordMod.Verify?modName=CzeCEP</source>
-    <language>CZE</language>
-    <coverage>provide the bible to the world</coverage>
-    <rights>
-    </rights>
-  </INFORMATION>
-  <BIBLEBOOK bnumber="1" bname="1 Mose" bsname="1Mo">
-    <CHAPTER cnumber="1">
-      <VERS vnumber="1">Na počátku stvořil Bůh nebe a zemi.</VERS>
-    </CHAPTER>
-  </BIBLEBOOK>
-</XMLBIBLE>
-`;
+import { xmlData } from './__fixtures__/xmlData.js';
 
-const goodXml: BibleVerse[] = [
-  {
-    translation: 'CZECEP',
-    book: 1,
-    chapter: 1,
-    verse: 1,
-    text: 'Na počátku stvořil Bůh nebe a zemi.',
-    isHeader: false,
-  },
-];
+import fs from 'fs';
+
+function loadFixture(file: string) {
+  const data = fs.readFileSync(`${__dirname}/__fixtures__/${file}`, 'utf-8');
+  return data;
+}
+
+const xmlSamples = [[loadFixture('valid_simple.xml'), xmlData.valid_simple.data, xmlData.valid_simple.metadata]];
 
 describe('Test XML parser.', () => {
-  test('Test testing', async () => {
-    const parser = new TranslationParserXml(sampleXml);
-    expect(await parser.getData()).toEqual(goodXml);
+  test.each(xmlSamples)('Test XML parser', async (input, data, metadata) => {
+    const parser = new TranslationParserXml(input as string);
+    expect(await parser.getData()).toEqual(data);
+    expect(await parser.getMetadata()).toEqual(metadata);
   });
 });

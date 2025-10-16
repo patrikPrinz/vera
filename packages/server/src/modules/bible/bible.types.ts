@@ -29,6 +29,24 @@ export interface BibleTranslation {
   books?: BibleBook[];
 }
 
+export interface BibleTranslationMetadata {
+  code: string;
+  language: string;
+  date: string;
+  creator: string;
+  source: string;
+  books: {
+    bookNumber: number;
+    name: string;
+    code: string;
+  }[];
+}
+
+export interface BibleTranslationContainer {
+  data: BibleVerse[];
+  metadata: BibleTranslationMetadata;
+}
+
 export interface InjectionRequest extends Request {
   repository: BibleRepository;
 }

@@ -79,7 +79,7 @@ export default class BibleController {
     }
   };
 
-  parseData = async(req: InjectionRequest, res: Response) => {
+  parseData = async (req: InjectionRequest, res: Response) => {
     const testData = `
             <?xml version="1.0" encoding="utf-8"?>
 <XMLBIBLE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="zef2005.xsd" version="2.0.1.18" status="v" biblename="Czech Ekumenicky Cesky preklad" type="x-bible" revision="0">
@@ -104,7 +104,7 @@ export default class BibleController {
     const parser = new TranslationParserXml(testData);
     const data = await parser.getData();
 
-    await req.repository.bulkInsert(data);
+    await req.repository.bulkInsert([]);
     res.send(data);
-  }
+  };
 }
