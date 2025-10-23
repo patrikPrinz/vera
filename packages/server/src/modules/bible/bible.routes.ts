@@ -2,7 +2,10 @@ import express, { Router } from 'express';
 import multer from 'multer';
 
 import BibleController from './bible.controller.js';
-import { bibleServiceInjector, TranslationParserInjector } from './bible.middleware.js';
+import {
+  bibleServiceInjector,
+  TranslationParserInjector,
+} from './bible.middleware.js';
 
 export const router: Router = express.Router();
 
