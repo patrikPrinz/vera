@@ -1,5 +1,6 @@
 import type { Request } from 'express';
 import type BibleRepository from './bible.repository.js';
+import type { TranslationParserXml } from './translation_parser/translation_parser.js';
 
 export interface BibleVerse {
   id?: string;
@@ -30,10 +31,11 @@ export interface BibleTranslation {
 }
 
 export interface BibleTranslationMetadata {
+  id?: string;
   code: string;
-  language: string;
-  date: string;
-  creator: string;
+  language?: string;
+  date?: Date;
+  creator?: string;
   source: string;
   books: {
     bookNumber: number;
@@ -48,5 +50,8 @@ export interface BibleTranslationContainer {
 }
 
 export interface InjectionRequest extends Request {
-  repository: BibleRepository;
+  context: {
+    repository?: BibleRepository;
+    parser?: TranslationParserXml;
+  };
 }

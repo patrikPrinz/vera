@@ -7,7 +7,17 @@ import {
   BibleVerse,
 } from '../bible.types.js';
 
-abstract class TranslationParser {
+export class ParserError extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+
+export const translationParserProvider = (data: string, _type = undefined) => {
+  return new TranslationParserXml(data);
+};
+
+export abstract class TranslationParser {
   protected rawData: string;
   protected parsedTranslation: BibleTranslationContainer;
 
@@ -16,17 +26,24 @@ abstract class TranslationParser {
     this.parsedTranslation = undefined;
   }
 
-  public async getData(): Promise<BibleVerse[]> {
+  protected async prepareData() {
     if (this.parsedTranslation === undefined) {
       this.parsedTranslation = await this.parseTranslation();
     }
+  }
+
+  public async getTranslation(): Promise<BibleTranslationContainer> {
+    await this.prepareData();
+    return this.parsedTranslation;
+  }
+
+  public async getData(): Promise<BibleVerse[]> {
+    await this.prepareData();
     return this.parsedTranslation.data;
   }
 
   public async getMetadata(): Promise<BibleTranslationMetadata> {
-    if (this.parsedTranslation === undefined) {
-      this.parsedTranslation = await this.parseTranslation();
-    }
+    await this.prepareData();
     return this.parsedTranslation.metadata;
   }
 
@@ -81,7 +98,10 @@ export class TranslationParserXml extends TranslationParser {
 
       const parsedData = this.schema.safeParse(parsedDocument);
       if (!parsedData.success) {
-        throw new Error();
+        console.trace(parsedData.error);
+        throw new ParserError(
+          'Failed validating data. Some fields are missing.',
+        );
       }
 
       const renumberedBooks = this.renumberProtestantBooks(parsedData.data);
@@ -92,7 +112,7 @@ export class TranslationParserXml extends TranslationParser {
       };
     } catch (err) {
       console.trace(err);
-      throw new Error('Failed parsing XML. Structure is invalid.');
+      throw new ParserError('Failed parsing XML. Structure is invalid.');
     }
   }
 
@@ -104,8 +124,9 @@ export class TranslationParserXml extends TranslationParser {
     if (ret.XMLBIBLE.BIBLEBOOK.length != 66) {
       return ret;
     }
+    console.log('Parsing protestants.');
     const missingIndices = [17, 18, 20, 21, 25, 45, 46];
-    let books: typeof parsedText.XMLBIBLE.BIBLEBOOK;
+
     for (const missingIndex of missingIndices) {
       for (let book = 0; book < ret.XMLBIBLE.BIBLEBOOK.length; book += 1) {
         if (Number(ret.XMLBIBLE.BIBLEBOOK[book].$.bnumber) >= missingIndex) {
@@ -116,8 +137,6 @@ export class TranslationParserXml extends TranslationParser {
         }
       }
     }
-
-    ret.XMLBIBLE.BIBLEBOOK = books;
     return ret;
   }
 
@@ -155,7 +174,7 @@ export class TranslationParserXml extends TranslationParser {
     return {
       code: xmlMetadata.identifier[0],
       language: xmlMetadata.language[0],
-      date: xmlMetadata.date[0],
+      date: new Date(xmlMetadata.date[0]),
       creator: xmlMetadata.creator[0],
       source: xmlMetadata.source[0],
       books: parsedXml.XMLBIBLE.BIBLEBOOK.map((book) => {

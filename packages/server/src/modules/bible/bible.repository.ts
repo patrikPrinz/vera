@@ -4,20 +4,56 @@ import {
   BibleBook,
   BibleChapter,
   BibleTranslation,
+  BibleTranslationContainer,
+  BibleTranslationMetadata,
   BibleVerse,
 } from './bible.types.js';
 
 export default class BibleRepository {
-  protected index: string;
+  protected bibleIndex: string;
+  protected metadataIndex: string;
   protected adapter: ElasticAdapter;
 
   constructor(adapter: ElasticAdapter) {
-    this.index = 'bible';
+    this.bibleIndex = 'bible';
+    this.metadataIndex = 'translation_metadata';
     this.adapter = adapter;
   }
 
+  public async getTranslationMetadata(translationCode: string): Promise<BibleTranslationMetadata | undefined> {
+    const query = {
+      match: {
+        code: translationCode
+      }
+    }
+    const data = await this.adapter.search(this.metadataIndex, query);
+
+    if (data === undefined) {
+      return undefined;
+    }
+    const metadata = data.map((element) => {
+      const fields = element._source as BibleTranslationMetadata;
+      console.log(fields);
+      return {
+        id: element._id,
+        code: fields.code,
+        language: fields.language,
+        date: new Date(fields.date),
+        creator: fields.creator,
+        source: fields.source,
+        books: fields.books.map((book) => {
+          return {
+            bookNumber: Number(book.bookNumber),
+            name: book.name,
+            code: book.code}
+        }),
+      } as BibleTranslationMetadata;
+    });
+    return metadata[0];
+  }
+
   public async getVerseById(id: string): Promise<BibleVerse | undefined> {
-    const data = (await this.adapter.get(this.index, id)) as BibleVerse;
+    const data = (await this.adapter.get(this.bibleIndex, id)) as BibleVerse;
     if (data === undefined) {
       return undefined;
     }
@@ -39,7 +75,7 @@ export default class BibleRepository {
         translation: translation,
       },
     };
-    const data = await this.adapter.search(this.index, query);
+    const data = await this.adapter.search(this.bibleIndex, query);
     if (data === undefined) {
       return [];
     }
@@ -64,7 +100,7 @@ export default class BibleRepository {
       },
     };
     const data = (await this.adapter.aggregate(
-      this.index,
+      this.bibleIndex,
       query,
     )) as estypes.AggregationsStringTermsAggregate;
 
@@ -95,7 +131,7 @@ export default class BibleRepository {
       },
     };
     const data = (await this.adapter.aggregate(
-      this.index,
+      this.bibleIndex,
       aggregation,
       query,
     )) as estypes.AggregationsStringTermsAggregate;
@@ -136,7 +172,7 @@ export default class BibleRepository {
       },
     };
     const data = (await this.adapter.aggregate(
-      this.index,
+      this.bibleIndex,
       aggregation,
       query,
     )) as estypes.AggregationsStringTermsAggregate;
@@ -179,8 +215,8 @@ export default class BibleRepository {
         ],
       },
     };
-    const data = await this.adapter.search(this.index, query);
-    console.log(data);
+    const data = await this.adapter.search(this.bibleIndex, query);
+
     if (data === undefined) {
       return [];
     }
@@ -199,11 +235,36 @@ export default class BibleRepository {
     return verses;
   }
 
-  public async bulkInsert(data: Array<BibleVerse>): Promise<void> {
-    await this.adapter.bulkIndex(this.index, data);
+  public async insertTranslation(
+    translation: BibleTranslationContainer,
+  ): Promise<boolean> {
+    if (await this.uniqueTranslation(translation.metadata.code)) {
+      await this.insertTranslationVerses(translation.data);
+      await this.insertTranslationMetadata(translation.metadata);
+      return true;
+    }
+    return false;
   }
 
-  public async insertTranslation(data: Array<BibleVerse>): Promise<void> {
-    await this.bulkInsert(data);
+  protected async uniqueTranslation(translationCode: string): Promise<boolean> {
+    const translations = await this.getTranslations();
+    for (const translation of translations) {
+      if (translation.translation == translationCode) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  protected async insertTranslationVerses(
+    data: Array<BibleVerse>,
+  ): Promise<void> {
+    await this.adapter.bulkIndex(this.bibleIndex, data);
+  }
+
+  protected async insertTranslationMetadata(
+    metadata: BibleTranslationMetadata,
+  ): Promise<void> {
+    await this.adapter.index(this.metadataIndex, metadata);
   }
 }

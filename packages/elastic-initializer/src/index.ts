@@ -38,6 +38,26 @@ const MAPPINGS: estypes.IndicesCreateRequest[] = [
       },
     },
   },
+  {
+    index: 'translation_metadata',
+    mappings: {
+      properties: {
+        code: { type: 'keyword' },
+        language: { type: 'keyword' },
+        date: { type: 'date' },
+        creator: { type: 'text' },
+        source: { type: 'text' },
+        books: {
+          type: 'nested',
+          properties: {
+            bookNumber: { type: 'integer' },
+            name: { type: 'text' },
+            code: { type: 'keyword' }
+          }
+        }
+      }
+    }
+  }
 ];
 
 await waitForElastic(connection);

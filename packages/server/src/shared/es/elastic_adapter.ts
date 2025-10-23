@@ -44,12 +44,19 @@ export default class ElasticAdapter implements ElasticPort {
     document: unknown,
     id: string = undefined,
   ): Promise<void> {
-    const request = {
-      index: index,
-      id: id,
-      document: document,
-    };
-    await this.client.index(request);
+    try {
+      const request = {
+        index: index,
+        id: id,
+        document: document,
+      };
+      await this.client.index(request);
+    } catch (err) {
+      if (err instanceof errors.ResponseError && err.statusCode === 404) {
+        return undefined;
+      }
+      throw err;
+    }
   }
 
   async bulkIndex(index: string, documents: Array<unknown>): Promise<void> {
