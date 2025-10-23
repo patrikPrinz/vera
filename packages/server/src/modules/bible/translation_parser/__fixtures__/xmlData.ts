@@ -13,7 +13,7 @@ export const xmlData = {
     metadata: {
       code: 'CZECEP',
       language: 'CZE',
-      date: '2009-01-23',
+      date: new Date('2009-01-23'),
       creator: 'Pan Tau',
       source:
         'http://www.crosswire.org/sword/servlet/SwordMod.Verify?modName=CzeCEP',
