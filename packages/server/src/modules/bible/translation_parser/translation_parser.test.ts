@@ -1,8 +1,9 @@
-import { TranslationParserXml } from './translation_parser.js';
-
-import { xmlData } from './__fixtures__/xmlData.js';
-
 import fs from 'fs';
+
+import { ParserError, TranslationParserXml } from './translation_parser.js';
+import { xmlData } from './__fixtures__/xmlData.js';
+import { validFull } from './__fixtures__/valid_full.js';
+import { BibleTranslationMetadata, BibleVerse } from '../bible.types.js';
 
 function loadFixture(file: string) {
   const data = fs.readFileSync(`${__dirname}/__fixtures__/${file}`, 'utf-8');
@@ -15,12 +16,24 @@ const xmlSamples = [
     xmlData.valid_simple.data,
     xmlData.valid_simple.metadata,
   ],
+  [loadFixture('valid_full.xml'), validFull.data, validFull.metadata],
 ];
 
 describe('Test XML parser.', () => {
-  test.each(xmlSamples)('Test XML parser', async (input, data, metadata) => {
-    const parser = new TranslationParserXml(input as string);
-    expect(await parser.getData()).toEqual(data);
-    expect(await parser.getMetadata()).toEqual(metadata);
+  test.each(xmlSamples)(
+    'Test XML parser with data.',
+    async (
+      input: string,
+      data: BibleVerse[],
+      metadata: BibleTranslationMetadata,
+    ) => {
+      const parser = new TranslationParserXml(input);
+      expect(await parser.getData()).toEqual(data);
+      expect(await parser.getMetadata()).toEqual(metadata);
+    },
+  );
+  test('Test empty data.', async () => {
+    const parser = new TranslationParserXml('');
+    await expect(parser.getData()).rejects.toThrowError(ParserError);
   });
 });

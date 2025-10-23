@@ -9,7 +9,7 @@ import globals from 'globals';
 
 ///** @type {import('eslint').Linter.Config[]} */
 export default tseslint.config(
-  { ignores: ['**/node_modules/**', '**/dist/**', 'pnpm-lock.yaml', '.env*'] },
+  { ignores: ['**/node_modules/**', '**/dist/**', 'pnpm-lock.yaml', '.env*', '**/__fixtures__/**'] },
   js.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
   //...pluginVue.configs['flat/recommended'],
