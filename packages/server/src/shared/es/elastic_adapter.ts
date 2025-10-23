@@ -1,4 +1,5 @@
 import { Client, errors, estypes } from '@elastic/elasticsearch';
+
 import ElasticPort from './elastic_port.js';
 
 export default class ElasticAdapter implements ElasticPort {
@@ -44,12 +45,19 @@ export default class ElasticAdapter implements ElasticPort {
     document: unknown,
     id: string = undefined,
   ): Promise<void> {
-    const request = {
-      index: index,
-      id: id,
-      document: document,
-    };
-    await this.client.index(request);
+    try {
+      const request = {
+        index: index,
+        id: id,
+        document: document,
+      };
+      await this.client.index(request);
+    } catch (err) {
+      if (err instanceof errors.ResponseError && err.statusCode === 404) {
+        return undefined;
+      }
+      throw err;
+    }
   }
 
   async bulkIndex(index: string, documents: Array<unknown>): Promise<void> {
@@ -64,7 +72,7 @@ export default class ElasticAdapter implements ElasticPort {
     await this.client.bulk({ body: data });
   }
 
-  async get<T>(index: string, id: string): Promise<T | undefined> {
+  async get(index: string, id: string): Promise<unknown> {
     try {
       const data = await this.client.get({
         index: index,
@@ -74,7 +82,7 @@ export default class ElasticAdapter implements ElasticPort {
       if (!data.found) {
         return undefined;
       }
-      return data._source as T;
+      return data._source;
     } catch (err: unknown) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
         return undefined;
@@ -83,22 +91,18 @@ export default class ElasticAdapter implements ElasticPort {
     }
   }
 
-  async search<T>(
+  async search(
     index: string,
     query: estypes.QueryDslQueryContainer,
-  ): Promise<T[] | undefined> {
+  ): Promise<estypes.SearchHit[] | undefined> {
     try {
-      const data = await this.client.search<T>({
+      const data = await this.client.search({
         index: index,
         query: query,
         _source: true,
       });
 
-      console.log(data);
-
-      return data.hits.hits
-        .map((hit) => hit._source)
-        .filter((src): src is T => src !== undefined);
+      return data.hits.hits;
     } catch (err) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
         return undefined;
@@ -111,7 +115,7 @@ export default class ElasticAdapter implements ElasticPort {
     index: string,
     aggregation: estypes.AggregationsAggregationContainer,
     query: estypes.QueryDslQueryContainer = undefined,
-  ): Promise<estypes.AggregationsAggregate> {
+  ): Promise<estypes.AggregationsAggregate | undefined> {
     try {
       const data = await this.client.search({
         index: index,

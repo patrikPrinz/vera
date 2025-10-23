@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <XMLBIBLE xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="zef2005.xsd" version="2.0.1.18" status="v" biblename="Czech Ekumenicky Cesky preklad" type="x-bible" revision="0">
+  <INFORMATION>
+    <date>2009-01-23</date>
+    <title>Czech Ekumenicky Cesky preklad</title>
+    <creator>Pan Tau</creator>
+    <description>Czech Ekumenicky Cesky preklad: Bible Pismo svate Stareho i Noveho Zakona podle ekumenickeho vydani z r. 1985 (c) Ekumenicka\par rada cirkvi v CR.</description>
+    <publisher>graphic artist</publisher>
+    <contributors>Sword Project</contributors>
+    <type>bible text</type>
+    <identifier>CZECEP</identifier>
+    <source>http://www.crosswire.org/sword/servlet/SwordMod.Verify?modName=CzeCEP</source>
+    <language>CZE</language>
+    <coverage>provide the bible to the world</coverage>
+    <rights>
+    </rights>
+  </INFORMATION>
+  <BIBLEBOOK bnumber="1" bname="1 Mose" bsname="1Mo">
+    <CHAPTER cnumber="1">
+      <VERS vnumber="1">Na počátku stvořil Bůh nebe a zemi.</VERS>
+    </CHAPTER>
+  </BIBLEBOOK>
+</XMLBIBLE>

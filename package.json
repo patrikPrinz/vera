@@ -6,9 +6,10 @@
   "scripts": {
     "build": "pnpm -r run build",
     "dev": "pnpm -r run dev",
-    "lint": "eslint packages/*/{src,tests}/**/*.{ts,tsx,vue}",
+    "test:unit": "pnpm --filter server run test:unit",
+    "lint": "eslint --fix packages/*/{src,tests}/**/*.{ts,tsx,vue}",
     "format": "prettier -w 'packages/*/{src,tests}/**/*.{ts,js,json,md}'",
-    "ci:lint": "eslint --fix packages/*/{src,tests}/**/*.{ts,tsx,vue} --max-warnings=0",
+    "ci:lint": "eslint packages/*/{src,tests}/**/*.{ts,tsx,vue} --max-warnings=0",
     "ci:format": "prettier -c 'packages/*/{src,tests}/**/*.{ts,js,json,md}'"
   },
   "keywords": [],

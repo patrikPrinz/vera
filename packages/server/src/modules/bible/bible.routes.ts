@@ -1,29 +1,38 @@
-/*
-/ap/bible...
-GET verse/:id
-GET text/translations
-GET /text/translation/:translation
-GET /text/translation/:translation/book/:book
-GET /text/translation/:translation/book/:book/chapter/:chapter
-GET /text/translation/:translation/book/:book/chapter/:chapter/verse/:verse
-PUT /text/translation/upload
-*/
-
 import express, { Router } from 'express';
+import multer from 'multer';
+
 import BibleController from './bible.controller.js';
-import BibleRepository from './bible.repository.js';
-import { elasticAdapter } from '../../shared/es/elastic_provider.js';
+import {
+  bibleServiceInjector,
+  TranslationParserInjector,
+} from './bible.middleware.js';
 
 export const router: Router = express.Router();
 
-const controller = new BibleController(new BibleRepository(elasticAdapter));
+const controller = new BibleController();
 
-router.get('/translations', async (_req, res) => {
-  const result = await controller.getTranslations();
-  res.send(result);
+const upload = multer({
+  storage: multer.memoryStorage(),
 });
 
-router.get('/test-data', async (_req, res) => {
-  const result = await controller.parseData();
-  res.send(result);
-});
+router.use(bibleServiceInjector);
+
+router.get('/translation/:translation', controller.getMetadata);
+router.get('/text/verse/:id', controller.getVerse);
+router.get('/translations', controller.getTranslations);
+router.get('/translation/:translation/books', controller.getBooks);
+router.get(
+  '/translation/:translation/book/:book/chapters',
+  controller.getChapters,
+);
+router.get(
+  '/translation/:translation/book/:book/chapter/:chapter/verses',
+  controller.getVerses,
+);
+
+router.post(
+  '/translation',
+  upload.single('translation'),
+  TranslationParserInjector,
+  controller.uploadTranslation,
+);

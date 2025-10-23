@@ -26,7 +26,20 @@ export default tseslint.config(
       globals: { ...globals.node, ...globals.es2024 },
     },
     
-    rules: {}
+    rules: {
+      "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "args": "all",
+        "argsIgnorePattern": "^_",
+        "caughtErrors": "all",
+        "caughtErrorsIgnorePattern": "^_",
+        "destructuredArrayIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ]
+    }
   },
   {
     files: ['packages/*/src/**/*.vue'],
