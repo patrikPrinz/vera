@@ -1,4 +1,5 @@
 import { Client, errors, estypes } from '@elastic/elasticsearch';
+
 import ElasticPort from './elastic_port.js';
 
 export default class ElasticAdapter implements ElasticPort {

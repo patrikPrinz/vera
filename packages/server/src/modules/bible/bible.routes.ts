@@ -1,14 +1,18 @@
 import express, { Router } from 'express';
-import BibleController from './bible.controller.js';
 import multer from 'multer';
-import { TranslationParserInjector } from './bible.middleware.js';
+
+import BibleController from './bible.controller.js';
+import { bibleServiceInjector, TranslationParserInjector } from './bible.middleware.js';
 
 export const router: Router = express.Router();
 
 const controller = new BibleController();
+
 const upload = multer({
   storage: multer.memoryStorage(),
 });
+
+router.use(bibleServiceInjector);
 
 router.get('/translation/:translation', controller.getMetadata);
 router.get('/text/verse/:id', controller.getVerse);

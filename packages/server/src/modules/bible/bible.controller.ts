@@ -1,7 +1,7 @@
 import { Response } from 'express';
+import { z, ZodError } from 'zod';
 
 import { InjectionRequest } from './bible.types.js';
-import { z, ZodError } from 'zod';
 
 export default class BibleController {
   getMetadata = async (req: InjectionRequest, res: Response) => {
