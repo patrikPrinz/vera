@@ -1,4 +1,5 @@
 import { estypes } from '@elastic/elasticsearch';
+
 import ElasticAdapter from '../../shared/es/elastic_adapter.js';
 import {
   BibleBook,

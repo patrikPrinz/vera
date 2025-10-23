@@ -1,6 +1,6 @@
-import BibleRepository from './bible.repository.js';
 import { Response, NextFunction } from 'express';
 
+import BibleRepository from './bible.repository.js';
 import { elasticAdapter } from '../../shared/es/elastic_provider.js';
 import { InjectionRequest } from './bible.types.js';
 import { translationParserProvider } from './translation_parser/translation_parser.js';
