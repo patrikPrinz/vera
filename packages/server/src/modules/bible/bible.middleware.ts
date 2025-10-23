@@ -30,7 +30,7 @@ export const TranslationParserInjector = (
   try {
     req.context.parser = translationParserProvider(req.file.buffer.toString());
     next();
-  } catch(_error) {
+  } catch (_error) {
     res.status(400).json({ error: 'File is missing.' });
   }
 };

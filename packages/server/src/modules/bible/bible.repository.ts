@@ -20,12 +20,14 @@ export default class BibleRepository {
     this.adapter = adapter;
   }
 
-  public async getTranslationMetadata(translationCode: string): Promise<BibleTranslationMetadata | undefined> {
+  public async getTranslationMetadata(
+    translationCode: string,
+  ): Promise<BibleTranslationMetadata | undefined> {
     const query = {
       match: {
-        code: translationCode
-      }
-    }
+        code: translationCode,
+      },
+    };
     const data = await this.adapter.search(this.metadataIndex, query);
 
     if (data === undefined) {
@@ -45,7 +47,8 @@ export default class BibleRepository {
           return {
             bookNumber: Number(book.bookNumber),
             name: book.name,
-            code: book.code}
+            code: book.code,
+          };
         }),
       } as BibleTranslationMetadata;
     });

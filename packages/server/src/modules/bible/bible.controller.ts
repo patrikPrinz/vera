@@ -10,12 +10,13 @@ export default class BibleController {
         translation: z.string(),
       });
       const { translation } = schema.parse(req.params);
-      const data = await req.context.repository.getTranslationMetadata(translation);
+      const data =
+        await req.context.repository.getTranslationMetadata(translation);
       res.send(data);
-    } catch(_error) {
+    } catch (_error) {
       res.status(500).json({ error: 'Server error.' });
     }
-  }
+  };
 
   getTranslations = async (req: InjectionRequest, res: Response) => {
     try {
@@ -97,11 +98,12 @@ export default class BibleController {
   uploadTranslation = async (req: InjectionRequest, res: Response) => {
     try {
       const translation = await req.context.parser.getTranslation();
-       const insertion = await req.context.repository.insertTranslation(translation);
-       if (! insertion) {
-         res.status(409).json('Translation already exists in datatbase');
-         return;
-       }
+      const insertion =
+        await req.context.repository.insertTranslation(translation);
+      if (!insertion) {
+        res.status(409).json('Translation already exists in datatbase');
+        return;
+      }
       res.status(200).send({ status: 'OK' });
       //res.send(translation);
     } catch (_error) {

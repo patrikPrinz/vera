@@ -52,12 +52,12 @@ const MAPPINGS: estypes.IndicesCreateRequest[] = [
           properties: {
             bookNumber: { type: 'integer' },
             name: { type: 'text' },
-            code: { type: 'keyword' }
-          }
-        }
-      }
-    }
-  }
+            code: { type: 'keyword' },
+          },
+        },
+      },
+    },
+  },
 ];
 
 await waitForElastic(connection);

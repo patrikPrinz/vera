@@ -29,4 +29,3 @@ router.post(
   TranslationParserInjector,
   controller.uploadTranslation,
 );
-
