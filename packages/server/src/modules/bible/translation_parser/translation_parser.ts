@@ -13,7 +13,10 @@ export class ParserError extends Error {
   }
 }
 
-export const translationParserProvider = (data: string, _type = undefined) => {
+export const translationParserProvider = (
+  data: string,
+  _type = undefined,
+): TranslationParser => {
   return new TranslationParserXml(data);
 };
 
