@@ -46,7 +46,10 @@ export default class BibleController {
     res: Response,
   ) => {
     const { translation, book } = req.validated;
-    const data = await this.service.getChaptersService(translation, Number(book));
+    const data = await this.service.getChaptersService(
+      translation,
+      Number(book),
+    );
     res.json(data);
   };
 
@@ -55,7 +58,11 @@ export default class BibleController {
     res: Response,
   ) => {
     const { translation, book, chapter } = req.validated;
-    const data = await this.service.getVersesService(translation, Number(book), Number(chapter));
+    const data = await this.service.getVersesService(
+      translation,
+      Number(book),
+      Number(chapter),
+    );
     res.json(data);
   };
 
@@ -70,7 +77,7 @@ export default class BibleController {
   };
 
   postTranslation = async (req: Request, res: Response) => {
-    const fileString = req.file.buffer.toString()
+    const fileString = req.file.buffer.toString();
     await this.service.postTranslationService(fileString);
     res.status(200).json({ result: 'OK' });
   };
