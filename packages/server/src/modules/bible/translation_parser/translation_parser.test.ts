@@ -2,13 +2,21 @@ import fs from 'fs';
 
 import { ParserError, TranslationParserXml } from './translation_parser.js';
 import { xmlData } from './__fixtures__/xmlData.js';
-import { validFull } from './__fixtures__/valid_full.js';
-import { BibleTranslationMetadata, BibleVerse } from '../bible.types.js';
+import {
+  BibleTranslationContainer,
+  BibleTranslationMetadata,
+  BibleVerse,
+} from '../bible.types.js';
 
 function loadFixture(file: string) {
   const data = fs.readFileSync(`${__dirname}/__fixtures__/${file}`, 'utf-8');
   return data;
 }
+
+const validFull = JSON.parse(
+  loadFixture('valid_full.json'),
+) as BibleTranslationContainer;
+validFull.metadata.date = new Date(validFull.metadata.date);
 
 const xmlSamples = [
   [

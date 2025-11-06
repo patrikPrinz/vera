@@ -2,17 +2,16 @@ import { Client, errors, estypes } from '@elastic/elasticsearch';
 
 import ElasticPort from './elastic_port.js';
 
+/**
+ * Basic Elasticsearch connection class.
+ *
+ * Implements basic methods for database connection to be used in module-specific
+ * repositories.
+ */
 export default class ElasticAdapter implements ElasticPort {
-  address: string;
-  username: string;
-  password: string;
-  client: Client;
+  public client: Client;
 
   constructor(address: string, username: string, password: string) {
-    this.address = address;
-    this.username = username;
-    this.password = password;
-
     if (password && username) {
       this.client = new Client({
         node: address,
@@ -24,26 +23,32 @@ export default class ElasticAdapter implements ElasticPort {
     }
   }
 
-  async getDbInfo(): Promise<string> {
+  /**
+   * Basic method used to check if connection was established successfully
+   *
+   * @returns Name of connected elasticsearch cluster
+   * @public
+   */
+  public async getDbInfo(): Promise<string> {
     const info = await this.client.info();
     return info.cluster_name;
   }
 
-  async listIndices(): Promise<Array<string>> {
+  public async listIndices(): Promise<Array<string>> {
     const indices = await this.client.indices.get({ index: '*' });
     console.log(indices);
     return Object.keys(indices);
   }
 
-  async exists(index: string): Promise<boolean> {
+  public async exists(index: string): Promise<boolean> {
     const exists = await this.client.indices.exists({ index: index });
     return exists ? true : false;
   }
 
-  async index(
+  public async index(
     index: string,
     document: unknown,
-    id: string = undefined,
+    id?: string,
   ): Promise<void> {
     try {
       const request = {
@@ -60,7 +65,10 @@ export default class ElasticAdapter implements ElasticPort {
     }
   }
 
-  async bulkIndex(index: string, documents: Array<unknown>): Promise<void> {
+  public async bulkIndex(
+    index: string,
+    documents: Array<unknown>,
+  ): Promise<void> {
     if (documents.length == 0) {
       return;
     }
@@ -72,7 +80,7 @@ export default class ElasticAdapter implements ElasticPort {
     await this.client.bulk({ body: data });
   }
 
-  async get(index: string, id: string): Promise<unknown> {
+  public async get(index: string, id: string): Promise<unknown> {
     try {
       const data = await this.client.get({
         index: index,
@@ -91,7 +99,7 @@ export default class ElasticAdapter implements ElasticPort {
     }
   }
 
-  async search(
+  public async search(
     index: string,
     query: estypes.QueryDslQueryContainer,
   ): Promise<estypes.SearchHit[] | undefined> {
@@ -105,7 +113,7 @@ export default class ElasticAdapter implements ElasticPort {
       return data.hits.hits;
     } catch (err) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
-        return undefined;
+        return [];
       }
       throw err;
     }
