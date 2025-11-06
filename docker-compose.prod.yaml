@@ -1,0 +1,28 @@
+services:
+  server:
+    restart: "on-failure:10"
+    build:
+      target: runtime
+    environment:
+      - NODE_ENV=production
+    profiles: ['prod']
+
+  frontend:
+    build:
+      target: runtime
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "${FRONTEND_PORT:-8082}:3001"
+    profiles: ['prod']
+
+  elastic-search:
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  elastic-initializer:
+
+  kibana:
+
+volumes:
+  esdata:

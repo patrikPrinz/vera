@@ -1,0 +1,28 @@
+services:
+  server:
+    build:
+      target: dev
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./packages/server/src:/app/packages/server/src
+    profiles: ['dev']
+
+  frontend:
+    build:
+      target: dev
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "${FRONTEND_PORT:-8082}:3001"
+    volumes:
+      - ./packages/frontend/src:/app/packages/frontend/src
+    profiles: ['dev']
+
+  elastic-search:
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  elastic-initializer:
+
+  kibana:

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "pnpm -r run build",
-    "dev": "pnpm -r run dev",
+    "dev": "docker compose -f docker-compose.yaml -f docker-compose.dev.yaml up --build",
     "test:unit": "pnpm --filter server run test:unit",
     "lint": "eslint --fix packages/*/{src,tests}/**/*.{ts,tsx,vue}",
     "format": "prettier -w 'packages/*/{src,tests}/**/*.{ts,js,json,md}'",
