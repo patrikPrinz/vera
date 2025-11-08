@@ -1,7 +1,6 @@
 import { Client, errors } from '@elastic/elasticsearch';
 import type { estypes } from '@elastic/elasticsearch';
 
-
 import type ElasticPort from './elastic_port.js';
 
 /**
