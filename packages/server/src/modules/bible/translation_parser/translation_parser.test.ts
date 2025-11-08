@@ -1,14 +1,18 @@
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 import { ParserError, TranslationParserXml } from './translation_parser.js';
 import { xmlData } from './__fixtures__/xmlData.js';
-import {
+import type {
   BibleTranslationContainer,
   BibleTranslationMetadata,
   BibleVerse,
 } from '../bible.types.js';
 
 function loadFixture(file: string) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
   const data = fs.readFileSync(`${__dirname}/__fixtures__/${file}`, 'utf-8');
   return data;
 }

@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { z } from 'zod';
 
-import { ValidatedRequest } from '../../shared/request_validator/request_validator.types.js';
+import type { ValidatedRequest } from '../../shared/request_validator/request_validator.types.js';
 import {
   getBooksSchema,
   getMetadataSchema,

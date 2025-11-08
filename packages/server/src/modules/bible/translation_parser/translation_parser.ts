@@ -1,7 +1,7 @@
 import xml2js from 'xml2js';
 import { z } from 'zod';
 
-import {
+import type {
   BibleTranslationContainer,
   BibleTranslationMetadata,
   BibleVerse,

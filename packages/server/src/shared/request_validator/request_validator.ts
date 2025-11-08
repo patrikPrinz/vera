@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import { ValidationError } from '../error_handler/errors.js';
-import { ValidatedRequest } from './request_validator.types.js';
+import type { ValidatedRequest } from './request_validator.types.js';
 import { z, ZodType } from 'zod';
 
 export function requestValidator<T extends ZodType>(schema: T) {
