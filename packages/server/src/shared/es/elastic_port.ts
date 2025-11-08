@@ -1,4 +1,4 @@
-import { Client, estypes } from '@elastic/elasticsearch';
+import type { Client, estypes } from '@elastic/elasticsearch';
 
 /**
  * Iterface for Elasticsearch adapter

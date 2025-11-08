@@ -1,6 +1,7 @@
-import { Client, errors, estypes } from '@elastic/elasticsearch';
+import { Client, errors } from '@elastic/elasticsearch';
+import type { estypes } from '@elastic/elasticsearch';
 
-import ElasticPort from './elastic_port.js';
+import type ElasticPort from './elastic_port.js';
 
 /**
  * Basic Elasticsearch connection class.

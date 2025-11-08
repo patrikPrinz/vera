@@ -3,7 +3,7 @@ import {
   NotFoundError,
 } from '../../shared/error_handler/errors.js';
 import BibleRepository from './bible.repository.js';
-import {
+import type {
   BibleBook,
   BibleChapter,
   BibleTranslation,
