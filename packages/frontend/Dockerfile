@@ -13,7 +13,9 @@ COPY pnpm-workspace.yaml package.json pnpm-lock.yaml tsconfig.base.json ./
 # Kopie manifestů jen pro server (a případně jeho tsconfig)
 COPY packages/frontend/package.json packages/frontend/tsconfig.json ./packages/frontend/
 # Instalace workspace závislostí pouze pro server a jeho závislé balíčky
-RUN pnpm install --filter frontend... --no-optional --no-frozen-lockfile
+RUN pnpm install --filter frontend... --no-frozen-lockfile
+# Copy package config files from root of the package (not needed for installing dependencies)
+COPY packages/frontend/tailwind.config.cjs packages/frontend/postcss.config.cjs ./packages/frontend/
 
 # ---- builder: produkční build artefaktů ----
 FROM deps AS builder
