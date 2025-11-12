@@ -5,7 +5,12 @@ export const i18n = createI18n({
   fallbackLocale: 'cs',
   messages: {
     cs: {
-      ahoy: 'ahoy-hoy',
+      general: {
+        appName: 'Vera',
+      },
+      ahoy: 'ahoy-hoyys',
+      home: 'Domů',
+      bible: 'Bible',
     },
   },
 });

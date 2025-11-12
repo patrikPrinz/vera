@@ -15,7 +15,11 @@ COPY packages/frontend/package.json packages/frontend/tsconfig.json ./packages/f
 # Instalace workspace závislostí pouze pro server a jeho závislé balíčky
 RUN pnpm install --filter frontend... --no-frozen-lockfile
 # Copy package config files from root of the package (not needed for installing dependencies)
-COPY packages/frontend/tailwind.config.cjs packages/frontend/postcss.config.cjs ./packages/frontend/
+COPY packages/frontend/tailwind.config.cjs\
+  packages/frontend/postcss.config.cjs\
+  packages/frontend/vite.config.js\
+  packages/frontend/index.html\
+  ./packages/frontend/
 
 # ---- builder: produkční build artefaktů ----
 FROM deps AS builder
@@ -30,6 +34,7 @@ FROM deps AS dev
 ENV NODE_ENV=development
 # Volitelně lze doplnit nodemon/tsx; ponecháváme na package.json skriptech
 # Defaultní příkaz může být přepsán v docker-compose (pnpm --filter server dev)
+EXPOSE 3001
 CMD ["pnpm", "--filter", "frontend", "dev"]
 
 # ---- runtime: minimální image pro běh v produkci ----
