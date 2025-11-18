@@ -25,6 +25,8 @@ COPY packages/frontend/tailwind.config.cjs\
 FROM deps AS builder
 # Zbytek zdrojáků až sem – ať se neinvaliduje cache deps při každé změně kódu
 COPY packages/frontend/src ./packages/frontend/src
+COPY packages/shared-types ./packages/shared-types
+
 # Build serveru (očekává se, že vytvoří packages/server/dist)
 RUN pnpm --filter frontend build
 
