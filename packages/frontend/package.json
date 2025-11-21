@@ -12,13 +12,16 @@
     "@tailwindcss/postcss": "^4.1.17",
     "autoprefixer": "^10.4.21",
     "axios": "^1.13.2",
+    "pinia": "^3.0.4",
     "postcss": "^8.5.6",
     "register-service-worker": "^1.7.2",
     "tailwindcss": "^4.1.17",
     "vue": "^3.2.13",
     "vue-i18n": "^11.1.12",
     "vue-icons-plus": "^0.1.8",
-    "vue-router": "^4.0.3"
+    "vue-router": "^4.0.3",
+    "vue-toastification": "2.0.0-rc.5",
+    "vue3-toastification": "0.0.1-beta"
   },
   "devDependencies": {
     "@types/jest": "^27.0.1",
