@@ -1,0 +1,93 @@
+import type {
+  BibleBookMetadata,
+  BibleTranslationMetadata,
+} from '@/shared/types/bible/bible.types';
+import { defineStore } from 'pinia';
+import { ref, type Ref } from 'vue';
+import { BibleHttpService } from '../services/bibleHttp.service';
+import { httpClient } from '@/shared/httpClient/HttpProvider';
+
+export const useBibleStore = defineStore('bible', () => {
+  const currentTranslation: Ref<string | undefined> = ref(undefined);
+  const currentBook: Ref<number | undefined> = ref(undefined);
+  const currentChapter: Ref<number | undefined> = ref(undefined);
+  const translationMetadata: Ref<BibleTranslationMetadata | undefined> =
+    ref(undefined);
+  const booksMetadata: Ref<Record<number, BibleBookMetadata> | undefined> =
+    ref(undefined);
+  const httpService = new BibleHttpService(httpClient);
+
+  function getCurrentTranslation() {
+    return currentTranslation.value;
+  }
+
+  async function setCurrentTranslation(value: string) {
+    currentTranslation.value = value;
+    const data = await httpService.getTranslationMetadata(
+      currentTranslation.value,
+    );
+    translationMetadata.value = data;
+    if (data && data.books) {
+      booksMetadata.value = {};
+      for (const book of data.books) {
+        booksMetadata.value[book.bookNumber] = book;
+      }
+    }
+  }
+
+  function isBookSet() {
+    return currentBook.value !== undefined;
+  }
+
+  function getCurrentBook() {
+    return currentBook.value;
+  }
+
+  function setCurrentBook(value: number | undefined) {
+    currentBook.value = value;
+  }
+
+  function isChapterSet() {
+    return currentChapter.value !== undefined;
+  }
+
+  function getCurrentChapter() {
+    return currentChapter.value;
+  }
+
+  function setCurrentChapter(value: number | undefined) {
+    currentChapter.value = value;
+  }
+
+  function getBookMetadata(id: number) {
+    if (booksMetadata.value && booksMetadata.value[id]) {
+      return booksMetadata.value[id];
+    }
+    return undefined;
+  }
+
+  async function initialize() {
+    await setCurrentTranslation('CZECEP');
+    currentBook.value = undefined;
+    currentChapter.value = undefined;
+  }
+
+  return {
+    currentTranslation,
+    currentBook,
+    currentChapter,
+    translationMetadata,
+    booksMetadata,
+
+    getCurrentTranslation,
+    setCurrentTranslation,
+    isBookSet,
+    getCurrentBook,
+    setCurrentBook,
+    isChapterSet,
+    getCurrentChapter,
+    setCurrentChapter,
+    getBookMetadata,
+    initialize,
+  };
+});
