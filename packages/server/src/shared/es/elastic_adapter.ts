@@ -37,7 +37,6 @@ export default class ElasticAdapter implements ElasticPort {
 
   public async listIndices(): Promise<Array<string>> {
     const indices = await this.client.indices.get({ index: '*' });
-    console.log(indices);
     return Object.keys(indices);
   }
 
