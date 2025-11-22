@@ -127,7 +127,6 @@ export class TranslationParserXml extends TranslationParser {
     if (ret.XMLBIBLE.BIBLEBOOK.length != 66) {
       return ret;
     }
-    console.log('Parsing protestants.');
     const missingIndices = [17, 18, 20, 21, 25, 45, 46];
 
     for (const missingIndex of missingIndices) {
