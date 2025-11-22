@@ -36,7 +36,6 @@ export default class BibleRepository {
     }
     const metadata = data.map((element) => {
       const fields = element._source as BibleTranslationMetadata;
-      console.log(fields);
       return {
         id: element._id,
         code: fields.code,
@@ -125,6 +124,7 @@ export default class BibleRepository {
     const aggregation = {
       terms: {
         field: 'book',
+        size: 100,
       },
       aggs: {
         sort_buckets: {
@@ -147,7 +147,6 @@ export default class BibleRepository {
       translation: translation,
       book: element.key as number,
     }));
-
     return books;
   }
 
@@ -166,6 +165,7 @@ export default class BibleRepository {
     const aggregation = {
       terms: {
         field: 'chapter',
+        size: 200,
       },
       aggs: {
         sort_buckets: {
@@ -226,7 +226,6 @@ export default class BibleRepository {
     }
     const verses = data.map((element) => {
       const fields = element._source as BibleVerse;
-      console.log(fields);
       return {
         id: element._id,
         book: Number(fields.book),
