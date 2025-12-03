@@ -7,6 +7,8 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction,
 ) => {
+  // TODO: replace with logger
+  console.trace(error);
   if (error instanceof AppError) {
     return res.status(error.statusCode).json({
       status: error.statusCode,

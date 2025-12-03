@@ -1,6 +1,6 @@
 import type { estypes } from '@elastic/elasticsearch';
 
-import ElasticAdapter from '../../shared/es/elastic_adapter.js';
+import ElasticAdapter from '../../shared/elastic/elastic_adapter.js';
 import type {
   BibleBook,
   BibleChapter,
@@ -106,6 +106,10 @@ export default class BibleRepository {
       this.bibleIndex,
       query,
     )) as estypes.AggregationsStringTermsAggregate;
+
+    if (!data) {
+      return [];
+    }
 
     const buckets = (data.buckets ||
       []) as estypes.AggregationsStringTermsBucket[];
