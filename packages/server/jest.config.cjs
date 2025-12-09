@@ -20,5 +20,9 @@ module.exports = {
   testPathIgnorePatterns: ['dist/*'],
   collectCoverage: true,
   collectCoverageFrom: ['**/*.ts?(x)'],
-  coveragePathIgnorePatterns: ['dist/*', '__fixtures__/.*\.ts(?:x)?$'],
+  coveragePathIgnorePatterns: [
+    'dist/*',
+    'tests/*',
+    '__fixtures__/.*\.ts(?:x)?$',
+  ],
 };
