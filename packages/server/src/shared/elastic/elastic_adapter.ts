@@ -102,7 +102,7 @@ export default class ElasticAdapter implements ElasticPort {
   public async search(
     index: string,
     query: estypes.QueryDslQueryContainer,
-  ): Promise<estypes.SearchHit[] | undefined> {
+  ): Promise<estypes.SearchHit[]> {
     try {
       const data = await this.client.search({
         index: index,
@@ -113,7 +113,8 @@ export default class ElasticAdapter implements ElasticPort {
       return data.hits.hits;
     } catch (err) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
-        return [];
+        console.log('nic tu není');
+        return undefined;
       }
       throw err;
     }
