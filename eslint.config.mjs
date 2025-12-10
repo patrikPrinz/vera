@@ -11,6 +11,7 @@ import globals from 'globals';
 export default tseslint.config(
   {
     ignores: [
+      'packages/shared-types/*',
       '**/node_modules/**',
       '**/dist/**',
       'pnpm-lock.yaml',
