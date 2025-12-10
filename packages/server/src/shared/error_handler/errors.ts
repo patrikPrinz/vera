@@ -1,3 +1,7 @@
+/**
+ * Class lets user know about exceptions, that occured during request processing.
+ * Each has corresponding message and HTTP status code.
+ */
 export class AppError extends Error {
   public readonly statusCode: number;
   public readonly code: string;
@@ -26,7 +30,7 @@ export class NotFoundError extends AppError {
 }
 
 export class ConflictError extends AppError {
-  constructor(message: string = 'Resource not found') {
-    super(404, 'NOT_FOUND_ERROR', message);
+  constructor(message: string = 'Conflict occured with existing resources') {
+    super(409, 'CONFLICT_ERROR', message);
   }
 }

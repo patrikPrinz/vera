@@ -69,7 +69,7 @@ export default interface ElasticPort {
   search(
     index: string,
     query: estypes.QueryDslQueryContainer,
-  ): Promise<estypes.SearchHit[]>;
+  ): Promise<estypes.SearchHit[] | undefined>;
 
   /**
    * Wrapper for aggregation query

@@ -2,13 +2,14 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-import { ParserError, TranslationParserXml } from './translation_parser.js';
+import {
+  ParserError,
+  TranslationParser,
+  translationParserProvider,
+  TranslationParserXml,
+} from './translation_parser.js';
 import { xmlData } from './__fixtures__/xmlData.js';
-import type {
-  BibleTranslationContainer,
-  BibleTranslationMetadata,
-  BibleVerse,
-} from '../bible.types.js';
+import type { BibleTranslationContainer } from '../bible.types.js';
 
 function loadFixture(file: string) {
   const __filename = fileURLToPath(import.meta.url);
@@ -23,29 +24,30 @@ const validFull = JSON.parse(
 validFull.metadata.date = new Date(validFull.metadata.date);
 
 const xmlSamples = [
-  [
-    loadFixture('valid_simple.xml'),
-    xmlData.valid_simple.data,
-    xmlData.valid_simple.metadata,
-  ],
-  [loadFixture('valid_full.xml'), validFull.data, validFull.metadata],
+  [loadFixture('valid_simple.xml'), xmlData.valid_simple],
+  [loadFixture('valid_full.xml'), validFull],
 ];
 
 describe('Test XML parser.', () => {
   test.each(xmlSamples)(
     'Test XML parser with data.',
-    async (
-      input: string,
-      data: BibleVerse[],
-      metadata: BibleTranslationMetadata,
-    ) => {
+    async (input: string, translation: BibleTranslationContainer) => {
       const parser = new TranslationParserXml(input);
-      expect(await parser.getData()).toEqual(data);
-      expect(await parser.getMetadata()).toEqual(metadata);
+      expect(await parser.getTranslation()).toEqual(translation);
+      expect(await parser.getData()).toEqual(translation.data);
+      expect(await parser.getMetadata()).toEqual(translation.metadata);
     },
   );
   test('Test empty data.', async () => {
     const parser = new TranslationParserXml('');
     await expect(parser.getData()).rejects.toThrowError(ParserError);
+  });
+});
+
+describe('Test parserProvider', () => {
+  test('Test instance creation for XML', () => {
+    const parser = translationParserProvider(loadFixture('valid_simple.xml'));
+    expect(parser).toBeInstanceOf(TranslationParser);
+    expect(parser).toBeInstanceOf(TranslationParserXml);
   });
 });

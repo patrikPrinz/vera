@@ -3,6 +3,12 @@ import { ValidationError } from '../error_handler/errors.js';
 import type { ValidatedRequest } from './request_validator.types.js';
 import { z, ZodType } from 'zod';
 
+/**
+ *Function creates request validator middleware, which compares request params
+ *property with ZOD schema. If parsing fails, it calls error handler middleware.
+ * @param schema ZOD schema
+ * @returns validator middleware function
+ */
 export function requestValidator<T extends ZodType>(schema: T) {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
