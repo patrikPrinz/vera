@@ -28,8 +28,9 @@ RUN pnpm install --filter server --no-frozen-lockfile
 
 # build: run typescript build to create production artifacts
 FROM dependencies AS build
-# copy source code files onto the container
+# copy source code files into the container
 COPY packages/server/src ./packages/server/src
+COPY packages/shared-types ./packages/shared-types
 
 RUN pnpm --filter server build
 
@@ -37,6 +38,8 @@ RUN pnpm --filter server build
 # dev: run development server
 FROM dependencies AS dev
 ENV NODE_ENV=development
+
+EXPOSE 3000
 
 CMD ["pnpm", "--filter", "server", "dev"]
 
