@@ -9,7 +9,15 @@ import globals from 'globals';
 
 ///** @type {import('eslint').Linter.Config[]} */
 export default tseslint.config(
-  { ignores: ['**/node_modules/**', '**/dist/**', 'pnpm-lock.yaml', '.env*', '**/__fixtures__/**'] },
+  {
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      'pnpm-lock.yaml',
+      '.env*',
+      '**/__fixtures__/**',
+    ],
+  },
   js.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
   //...pluginVue.configs['flat/recommended'],
@@ -20,26 +28,27 @@ export default tseslint.config(
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        projectService: true,
+        projectService: false,
+        project: ['./packages/*/tsconfig.eslint.json'],
         tsconfigRootDir: import.meta.dirname,
       },
       globals: { ...globals.node, ...globals.es2024 },
     },
-    
+
     rules: {
-      "@typescript-eslint/no-unused-vars": [
-      "error",
-      {
-        "args": "all",
-        "argsIgnorePattern": "^_",
-        "caughtErrors": "all",
-        "caughtErrorsIgnorePattern": "^_",
-        "destructuredArrayIgnorePattern": "^_",
-        "varsIgnorePattern": "^_",
-        "ignoreRestSiblings": true
-      }
-    ]
-    }
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+    },
   },
   {
     files: ['packages/*/src/**/*.vue'],
@@ -49,15 +58,15 @@ export default tseslint.config(
         extraFileExtensions: ['.vue'],
         parser: tsParser,
         ecmaVersion: 'latest',
-        sourceType: "module",
+        sourceType: 'module',
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
-      }
+      },
     },
     plugins: {
-      vue
+      vue,
     },
-    rules: {}
+    rules: {},
   },
   prettier,
 );
