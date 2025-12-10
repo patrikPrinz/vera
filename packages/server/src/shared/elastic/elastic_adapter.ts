@@ -7,7 +7,7 @@ import type ElasticPort from './elastic_port.js';
  * Basic Elasticsearch connection class.
  *
  * Implements basic methods for database connection to be used in module-specific
- * repositories.
+ * repository classes
  */
 export default class ElasticAdapter implements ElasticPort {
   public client: Client;

@@ -1,3 +1,7 @@
+/**
+ * Class lets user know about exceptions, that occured during request processing.
+ * Each has corresponding message and HTTP status code.
+ */
 export class AppError extends Error {
   public readonly statusCode: number;
   public readonly code: string;
