@@ -1,7 +1,5 @@
 import { GenericContainer } from 'testcontainers';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import type { estypes } from '@elastic/elasticsearch';
 
 export const MAPPINGS: estypes.IndicesCreateRequest[] = [

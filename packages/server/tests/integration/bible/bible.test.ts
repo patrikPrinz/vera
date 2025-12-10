@@ -8,14 +8,14 @@ import {
 } from '@jest/globals';
 import fs from 'fs';
 import { type StartedTestContainer } from 'testcontainers';
-import request from 'supertest';
+import request, { type Response } from 'supertest';
 import type { Express } from 'express';
 import {
   initializeIndices,
   startElasticContainer,
   MAPPINGS,
 } from '../helpers/initialize_elastic.js';
-import { fstat } from 'fs';
+
 process.env.ELASTIC_PASSWORD = 'pass';
 
 describe('Bible module', () => {
@@ -58,12 +58,13 @@ describe('Bible module', () => {
   });
 
   test('list books for translation', async () => {
-    const res = await request(app)
+    const res: Response = await request(app)
       .get('/api/bible/translation/CZECEP/books')
       .send();
     expect(res.statusCode).toEqual(200);
-    expect(res.body.length).toEqual(12);
-    expect(res.body[0]).toEqual({ translation: 'CZECEP', book: 1 });
+    const body = res.body as unknown[];
+    expect(body.length).toEqual(12);
+    expect(body[0]).toEqual({ translation: 'CZECEP', book: 1 });
   });
 
   test('list chapters of book', async () => {
@@ -71,8 +72,9 @@ describe('Bible module', () => {
       .get('/api/bible/translation/CZECEP/book/1/chapters')
       .send();
     expect(res.statusCode).toEqual(200);
-    expect(res.body.length).toEqual(50);
-    expect(res.body[0]).toEqual({ translation: 'CZECEP', book: 1, chapter: 1 });
+    const body = res.body as unknown[];
+    expect(body.length).toEqual(50);
+    expect(body[0]).toEqual({ translation: 'CZECEP', book: 1, chapter: 1 });
   });
 
   test('list verses', async () => {
@@ -82,7 +84,8 @@ describe('Bible module', () => {
     console.log(res.body);
     expect(res.statusCode).toEqual(200);
     //expect(res.body.length).toEqual(31);
-    expect(res.body[0]).toEqual(
+    const body = res.body as unknown[];
+    expect(body[0]).toEqual(
       expect.objectContaining({
         book: 1,
         chapter: 1,
