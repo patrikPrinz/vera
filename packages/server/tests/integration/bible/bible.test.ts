@@ -24,8 +24,8 @@ describe('Bible module', () => {
   let elasticContainer: StartedTestContainer;
   beforeAll(async () => {
     elasticContainer = await startElasticContainer();
-    const host = elasticContainer.getHost(); // typicky 127.0.0.1
-    const port = elasticContainer.getMappedPort(9200); // např. 32775
+    const host = elasticContainer.getHost();
+    const port = elasticContainer.getMappedPort(9200);
 
     process.env.ELASTIC_URL = `http://${host}:${port}`;
     const { default: importedApp } = await import('../../../src/bootstrap.js');
@@ -63,7 +63,7 @@ describe('Bible module', () => {
       .send();
     expect(res.statusCode).toEqual(200);
     const body = res.body as unknown[];
-    expect(body.length).toEqual(12);
+    expect(body.length).toEqual(66);
     expect(body[0]).toEqual({ translation: 'CZECEP', book: 1 });
   });
 
@@ -83,7 +83,6 @@ describe('Bible module', () => {
       .send();
     console.log(res.body);
     expect(res.statusCode).toEqual(200);
-    //expect(res.body.length).toEqual(31);
     const body = res.body as unknown[];
     expect(body[0]).toEqual(
       expect.objectContaining({
