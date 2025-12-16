@@ -51,6 +51,7 @@ export class BibleService {
     chapter: number,
   ): Promise<BibleVerse[]> => {
     const data = await this.repository.getVerses(translation, book, chapter);
+    if (data === undefined) throw new NotFoundError();
     return data;
   };
 

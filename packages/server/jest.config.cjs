@@ -17,4 +17,12 @@ module.exports = {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   testMatch: ['**/?(*.)+(spec|test).ts?(x)'],
+  testPathIgnorePatterns: ['dist/*'],
+  collectCoverage: true,
+  collectCoverageFrom: ['**/*.ts?(x)'],
+  coveragePathIgnorePatterns: [
+    'dist/*',
+    'tests/*',
+    '__fixtures__/.*\.ts(?:x)?$',
+  ],
 };

@@ -3,7 +3,7 @@ import multer from 'multer';
 
 import BibleController from './bible.controller.js';
 import BibleRepository from './bible.repository.js';
-import { elasticAdapter } from '../../shared/es/elastic_provider.js';
+import { elasticAdapter } from '../../shared/elastic/elastic_provider.js';
 import { requestValidator } from '../../shared/request_validator/request_validator.js';
 import {
   getBooksSchema,
