@@ -5,7 +5,7 @@ import { dirname } from 'path';
 import {
   ParserError,
   TranslationParser,
-  translationParserProvider,
+  TranslationParserFactory,
   TranslationParserXml,
 } from './translation_parser.js';
 import { xmlData } from './__fixtures__/xmlData.js';
@@ -46,7 +46,9 @@ describe('Test XML parser.', () => {
 
 describe('Test parserProvider', () => {
   test('Test instance creation for XML', () => {
-    const parser = translationParserProvider(loadFixture('valid_simple.xml'));
+    const parser = new TranslationParserFactory().createTranslationParser(
+      loadFixture('valid_simple.xml'),
+    );
     expect(parser).toBeInstanceOf(TranslationParser);
     expect(parser).toBeInstanceOf(TranslationParserXml);
   });

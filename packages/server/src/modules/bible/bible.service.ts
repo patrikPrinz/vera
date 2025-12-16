@@ -1,8 +1,9 @@
+import { injectable, inject } from 'tsyringe';
 import {
   ConflictError,
   NotFoundError,
 } from '../../shared/error_handler/errors.js';
-import BibleRepository from './bible.repository.js';
+import type { IBibleService, IBibleRepository } from './bible.interfaces.js';
 import type {
   BibleBook,
   BibleChapter,
@@ -10,13 +11,20 @@ import type {
   BibleTranslationMetadata,
   BibleVerse,
 } from './bible.types.js';
-import { translationParserProvider } from './translation_parser/translation_parser.js';
+import type { TranslationParserFactory } from './translation_parser/translation_parser.js';
 
-export class BibleService {
-  protected repository: BibleRepository;
+@injectable()
+export class BibleService implements IBibleService {
+  protected readonly repository: IBibleRepository;
+  protected readonly translationParserFactory: TranslationParserFactory;
 
-  constructor(repository: BibleRepository) {
+  constructor(
+    @inject('BibleRepository') repository: IBibleRepository,
+    @inject('TranslationParserFactory')
+    translationParserFactory: TranslationParserFactory,
+  ) {
     this.repository = repository;
+    this.translationParserFactory = translationParserFactory;
   }
 
   getMetadataService = async (
@@ -61,7 +69,8 @@ export class BibleService {
   };
 
   postTranslationService = async (fileString: string): Promise<void> => {
-    const parser = translationParserProvider(fileString);
+    const parser =
+      this.translationParserFactory.createTranslationParser(fileString);
     const translation = await parser.getTranslation();
     const insertion = await this.repository.insertTranslation(translation);
     if (!insertion) {

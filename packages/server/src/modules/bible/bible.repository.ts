@@ -1,4 +1,5 @@
 import type { estypes } from '@elastic/elasticsearch';
+import { injectable, inject } from 'tsyringe';
 
 import ElasticAdapter from '../../shared/elastic/elastic_adapter.js';
 import type {
@@ -9,13 +10,15 @@ import type {
   BibleTranslationMetadata,
   BibleVerse,
 } from './bible.types.js';
+import type { IBibleRepository } from './bible.interfaces.js';
 
-export default class BibleRepository {
+@injectable()
+export class BibleRepository implements IBibleRepository {
   protected bibleIndex: string;
   protected metadataIndex: string;
   protected adapter: ElasticAdapter;
 
-  constructor(adapter: ElasticAdapter) {
+  constructor(@inject('ElasticAdapter') adapter: ElasticAdapter) {
     this.bibleIndex = 'bible';
     this.metadataIndex = 'translation_metadata';
     this.adapter = adapter;

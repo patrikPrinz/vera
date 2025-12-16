@@ -1,3 +1,4 @@
+import { injectable } from 'tsyringe';
 import { Client, errors } from '@elastic/elasticsearch';
 import type { estypes } from '@elastic/elasticsearch';
 
@@ -9,7 +10,8 @@ import type ElasticPort from './elastic_port.js';
  * Implements basic methods for database connection to be used in module-specific
  * repository classes
  */
-export default class ElasticAdapter implements ElasticPort {
+@injectable()
+export class ElasticAdapter implements ElasticPort {
   public client: Client;
 
   constructor(address: string, username: string, password: string) {
