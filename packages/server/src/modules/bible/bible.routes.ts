@@ -1,11 +1,6 @@
-import { injectable } from 'tsyringe';
+import { injectable, inject } from 'tsyringe';
 import express from 'express';
-import {
-  Router,
-  type Request,
-  type Response,
-  type NextFunction,
-} from 'express';
+import type { Router, Request, Response, NextFunction } from 'express';
 import type { BibleController } from './bible.controller.js';
 
 import {
@@ -22,11 +17,12 @@ import multer from 'multer';
 @injectable()
 export class BibleRouterFactory {
   public static createRouter(
-    controller: BibleController,
+    @inject('BibleController') controller: BibleController,
+    @inject('requestValidator')
     requestValidator: <T extends ZodType>(
       schema: T,
     ) => (req: Request, _res: Response, next: NextFunction) => void,
-  ) {
+  ): Router {
     const upload = multer({
       storage: multer.memoryStorage(),
     });

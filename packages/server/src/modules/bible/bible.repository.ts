@@ -1,7 +1,7 @@
 import type { estypes } from '@elastic/elasticsearch';
 import { injectable, inject } from 'tsyringe';
 
-import ElasticAdapter from '../../shared/elastic/elastic_adapter.js';
+import { ElasticAdapter } from '../../shared/elastic/elastic_adapter.js';
 import type {
   BibleBook,
   BibleChapter,
