@@ -1,8 +1,16 @@
 <template>
-  <nav class="flex justify-between">
-    <BsArrowLeftSquare v-if="!props.firstItem" @click="$emit('previousItemEvent')" />
+  <nav class="flex justify-between my-2">
+    <BsArrowLeftSquare
+      class="cursor-pointer"
+      v-if="!props.firstItem"
+      @click="$emit('previousItemEvent')"
+    />
     <div v-else></div>
-    <BsArrowRightSquare v-if="!props.lastItem" @click="$emit('nextItemEvent')" />
+    <BsArrowRightSquare
+      class="cursor-pointer"
+      v-if="!props.lastItem"
+      @click="$emit('nextItemEvent')"
+    />
     <div v-else></div>
   </nav>
 </template>

@@ -1,10 +1,20 @@
 <template>
   <NavigationComponent :title="chapterTitle" @returnEvent="returnEvent" />
-  <ChapterNavigationComponent :firstItem="firstChapter" :lastItem="lastChapter" @previousItemEvent="previousItemEvent" @nextItemEvent="nextItemEvent"/>
+  <ChapterNavigationComponent
+    :firstItem="firstChapter"
+    :lastItem="lastChapter"
+    @previousItemEvent="previousItemEvent"
+    @nextItemEvent="nextItemEvent"
+  />
   <p class="py-1 text-left" v-for="verse in verses">
     <span class="font-bold pe-1">{{ verse.verse }}.</span>{{ verse.text }}
   </p>
-
+  <ChapterNavigationComponent
+    :firstItem="firstChapter"
+    :lastItem="lastChapter"
+    @previousItemEvent="previousItemEvent"
+    @nextItemEvent="nextItemEvent"
+  />
 </template>
 <script setup lang="ts">
 import { computed, onMounted, ref, type Ref } from 'vue';
@@ -40,7 +50,9 @@ async function refreshChapter() {
   if (translation && book && chapter) {
     verses.value = await httpService.getBibleVerses(translation, book, chapter);
     chapterTitle.value = `${bibleStore.getBookMetadata(book)?.name}; ${chapter.toString()}`;
-    chapterCount.value = (await httpService.getBibleChapters(translation, book)).length
+    chapterCount.value = (
+      await httpService.getBibleChapters(translation, book)
+    ).length;
   }
 }
 
@@ -63,5 +75,4 @@ async function nextItemEvent() {
     await refreshChapter();
   }
 }
-
 </script>
