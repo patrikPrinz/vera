@@ -15,11 +15,9 @@ COPY packages/frontend/package.json packages/frontend/tsconfig.json ./packages/f
 # Instalace workspace závislostí pouze pro server a jeho závislé balíčky
 RUN pnpm install --filter frontend... --no-frozen-lockfile
 # Copy package config files from root of the package (not needed for installing dependencies)
-COPY packages/frontend/tailwind.config.cjs\
-  packages/frontend/postcss.config.cjs\
-  packages/frontend/vite.config.js\
-  packages/frontend/index.html\
-  ./packages/frontend/
+COPY packages/frontend/vite.config.js\
+    packages/frontend/index.html\
+    ./packages/frontend/
 
 # ---- builder: produkční build artefaktů ----
 FROM deps AS builder

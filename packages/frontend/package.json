@@ -9,8 +9,7 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.17",
-    "autoprefixer": "^10.4.21",
+    "@tailwindcss/vite": "^4.1.18",
     "axios": "^1.13.2",
     "pinia": "^3.0.4",
     "postcss": "^8.5.6",
