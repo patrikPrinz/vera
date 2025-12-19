@@ -4,6 +4,7 @@ services:
       target: dev
     environment:
       - NODE_ENV=development
+      - ELASTIC_PASSWORD="${ELASTIC_PASSWORD:-pass}"
     volumes:
       - ./packages/server/src:/app/packages/server/src
     profiles: ['dev']

@@ -1,11 +1,12 @@
 import xml2js from 'xml2js';
 import { z } from 'zod';
-
 import type {
   BibleTranslationContainer,
   BibleTranslationMetadata,
   BibleVerse,
 } from '../bible.types.js';
+
+import { parsedXmlSchema } from './translation.schema.js';
 
 export class ParserError extends Error {
   constructor(message: string) {
@@ -15,11 +16,15 @@ export class ParserError extends Error {
 
 export const translationParserProvider = (
   data: string,
-  _type = undefined,
+  _type = 'xml',
 ): TranslationParser => {
   return new TranslationParserXml(data);
 };
 
+/**
+ * Abstract class of bible text parser. Implements basic scaffolding of parsing
+ * and retrieving data, shared by all parsers.
+ */
 export abstract class TranslationParser {
   protected rawData: string;
   protected parsedTranslation: BibleTranslationContainer;
@@ -53,45 +58,10 @@ export abstract class TranslationParser {
   protected abstract parseTranslation(): Promise<BibleTranslationContainer>;
 }
 
+/**
+ * Implements parsing of XML files in Zefania XML format.
+ */
 export class TranslationParserXml extends TranslationParser {
-  protected readonly schema = z.object({
-    XMLBIBLE: z.object({
-      INFORMATION: z.array(
-        z.object({
-          identifier: z.array(z.string()),
-          language: z.array(z.string()),
-          date: z.array(z.string()),
-          creator: z.array(z.string()),
-          source: z.array(z.string()),
-        }),
-      ),
-      BIBLEBOOK: z.array(
-        z.object({
-          $: z.object({
-            bnumber: z.string(),
-            bname: z.string(),
-            bsname: z.string(),
-          }),
-          CHAPTER: z.array(
-            z.object({
-              $: z.object({
-                cnumber: z.string(),
-              }),
-              VERS: z.array(
-                z.object({
-                  $: z.object({
-                    vnumber: z.string(),
-                  }),
-                  _: z.string(),
-                }),
-              ),
-            }),
-          ),
-        }),
-      ),
-    }),
-  });
-
   protected async parseTranslation(): Promise<BibleTranslationContainer> {
     try {
       const parser = new xml2js.Parser();
@@ -99,7 +69,7 @@ export class TranslationParserXml extends TranslationParser {
         this.rawData,
       );
 
-      const parsedData = this.schema.safeParse(parsedDocument);
+      const parsedData = parsedXmlSchema.safeParse(parsedDocument);
       if (!parsedData.success) {
         console.trace(parsedData.error);
         throw new ParserError(
@@ -120,14 +90,13 @@ export class TranslationParserXml extends TranslationParser {
   }
 
   protected renumberProtestantBooks(
-    parsedText: z.infer<typeof this.schema>,
-  ): z.infer<typeof this.schema> {
+    parsedText: z.infer<typeof parsedXmlSchema>,
+  ): z.infer<typeof parsedXmlSchema> {
     const ret = parsedText;
     // Catholic or unknown translation type
     if (ret.XMLBIBLE.BIBLEBOOK.length != 66) {
       return ret;
     }
-    console.log('Parsing protestants.');
     const missingIndices = [17, 18, 20, 21, 25, 45, 46];
 
     for (const missingIndex of missingIndices) {
@@ -144,7 +113,7 @@ export class TranslationParserXml extends TranslationParser {
   }
 
   protected parseBooks(
-    parsedXml: z.infer<typeof TranslationParserXml.prototype.schema>,
+    parsedXml: z.infer<typeof parsedXmlSchema>,
   ): BibleVerse[] {
     const translationCode = parsedXml.XMLBIBLE.INFORMATION[0].identifier[0];
     const parsedData = parsedXml.XMLBIBLE;
@@ -171,7 +140,7 @@ export class TranslationParserXml extends TranslationParser {
   }
 
   protected parseMetadata(
-    parsedXml: z.infer<typeof TranslationParserXml.prototype.schema>,
+    parsedXml: z.infer<typeof parsedXmlSchema>,
   ): BibleTranslationMetadata {
     const xmlMetadata = parsedXml.XMLBIBLE.INFORMATION[0];
     return {

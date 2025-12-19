@@ -72,7 +72,6 @@ export default class BibleController {
   ) => {
     const { id } = req.validated;
     const data = await this.service.getVerseService(id);
-    console.log(data);
     res.json(data);
   };
 

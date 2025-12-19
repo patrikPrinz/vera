@@ -1,6 +1,2 @@
 packages:
   - packages/*
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - cypress
-  - esbuild

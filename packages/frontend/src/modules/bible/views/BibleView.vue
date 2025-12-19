@@ -1,34 +1,21 @@
 <template>
     <main>
-      ahoy-hoy
-      <ul>
-        <li v-for="book in data.value">{{ book.book }}</li>
-      </ul>
+      <BooksComponent v-if="!bibleStore.isBookSet() && !bibleStore.isChapterSet()" />
+      <ChaptersComponent v-else-if="bibleStore.isBookSet() && !bibleStore.isChapterSet()" />
+      <ChapterComponent v-else />
     </main>
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
-import { onMounted, ref } from 'vue';
-import type { BibleTranslation } from '@/shared/types/index';
+import { onBeforeMount } from 'vue';
+import { useBibleStore } from '../stores/bibleStore';
+import BooksComponent from '../components/BooksComponent.vue';
+import ChaptersComponent from '../components/ChaptersComponent.vue';
+import ChapterComponent from '../components/ChapterComponent.vue';
 
-const data = ref();
+const bibleStore = useBibleStore();
 
-onMounted(async () => {
-  data.value = await loadBibleBooks('CZECEP');
-  console.log(data.value);
+onBeforeMount(async () => {
+  await bibleStore.initialize();
 });
-
-async function loadBibleBooks(translation: string): Promise<BibleTranslation> {
-  try {
-    const response = await axios.get('http://localhost:3000/api/bible/translation/' + translation + '/books');
-    console.log(response);
-    if (response.data) {
-      return response.data as BibleTranslation;
-    }
-  }
-  catch (_error) {
-    return undefined;
-  }
-}
 </script>

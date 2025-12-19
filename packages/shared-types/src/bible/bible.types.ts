@@ -33,11 +33,13 @@ export interface BibleTranslationMetadata {
   date?: Date;
   creator?: string;
   source: string;
-  books: {
-    bookNumber: number;
-    name: string;
-    code: string;
-  }[];
+  books: BibleBookMetadata[];
+}
+
+export interface BibleBookMetadata {
+  bookNumber: number;
+  name: string;
+  code: string;
 }
 
 export interface BibleTranslationContainer {

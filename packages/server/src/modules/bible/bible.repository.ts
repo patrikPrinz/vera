@@ -1,6 +1,6 @@
 import type { estypes } from '@elastic/elasticsearch';
 
-import ElasticAdapter from '../../shared/es/elastic_adapter.js';
+import ElasticAdapter from '../../shared/elastic/elastic_adapter.js';
 import type {
   BibleBook,
   BibleChapter,
@@ -30,13 +30,11 @@ export default class BibleRepository {
       },
     };
     const data = await this.adapter.search(this.metadataIndex, query);
-
-    if (data === undefined) {
+    if (data.length == 0) {
       return undefined;
     }
     const metadata = data.map((element) => {
       const fields = element._source as BibleTranslationMetadata;
-      console.log(fields);
       return {
         id: element._id,
         code: fields.code,
@@ -71,32 +69,6 @@ export default class BibleRepository {
     } as BibleVerse;
   }
 
-  public async getTranslationVerses(
-    translation: string,
-  ): Promise<BibleVerse[]> {
-    const query = {
-      match: {
-        translation: translation,
-      },
-    };
-    const data = await this.adapter.search(this.bibleIndex, query);
-    if (data === undefined) {
-      return [];
-    }
-    const verses = data.map((element) => {
-      const fields = element._source as BibleVerse;
-      return {
-        id: element._id,
-        book: Number(fields.book),
-        chapter: Number(fields.chapter),
-        verse: Number(fields.verse),
-        text: fields.text,
-        isHeader: fields.isHeader,
-      } as BibleVerse;
-    });
-    return verses;
-  }
-
   public async getTranslations(): Promise<Array<BibleTranslation>> {
     const query = {
       terms: {
@@ -108,8 +80,11 @@ export default class BibleRepository {
       query,
     )) as estypes.AggregationsStringTermsAggregate;
 
-    const buckets = (data.buckets ||
-      []) as estypes.AggregationsStringTermsBucket[];
+    if (!data) {
+      return [];
+    }
+
+    const buckets = data.buckets as estypes.AggregationsStringTermsBucket[];
 
     const translations: BibleTranslation[] = buckets.map((element) => ({
       translation: element.key as string,
@@ -125,6 +100,7 @@ export default class BibleRepository {
     const aggregation = {
       terms: {
         field: 'book',
+        size: 100,
       },
       aggs: {
         sort_buckets: {
@@ -140,14 +116,12 @@ export default class BibleRepository {
       query,
     )) as estypes.AggregationsStringTermsAggregate;
 
-    const buckets = (data.buckets ||
-      []) as estypes.AggregationsStringTermsBucket[];
+    const buckets = data.buckets as estypes.AggregationsStringTermsBucket[];
 
     const books: BibleBook[] = buckets.map((element) => ({
       translation: translation,
       book: element.key as number,
     }));
-
     return books;
   }
 
@@ -166,6 +140,7 @@ export default class BibleRepository {
     const aggregation = {
       terms: {
         field: 'chapter',
+        size: 200,
       },
       aggs: {
         sort_buckets: {
@@ -181,8 +156,7 @@ export default class BibleRepository {
       query,
     )) as estypes.AggregationsStringTermsAggregate;
 
-    const buckets = (data.buckets ||
-      []) as estypes.AggregationsStringTermsBucket[];
+    const buckets = data.buckets as estypes.AggregationsStringTermsBucket[];
 
     const chapters: BibleChapter[] = buckets.map((element) => ({
       translation: translation,
@@ -197,7 +171,7 @@ export default class BibleRepository {
     translation: string,
     book: number,
     chapter: number,
-  ): Promise<BibleVerse[]> {
+  ): Promise<BibleVerse[] | undefined> {
     const query = {
       bool: {
         must: [
@@ -221,12 +195,11 @@ export default class BibleRepository {
     };
     const data = await this.adapter.search(this.bibleIndex, query);
 
-    if (data === undefined) {
-      return [];
+    if (!data || data.length == 0) {
+      return undefined;
     }
     const verses = data.map((element) => {
       const fields = element._source as BibleVerse;
-      console.log(fields);
       return {
         id: element._id,
         book: Number(fields.book),
