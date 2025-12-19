@@ -1,7 +1,10 @@
 <template>
-  <ul>
+  <ul class="flex flex-col justify-around">
     <li v-for="book in books">
-      <button @click="bibleStore.setCurrentBook(book.book)">
+      <button
+        class="border-text p2 hover:bg-secondary hover:text-text-inverse dark:hover:text-text m-2 w-1/2 cursor-pointer rounded-2xl border-2 p-2"
+        @click="bibleStore.setCurrentBook(book.book)"
+      >
         {{ bibleStore.getBookMetadata(book.book)?.name }}
       </button>
     </li>
