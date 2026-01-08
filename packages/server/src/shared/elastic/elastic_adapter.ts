@@ -108,6 +108,7 @@ export class ElasticAdapter implements ElasticPort {
     try {
       const data = await this.client.search({
         index: index,
+        size: 1000,
         query: query,
         _source: true,
       });
@@ -115,7 +116,6 @@ export class ElasticAdapter implements ElasticPort {
       return data.hits.hits;
     } catch (err) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
-        console.log('nic tu není');
         return undefined;
       }
       throw err;
