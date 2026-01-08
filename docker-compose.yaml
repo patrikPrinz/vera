@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: packages/server/Dockerfile
     ports:
-      - "${SERVER_PORT:-3000}:3000"
+      - '${SERVER_PORT:-3000}:3000'
     networks:
       - vera_network
 
@@ -14,13 +14,16 @@ services:
       dockerfile: packages/frontend/Dockerfile
     networks:
       - vera_network
+    environment:
+      - SERVER_PORT=${SERVER_PORT:-3000}
+      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost}
 
   elastic-search:
     image: elasticsearch:9.1.2
     environment:
       - discovery.type=single-node
-      - ELASTIC_USERNAME=elastic
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
       - xpack.security.enabled=false
       - xpack.security.http.ssl.enabled=false
       - http.cors.enabled=true
@@ -31,19 +34,18 @@ services:
       - 9200:9200
     networks:
       - vera_network
-      
 
   elastic-initializer:
-    build: 
+    build:
       context: .
       dockerfile: packages/elastic-initializer/Dockerfile
       target: dev
     depends_on:
       - elastic-search
     environment:
-      - ELASTIC_NODE=http://elastic-search:9200
-      - ELASTIC_USERNAME=elastic
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_NODE=${ELASTIC_NODE:-http://elastic-search:9200}
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
     volumes:
       - ./packages/elastic-initializer/src:/app/packages/elastic-initializer/src
     networks:
@@ -56,7 +58,7 @@ services:
     depends_on:
       - elastic-search
     environment:
-      - ELASTICSEARCH_HOSTS=http://elastic-search:9200
+      - ELASTICSEARCH_HOSTS=${ELASTIC_NODE:-http://elastic-search:9200}
     ports:
       - 5601:5601
     networks:
