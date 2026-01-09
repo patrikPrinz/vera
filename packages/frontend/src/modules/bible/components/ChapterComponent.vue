@@ -7,7 +7,7 @@
     @nextItemEvent="nextItemEvent"
   />
   <p class="py-1 text-left" v-for="verse in verses">
-    <span class="font-bold pe-1">{{ verse.verse }}.</span>{{ verse.text }}
+    <span class="pe-1 font-bold">{{ verse.verse }}.</span>{{ verse.text }}
   </p>
   <ChapterNavigationComponent
     :firstItem="firstChapter"

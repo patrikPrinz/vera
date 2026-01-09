@@ -1,5 +1,5 @@
 <template>
-  <nav class="flex justify-between my-2">
+  <nav class="my-2 flex justify-between">
     <BsArrowLeftSquare
       class="cursor-pointer"
       v-if="!props.firstItem"
@@ -17,6 +17,24 @@
 
 <script setup lang="ts">
 import { BsArrowLeftSquare, BsArrowRightSquare } from 'vue-icons-plus/bs';
+import { useKeyboardHandler } from '../../composables/keyboardHandler';
+import { onMounted, onUnmounted } from 'vue';
 
 const props = defineProps(['firstItem', 'lastItem']);
+const emit = defineEmits(['previousItemEvent', 'nextItemEvent']);
+
+const { registerKey, unregisterKey } = useKeyboardHandler();
+onMounted(() => {
+  registerKey('ArrowLeft', () => {
+    emit('previousItemEvent');
+  });
+  registerKey('ArrowRight', () => {
+    emit('nextItemEvent');
+  });
+});
+
+onUnmounted(() => {
+  unregisterKey('ArrowLeft');
+  unregisterKey('ArrowRight');
+});
 </script>

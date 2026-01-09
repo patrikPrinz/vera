@@ -24,7 +24,7 @@
 
     <div
       :class="showMenu ? '' : 'pointer-events-none opacity-0'"
-      class="fixed flex min-w-full justify-start transition-all duration-300 before:fixed before:min-h-screen before:min-w-full before:bg-slate-800 before:opacity-[.8]"
+      class="absolute flex min-w-full justify-start transition-all duration-300 before:absolute before:min-h-screen before:min-w-full before:bg-slate-800 before:opacity-[.8]"
     >
       <div
         class="bg-white-100 absolute inset-0 opacity-50"
