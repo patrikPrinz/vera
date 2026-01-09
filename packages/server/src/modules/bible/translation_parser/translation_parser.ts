@@ -1,5 +1,7 @@
+import 'reflect-metadata';
 import xml2js from 'xml2js';
 import { z } from 'zod';
+import { injectable } from 'tsyringe';
 import type {
   BibleTranslationContainer,
   BibleTranslationMetadata,
@@ -14,12 +16,15 @@ export class ParserError extends Error {
   }
 }
 
-export const translationParserProvider = (
-  data: string,
-  _type = 'xml',
-): TranslationParser => {
-  return new TranslationParserXml(data);
-};
+@injectable()
+export class TranslationParserFactory {
+  public createTranslationParser(
+    data: string,
+    _type: string = 'xml',
+  ): TranslationParser {
+    return new TranslationParserXml(data);
+  }
+}
 
 /**
  * Abstract class of bible text parser. Implements basic scaffolding of parsing
