@@ -1,0 +1,72 @@
+services:
+  server:
+    image: 'ghcr.io/patrikprinz/vera-server:latest'
+    ports:
+      - '${SERVER_PORT:-3000}:3000'
+    environment:
+      - NODE_ENV=production
+      - ELASTIC_PASSWORD="${ELASTIC_PASSWORD:-pass}"
+    networks:
+      - vera_network
+
+  frontend:
+    image: 'ghcr.io/patrikprinz/vera-frontend:latest'
+    networks:
+      - vera_network
+    environment:
+      - SERVER_PORT=${SERVER_PORT:-3000}
+      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost}
+      - NODE_ENV=production
+    ports:
+      - '${FRONTEND_PORT:-3001}:80'
+
+  elastic-search:
+    image: elasticsearch:9.1.2
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - http.cors.enabled=true
+      - http.cors.allow-origin=http://localhost:3000
+      - http.cors.allow-credentials=true
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - 9200:9200
+    networks:
+      - vera_network
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  elastic-initializer:
+    image: 'ghcr.io/patrikprinz/vera-elatic-initializer:latest'
+    depends_on:
+      - elastic-search
+    environment:
+      - ELASTIC_NODE=${ELASTIC_NODE:-http://elastic-search:9200}
+      - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
+    volumes:
+      - ./packages/elastic-initializer/src:/app/packages/elastic-initializer/src
+    networks:
+      - vera_network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.1.5
+    #volumes:
+    #- ./kibana.yml:/usr/share/kibana/config/kibana.yml
+    depends_on:
+      - elastic-search
+    environment:
+      - ELASTICSEARCH_HOSTS=${ELASTIC_NODE:-http://elastic-search:9200}
+    ports:
+      - 5601:5601
+    networks:
+      - vera_network
+
+networks:
+  vera_network:
+
+volumes:
+  esdata:

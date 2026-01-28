@@ -1,4 +1,5 @@
 import type { Request, Response } from 'express';
+import { injectable, inject } from 'tsyringe';
 import { z } from 'zod';
 
 import type { ValidatedRequest } from '../../shared/request_validator/request_validator.types.js';
@@ -9,12 +10,13 @@ import {
   getVersesSchema,
   getVerseSchema,
 } from './bible.schema.js';
-import { BibleService } from './bible.service.js';
+import type { IBibleService } from './bible.interfaces.js';
 
-export default class BibleController {
-  protected service: BibleService;
+@injectable()
+export class BibleController {
+  protected service: IBibleService;
 
-  constructor(service: BibleService) {
+  constructor(@inject('BibleService') service: IBibleService) {
     this.service = service;
   }
 

@@ -1,3 +1,4 @@
+import { injectable } from 'tsyringe';
 import { Client, errors } from '@elastic/elasticsearch';
 import type { estypes } from '@elastic/elasticsearch';
 
@@ -9,7 +10,8 @@ import type ElasticPort from './elastic_port.js';
  * Implements basic methods for database connection to be used in module-specific
  * repository classes
  */
-export default class ElasticAdapter implements ElasticPort {
+@injectable()
+export class ElasticAdapter implements ElasticPort {
   public client: Client;
 
   constructor(address: string, username: string, password: string) {
@@ -106,6 +108,7 @@ export default class ElasticAdapter implements ElasticPort {
     try {
       const data = await this.client.search({
         index: index,
+        size: 1000,
         query: query,
         _source: true,
       });
@@ -113,7 +116,6 @@ export default class ElasticAdapter implements ElasticPort {
       return data.hits.hits;
     } catch (err) {
       if (err instanceof errors.ResponseError && err.statusCode === 404) {
-        console.log('nic tu není');
         return undefined;
       }
       throw err;

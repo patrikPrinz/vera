@@ -1,11 +1,10 @@
 services:
   server:
-    restart: "on-failure:10"
+    restart: 'on-failure:10'
     build:
       target: runtime
     environment:
       - NODE_ENV=production
-    profiles: ['prod']
 
   frontend:
     build:
@@ -13,8 +12,7 @@ services:
     environment:
       - NODE_ENV=production
     ports:
-      - "${FRONTEND_PORT:-8082}:3001"
-    profiles: ['prod']
+      - '${FRONTEND_PORT:-3001}:80'
 
   elastic-search:
     volumes:
@@ -24,5 +22,5 @@ services:
 
   kibana:
 
-volumes:
-  esdata:
+#volumes:
+#  esdata:

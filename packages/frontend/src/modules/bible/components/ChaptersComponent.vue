@@ -1,8 +1,11 @@
 <template>
   <NavigationComponent :title="bookTitle" @returnEvent="returnEvent" />
-  <ul>
+  <ul class="flex flex-wrap justify-around">
     <li v-for="chapter in chapters">
-      <button @click="bibleStore.setCurrentChapter(chapter.chapter)">
+      <button
+        class="border-text hover:bg-secondary hover:text-text-inverse dark:hover:text-text text-l m-3 h-12 w-12 cursor-pointer rounded-md border-2 py-2"
+        @click="bibleStore.setCurrentChapter(chapter.chapter)"
+      >
         {{ chapter.chapter }}
       </button>
     </li>

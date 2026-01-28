@@ -1,1 +1,1 @@
-export * from './bible.routes.js';
+export * from './bootstrap.js';
