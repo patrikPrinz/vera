@@ -39,6 +39,7 @@ CMD ["pnpm", "--filter", "frontend", "dev"]
 
 # ---- runtime: minimální image pro běh v produkci ----
 FROM nginx:stable-alpine-perl AS runtime
+COPY packages/frontend/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/packages/frontend/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
