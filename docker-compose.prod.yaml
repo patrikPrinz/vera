@@ -5,8 +5,6 @@ services:
       target: runtime
     environment:
       - NODE_ENV=production
-      - ELASTIC_PASSWORD="${ELASTIC_PASSWORD:-pass}"
-    profiles: ['prod']
 
   frontend:
     build:
@@ -15,7 +13,6 @@ services:
       - NODE_ENV=production
     ports:
       - '${FRONTEND_PORT:-3001}:80'
-    profiles: ['prod']
 
   elastic-search:
     volumes:
