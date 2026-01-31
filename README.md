@@ -29,7 +29,7 @@ To run the containers you can download and run the docker compose like this:
 ### Linux/MacOS
 ```bash
 mkdir vera && cd vera
-wget https://github.com/patrikPrinz/vera/deployment/docker-compose.yaml
+wget https://github.com/patrikPrinz/vera/raw/refs/heads/main/release/docker-compose.yaml
 
 docker compose up
 ```

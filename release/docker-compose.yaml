@@ -40,7 +40,7 @@ services:
       - esdata:/usr/share/elasticsearch/data
 
   elastic-initializer:
-    image: 'ghcr.io/patrikprinz/vera-elatic-initializer:latest'
+    image: 'ghcr.io/patrikprinz/vera-elastic-initializer:latest'
     depends_on:
       - elastic-search
     environment:
