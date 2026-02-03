@@ -13,7 +13,7 @@ It provides these basic features (or will provide in the future):
 ## Prerequisites
 - Docker with docker compose
 - Internet connection
-- Node.js and pnpm (optional, for build and developpurposes)
+- Node.js and pnpm (optional, for build and development purposes)
 
 ## How to run it
 Each release of the application builds new docker images for each app package.
