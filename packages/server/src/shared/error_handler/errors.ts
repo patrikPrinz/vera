@@ -23,6 +23,12 @@ export class ValidationError extends AppError {
   }
 }
 
+export class AuthError extends AppError {
+  constructor(message = 'Request needs authentication') {
+    super(401, 'AUTH_ERROR', message);
+  }
+}
+
 export class NotFoundError extends AppError {
   constructor(message: string = 'Resource not found') {
     super(404, 'NOT_FOUND_ERROR', message);
