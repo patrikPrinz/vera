@@ -25,3 +25,7 @@ services:
   elastic-initializer:
 
   kibana:
+
+  postgres:
+
+  adminer:

@@ -1,19 +1,31 @@
 import express from 'express';
 import type { Express } from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
+import expressSession from 'express-session';
 
 import { errorHandler } from './shared/error_handler/error_handler.js';
 
 import { bibleContainer } from './container.js';
 import { registerBibleRouter } from './modules/bible/index.js';
+import { authContainer } from './container.js';
+import { registerAuthRouter } from './modules/auth/bootstrap.js';
+import passport from 'passport';
 
 const bibleRouter = registerBibleRouter(bibleContainer);
+const authRouter = registerAuthRouter(authContainer);
 
 const app: Express = express();
+
+app.use(expressSession({ secret: 'VeraAppSecret' }));
+app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(cors());
 
 app.use('/api/bible', bibleRouter);
+app.use('/api/auth', authRouter);
 
 app.use(errorHandler);
 
