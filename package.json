@@ -11,7 +11,7 @@
     "prod": "docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up",
     "test:unit": "pnpm --filter server run test:unit",
     "test:integration": "pnpm --filter server run test:integration",
-    "test": "pnpm --filter server run test",
+    "test": "pnpm -r run test",
     "lint": "eslint --fix 'packages/*/{src,tests}/**/*.{ts,tsx,vue}'",
     "format": "prettier -w 'packages/*/{src,tests}/**/*.{ts,js,json,md}'",
     "ci:lint": "eslint 'packages/*/{src,tests}/**/*.{ts,tsx,vue}' --max-warnings=0",
