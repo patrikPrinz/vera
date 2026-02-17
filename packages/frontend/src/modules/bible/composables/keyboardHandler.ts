@@ -20,16 +20,14 @@ function registered(code: string) {
 async function execute(code: string) {
   if (registered(code)) {
     const callback = keyBindings.get(code);
-    if (callback) {
+    if (typeof callback === 'function') {
       await callback();
     }
   }
 }
 
 window.addEventListener('keyup', (e: KeyboardEvent) => {
-  if (registered(e.key)) {
-    void execute(e.key);
-  }
+  void execute(e.key);
 });
 
 /**

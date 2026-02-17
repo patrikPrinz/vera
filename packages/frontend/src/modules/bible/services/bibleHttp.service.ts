@@ -5,8 +5,9 @@ import type {
   BibleVerse,
 } from '@/shared/types/bible/bible.types';
 import { Axios } from 'axios';
+import type { BibleHttpPort } from './bibleHttp.port';
 
-export class BibleHttpService {
+export class BibleHttpService implements BibleHttpPort {
   protected client: Axios;
 
   constructor(client: Axios) {
@@ -23,7 +24,10 @@ export class BibleHttpService {
     return [];
   }
 
-  public async getBibleChapters(translation: string, book: number) {
+  public async getBibleChapters(
+    translation: string,
+    book: number,
+  ): Promise<BibleChapter[]> {
     const data = await this.client.get(
       `bible/translation/${translation}/book/${book}/chapters`,
     );
