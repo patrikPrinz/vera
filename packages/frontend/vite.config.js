@@ -19,4 +19,16 @@ export default defineConfig({
       interval: 100,
     },
   },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    coverage: {
+      enabled: true,
+      provider: 'v8',
+      reporter: ['text', 'html'],
+      all: true,
+      include: ['**/*.{ts,vue}'],
+      exclude: ['dist/*', 'tests/*', '__fixtures__/.*\.ts(?:x)?$'],
+    },
+  },
 });
