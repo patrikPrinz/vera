@@ -15,11 +15,9 @@ COPY packages/frontend/package.json packages/frontend/tsconfig.json ./packages/f
 # Instalace workspace závislostí pouze pro server a jeho závislé balíčky
 RUN pnpm install --filter frontend... --no-frozen-lockfile
 # Copy package config files from root of the package (not needed for installing dependencies)
-COPY packages/frontend/tailwind.config.cjs\
-  packages/frontend/postcss.config.cjs\
-  packages/frontend/vite.config.js\
-  packages/frontend/index.html\
-  ./packages/frontend/
+COPY packages/frontend/vite.config.js\
+    packages/frontend/index.html\
+    ./packages/frontend/
 
 # ---- builder: produkční build artefaktů ----
 FROM deps AS builder
@@ -41,6 +39,7 @@ CMD ["pnpm", "--filter", "frontend", "dev"]
 
 # ---- runtime: minimální image pro běh v produkci ----
 FROM nginx:stable-alpine-perl AS runtime
+COPY packages/frontend/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/packages/frontend/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

@@ -63,6 +63,7 @@ export default tseslint.config(
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
       },
+      globals: { ...globals.browser, ...globals.es2024 },
     },
     plugins: {
       vue,

@@ -1,1 +1,39 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #173a60;
+  --color-secondary: #32506c;
+  --color-background: #9cbddb;
+  --color-text: #353535;
+  --color-text-inverse: #cecece;
+}
+@custom-variant dark (&:where(.dark, .dark *));
+@layer base {
+  .dark {
+    --color-background: #373d51;
+    --color-text: #cecece;
+    --color-text-inverse: #282828;
+  }
+  :root {
+    --theme-transition: 300ms;
+    --theme-ease: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  html,
+  body {
+    transition:
+      background-color var(--theme-transition) var(--theme-ease),
+      color var(--theme-transition) var(--theme-ease);
+  }
+
+  /* Pro většinu prvků v UI */
+  :where(*, *::before, *::after) {
+    transition:
+      background-color var(--theme-transition) var(--theme-ease),
+      color var(--theme-transition) var(--theme-ease),
+      border-color var(--theme-transition) var(--theme-ease),
+      fill var(--theme-transition) var(--theme-ease),
+      stroke var(--theme-transition) var(--theme-ease),
+      box-shadow var(--theme-transition) var(--theme-ease);
+  }
+}

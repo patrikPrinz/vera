@@ -4,11 +4,8 @@ services:
       target: dev
     environment:
       - NODE_ENV=development
-      - ELASTIC_PASSWORD="${ELASTIC_PASSWORD:-pass}"
     volumes:
-      - ./packages/server/src:/app/packages/server/src
-    profiles: ['dev']
-
+      - ./packages/server/src:/app/packages/server/src:z
   frontend:
     build:
       target: dev
@@ -17,10 +14,9 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - CHOKIDAR_INTERVAL=100
     ports:
-      - "${FRONTEND_PORT:-3001}:3001"
+      - '${FRONTEND_PORT:-3001}:3001'
     volumes:
-      - ./packages/frontend/src:/app/packages/frontend/src
-    profiles: ['dev']
+      - ./packages/frontend/src:/app/packages/frontend/src:z
 
   elastic-search:
     volumes:
@@ -29,3 +25,7 @@ services:
   elastic-initializer:
 
   kibana:
+
+  postgres:
+
+  adminer:

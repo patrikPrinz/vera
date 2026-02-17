@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import NavBar from './components/navigation/NavBar.vue';
+import { useThemeStore } from './stores/themeStore';
 
+const themeStore = useThemeStore();
 </script>
 
 <template>
-  <NavBar />
-  <div class="px-4">
-    <router-view/>
+  <div class="min-h-screen pb-3" :class="themeStore.darkTheme ? 'dark' : ''">
+    <NavBar />
+    <div class="bg-background px-4">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -16,6 +20,11 @@ import NavBar from './components/navigation/NavBar.vue';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+#app .dark {
+  color: var(--color-text);
+  background-color: var(--color-background);
 }
 </style>
