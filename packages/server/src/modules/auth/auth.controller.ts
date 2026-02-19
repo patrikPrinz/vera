@@ -46,4 +46,8 @@ export class AuthController {
     }
     res.status(200).json({ message: 'ok' });
   };
+
+  getMe = (_req: Request, res: Response, _next: NextFunction) => {
+    res.status(200).json({ authenticated: true });
+  };
 }
