@@ -4,8 +4,9 @@ import type {
 } from '@/shared/types/bible/bible.types';
 import { defineStore } from 'pinia';
 import { ref, type Ref } from 'vue';
-import { BibleHttpService } from '../services/bibleHttp.service';
+import { type BibleHttpPort } from '../services/bibleHttp.port';
 import { httpClient } from '@/shared/httpClient/HttpProvider';
+import { BibleHttpService } from '../services/bibleHttp.service';
 
 export const useBibleStore = defineStore('bible', () => {
   const currentTranslation: Ref<string | undefined> = ref(undefined);
@@ -15,13 +16,14 @@ export const useBibleStore = defineStore('bible', () => {
     ref(undefined);
   const booksMetadata: Ref<Record<number, BibleBookMetadata> | undefined> =
     ref(undefined);
-  const httpService = new BibleHttpService(httpClient);
+  //const httpService = new BibleHttpPort(httpClient);
 
   function getCurrentTranslation() {
     return currentTranslation.value;
   }
 
   async function setCurrentTranslation(value: string) {
+    const httpService = getBibleService();
     currentTranslation.value = value;
     const data = await httpService.getTranslationMetadata(
       currentTranslation.value,
@@ -44,7 +46,9 @@ export const useBibleStore = defineStore('bible', () => {
   }
 
   function setCurrentBook(value: number | undefined) {
-    currentBook.value = value;
+    if (value === undefined || getBookMetadata(value)) {
+      currentBook.value = value;
+    }
   }
 
   function isChapterSet() {
@@ -91,3 +95,16 @@ export const useBibleStore = defineStore('bible', () => {
     initialize,
   };
 });
+
+let bibleService: BibleHttpPort | null = null;
+
+export function setBibleService(service: BibleHttpPort | null) {
+  bibleService = service;
+}
+
+function getBibleService(): BibleHttpPort {
+  if (!bibleService) {
+    bibleService = new BibleHttpService(httpClient);
+  }
+  return bibleService;
+}
