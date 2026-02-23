@@ -54,7 +54,6 @@ import { useKeyboardHandler } from '@/composables/keyboardHandler';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';
-import { useAuthStore } from '../authStore';
 import { authService } from '../services/authService.provider';
 import router from '@/router';
 
