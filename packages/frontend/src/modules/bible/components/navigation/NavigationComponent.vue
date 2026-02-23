@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { BsArrowUpSquare } from 'vue-icons-plus/bs';
-import { useKeyboardHandler } from '../../composables/keyboardHandler';
+import { useKeyboardHandler } from '../../../../composables/keyboardHandler';
 import { onMounted, onUnmounted } from 'vue';
 
 const props = defineProps(['title']);
