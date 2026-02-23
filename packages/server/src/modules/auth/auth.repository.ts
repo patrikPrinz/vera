@@ -25,7 +25,23 @@ export class AuthRepository {
       .select(['id', 'email', 'username'])
       .where('email', '=', email)
       .executeTakeFirst();
-    if (query) {
+    if (!query) {
+      return undefined;
+    }
+    return {
+      id: query.id,
+      email: query.email,
+      username: query.username,
+    };
+  }
+
+  public async findUserById(id: string): Promise<UserDetails | undefined> {
+    const query = await this.adapter
+      .selectFrom('user_details')
+      .select(['id', 'email', 'username'])
+      .where('id', '=', id)
+      .executeTakeFirst();
+    if (!query) {
       return undefined;
     }
     return {
