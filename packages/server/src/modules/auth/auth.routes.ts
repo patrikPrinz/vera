@@ -35,9 +35,12 @@ export class AuthRouterFactory {
 
     router.post('/logout', authenticated, controller.postLogout);
 
-    router.get('/me', authenticated, (_req, res) => {
-      res.send('Hello there.');
-    });
+    router.get(
+      '/me',
+
+      authenticated,
+      controller.getMe,
+    );
 
     return router;
   }

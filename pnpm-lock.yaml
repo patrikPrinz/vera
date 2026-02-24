@@ -127,6 +127,9 @@ importers:
       vue3-toastification:
         specifier: 0.0.1-beta
         version: 0.0.1-beta(typescript@5.9.3)
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
     devDependencies:
       '@types/jest':
         specifier: ^27.5.2
@@ -9150,7 +9153,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 25.2.3
+      '@types/node': 24.10.13
       merge-stream: 2.0.0
       supports-color: 8.1.1
 

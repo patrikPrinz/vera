@@ -17,12 +17,18 @@ const authRouter = registerAuthRouter(authContainer);
 
 const app: Express = express();
 
-app.use(expressSession({ secret: 'VeraAppSecret' }));
+app.use(
+  expressSession({
+    secret: 'VeraAppSecret',
+    saveUninitialized: false,
+    cookie: { httpOnly: true, sameSite: 'lax', secure: false },
+  }),
+);
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
 
 app.use('/api/bible', bibleRouter);
 app.use('/api/auth', authRouter);
