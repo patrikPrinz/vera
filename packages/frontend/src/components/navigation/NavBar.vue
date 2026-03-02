@@ -6,7 +6,7 @@
       <div class="grow-0">
         <router-link to="/">
           <h1 class="hover:bg-secondary p-3 pt-1.5 text-xl font-bold">
-            {{ $t('general.appName') }}
+            {{ i18n.t('general.appName') }}
           </h1>
         </router-link>
       </div>
@@ -49,7 +49,7 @@
                 class="hover:bg-primary block w-full cursor-pointer text-lg font-bold"
                 :to="`/${option}`"
                 @click="hideMenu()"
-                >{{ $t(option) }}</router-link
+                >{{ i18n.t(option) }}</router-link
               >
             </li>
             <li>ahoy-hoy</li>
@@ -64,6 +64,9 @@
 import { BiMenu, BiMoon, BiSun, BiX } from 'vue-icons-plus/bi';
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useThemeStore } from '@/stores/themeStore';
+import { useI18n } from 'vue-i18n';
+
+const i18n = useI18n();
 
 const menuOptions = ['bible'];
 const showMenu = ref(false);
