@@ -1,6 +1,9 @@
 import { injectable, inject } from 'tsyringe';
 import type { AuthRepository } from './auth.repository.js';
-import type { AuthenticationRequest } from '../../shared/types/auth/auth.types.js';
+import type {
+  AuthenticationRequest,
+  UserDetails,
+} from '../../shared/types/auth/auth.types.js';
 import { ValidationError } from '../../shared/error_handler/errors.js';
 
 @injectable()
@@ -31,5 +34,9 @@ export class AuthService {
       return true;
     }
     return false;
+  };
+
+  getUserDetails = async (id: string): Promise<UserDetails | undefined> => {
+    return await this.repository.findUserById(id);
   };
 }

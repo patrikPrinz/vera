@@ -4,7 +4,8 @@ import type { ValidatedRequest } from '../../shared/request_validator/request_va
 import type { postRegisterSchema } from './auth.schema.js';
 import z from 'zod';
 import type { AuthService } from './auth.service.js';
-import { AppError } from '../../shared/error_handler/errors.js';
+import { AppError, AuthError } from '../../shared/error_handler/errors.js';
+import type { User } from '../../shared/types/auth/auth.types.js';
 
 @injectable()
 export class AuthController {
@@ -47,7 +48,12 @@ export class AuthController {
     res.status(200).json({ message: 'ok' });
   };
 
-  getMe = (_req: Request, res: Response, _next: NextFunction) => {
-    res.status(200).json({ authenticated: true });
+  getMe = async (req: Request, res: Response, _next: NextFunction) => {
+    if (req.user) {
+      const result = await this.service.getUserDetails((req.user as User).id);
+      res.status(200).json(result);
+    } else {
+      throw new AuthError();
+    }
   };
 }
