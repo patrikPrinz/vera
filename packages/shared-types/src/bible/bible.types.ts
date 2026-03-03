@@ -1,3 +1,10 @@
+export interface BibleLocation {
+  translation: string;
+  book: number;
+  chapter: number;
+  verse: number;
+}
+
 export interface BibleVerse {
   id?: string;
   translation: string;
