@@ -49,7 +49,7 @@
         </button>
         <nav>
           <ul>
-            <li v-for="option in menuOptions">
+            <li v-for="(option, index) in menuOptions">
               <router-link
                 class="hover:bg-primary block w-full cursor-pointer text-lg font-bold"
                 :to="`/${option}`"
@@ -67,11 +67,12 @@
 
 <script setup lang="ts">
 import { BiMenu, BiMoon, BiSun, BiX } from 'vue-icons-plus/bi';
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useThemeStore } from '@/stores/themeStore';
 import { useI18n } from 'vue-i18n';
 import LocaleSwitcher from '@/shared/i18n/components/LocaleSwitcher.vue';
 import UserSwitcher from '@/modules/auth/components/UserSwitcher.vue';
+import { useKeyboardHandler } from '@/composables/keyboardHandler';
 
 const i18n = useI18n();
 
@@ -86,16 +87,10 @@ function hideMenu() {
   showMenu.value = false;
 }
 
-function onKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape') hideMenu();
-}
+const { registerKey, unregisterKey } = useKeyboardHandler();
 
-onMounted(() => window.addEventListener('keydown', onKeydown));
-onUnmounted(() => window.removeEventListener('keydown', onKeydown));
-
-watch(showMenu, (open) => {
-  document.body.style.overflow = open ? 'hidden' : '';
-});
+onMounted(() => registerKey('Escape', hideMenu));
+onUnmounted(() => unregisterKey('Escape'));
 
 // light/dark theme switching
 const themeStore = useThemeStore();

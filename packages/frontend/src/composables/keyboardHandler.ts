@@ -47,6 +47,7 @@ export function useKeyboardHandler(): RegisterKey {
     'ArrowRight',
     'Backspace',
     'Enter',
+    'Escape',
   ];
 
   const registerKey = (

@@ -16,7 +16,7 @@
   />
 
   <div class="absolute top-12" v-if="showMenu == true">
-    <div v-if="await authStore.isAuthenticated()"></div>
+    <div v-if="true"></div>
     <div v-else><router-link to="/auth/login"></router-link></div>
   </div>
 </template>
