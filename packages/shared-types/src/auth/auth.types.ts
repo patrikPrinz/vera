@@ -12,7 +12,7 @@ export interface User {
 export interface UserDetails {
   id: string;
   email: string;
-  username: string;
+  username?: string;
 }
 
 export interface AuthProvider {

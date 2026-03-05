@@ -1,0 +1,22 @@
+{
+  "general": {
+    "appName": "Vera",
+    "serverError": "Načítání dat ze serveru selhalo.",
+    "email": "E-mail",
+    "password": "Heslo",
+    "passwordConfirm": "Heslo znovu",
+    "send": "Odeslat"
+  },
+  "login": {
+    "register": "Zaregistrovat se",
+    "login": "Přihlásit se",
+    "missingCredentials": "Vyplňte prosím jméno a heslo.",
+    "incorrectCredentials": "Chybné jméno, nebo heslo.",
+    "duplicateRegisterMethod": "Uživatel již je zaregistrovám.",
+    "wrongPasswordCheck": "Hesla se neshodují"
+  },
+  "navigation": {
+    "home": "Domů",
+    "bible": "Bible"
+  }
+}

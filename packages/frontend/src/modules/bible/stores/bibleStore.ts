@@ -4,9 +4,11 @@ import type {
 } from '@/shared/types/bible/bible.types';
 import { defineStore } from 'pinia';
 import { ref, type Ref } from 'vue';
-import { type BibleHttpPort } from '../services/bibleHttp.port';
 import { httpClient } from '@/shared/httpClient/HttpProvider';
-import { BibleHttpService } from '../services/bibleHttp.service';
+import {
+  BibleHttpService,
+  type IBibleHttpService,
+} from '../services/bibleHttp.service';
 
 export const useBibleStore = defineStore('bible', () => {
   const currentTranslation: Ref<string | undefined> = ref(undefined);
@@ -96,13 +98,13 @@ export const useBibleStore = defineStore('bible', () => {
   };
 });
 
-let bibleService: BibleHttpPort | null = null;
+let bibleService: IBibleHttpService | null = null;
 
-export function setBibleService(service: BibleHttpPort | null) {
+export function setBibleService(service: IBibleHttpService | null) {
   bibleService = service;
 }
 
-function getBibleService(): BibleHttpPort {
+function getBibleService(): IBibleHttpService {
   if (!bibleService) {
     bibleService = new BibleHttpService(httpClient);
   }

@@ -6,18 +6,22 @@
       <div class="grow-0">
         <router-link to="/">
           <h1 class="hover:bg-secondary p-3 pt-1.5 text-xl font-bold">
-            {{ $t('general.appName') }}
+            {{ i18n.t('general.appName') }}
           </h1>
         </router-link>
       </div>
-      <div class="hover:bg-secondary">
-        <div
-          class="grow-0 cursor-pointer p-2 transition duration-300"
-          :class="{ 'rotate-90': showMenu }"
-          @click="toggleMenu()"
-        >
-          <BiX class="fade show" v-if="showMenu" />
-          <BiMenu class="fade show" v-else />
+      <div class="flex space-x-2">
+        <LocaleSwitcher class="p-2" />
+        <UserSwitcher class="p-2" />
+        <div class="hover:bg-secondary">
+          <div
+            class="grow-0 cursor-pointer p-2 transition duration-300"
+            :class="{ 'rotate-90': showMenu }"
+            @click="toggleMenu()"
+          >
+            <BiX class="fade show" v-if="showMenu" />
+            <BiMenu class="fade show" v-else />
+          </div>
         </div>
       </div>
     </header>
@@ -30,6 +34,7 @@
         class="bg-white-100 absolute inset-0 opacity-50"
         @click="hideMenu()"
       ></div>
+
       <aside
         class="bg-secondary text-text-inverse dark:text-text z-10 min-h-screen min-w-1/2 transform opacity-[1] transition-transform duration-300 md:min-w-1/4"
         :class="showMenu ? 'translate-x-0' : '-translate-x-full'"
@@ -44,15 +49,15 @@
         </button>
         <nav>
           <ul>
-            <li v-for="option in menuOptions">
+            <li v-for="(option, index) in menuOptions">
               <router-link
                 class="hover:bg-primary block w-full cursor-pointer text-lg font-bold"
                 :to="`/${option}`"
                 @click="hideMenu()"
-                >{{ $t(option) }}</router-link
               >
+                {{ i18n.t(option) }}
+              </router-link>
             </li>
-            <li>ahoy-hoy</li>
           </ul>
         </nav>
       </aside>
@@ -62,8 +67,14 @@
 
 <script setup lang="ts">
 import { BiMenu, BiMoon, BiSun, BiX } from 'vue-icons-plus/bi';
-import { ref, onMounted, onUnmounted, watch } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useThemeStore } from '@/stores/themeStore';
+import { useI18n } from 'vue-i18n';
+import LocaleSwitcher from '@/shared/i18n/components/LocaleSwitcher.vue';
+import UserSwitcher from '@/modules/auth/components/UserSwitcher.vue';
+import { useKeyboardHandler } from '@/composables/keyboardHandler';
+
+const i18n = useI18n();
 
 const menuOptions = ['bible'];
 const showMenu = ref(false);
@@ -76,16 +87,10 @@ function hideMenu() {
   showMenu.value = false;
 }
 
-function onKeydown(e: KeyboardEvent) {
-  if (e.key === 'Escape') hideMenu();
-}
+const { registerKey, unregisterKey } = useKeyboardHandler();
 
-onMounted(() => window.addEventListener('keydown', onKeydown));
-onUnmounted(() => window.removeEventListener('keydown', onKeydown));
-
-watch(showMenu, (open) => {
-  document.body.style.overflow = open ? 'hidden' : '';
-});
+onMounted(() => registerKey('Escape', hideMenu));
+onUnmounted(() => unregisterKey('Escape'));
 
 // light/dark theme switching
 const themeStore = useThemeStore();
