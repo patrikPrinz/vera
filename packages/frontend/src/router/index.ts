@@ -34,6 +34,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/user/bookmarks',
     name: 'bookmarks',
+    meta: { requiresAuth: true },
     component: () => import('../modules/user/views/BookmarkView.vue'),
   },
 ];
