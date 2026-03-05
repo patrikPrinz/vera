@@ -1,4 +1,4 @@
-import type { Request, Response, NextFunction } from 'express';
+import type { Response, NextFunction } from 'express';
 import { inject, injectable } from 'tsyringe';
 import { UserService } from './user.service.js';
 import type { User } from '../../shared/types/auth/auth.types.js';
