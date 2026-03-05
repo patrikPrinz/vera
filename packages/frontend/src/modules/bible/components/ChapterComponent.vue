@@ -6,9 +6,17 @@
     @previousItemEvent="previousItemEvent"
     @nextItemEvent="nextItemEvent"
   />
-  <p class="py-1 text-left" v-for="verse in verses">
-    <span class="pe-1 font-bold">{{ verse.verse }}.</span>{{ verse.text }}
+
+  <p
+    :id="`verse-${verse.verse}`"
+    class="scroll-ms-8 py-1 text-left"
+    v-for="(verse, key) in verses"
+  >
+    <span class="pe-1 font-bold" @click="$emit('selectVerseEvent', verse)"
+      >{{ verse.verse }}.</span
+    >{{ verse.text }}
   </p>
+
   <ChapterNavigationComponent
     :firstItem="firstChapter"
     :lastItem="lastChapter"
