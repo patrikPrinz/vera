@@ -45,7 +45,7 @@ CREATE TABLE user_bookmarks (
     bible_verse smallint NOT NULL,
     author_id bigint NOT NULL REFERENCES user_details(id),
     bookmark_name varchar(50) NOT NULL,
-    UNIQUE (author_id, bookmark_name)
+    UNIQUE (author_id, bookmark_name, bible_translation)
 );
 
 CREATE TABLE bible_user_metadata (

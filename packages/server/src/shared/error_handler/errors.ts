@@ -29,6 +29,12 @@ export class AuthError extends AppError {
   }
 }
 
+export class PermissionError extends AppError {
+  constructor(message = 'User not permitted to perform this operation') {
+    super(403, 'PERMISSION_ERROR', message);
+  }
+}
+
 export class NotFoundError extends AppError {
   constructor(message: string = 'Resource not found') {
     super(404, 'NOT_FOUND_ERROR', message);

@@ -2,67 +2,60 @@ import type { Kysely } from 'kysely';
 import { inject, injectable } from 'tsyringe';
 import type { Database } from '../../../shared/postgres/schema.js';
 import type { BibleLocation } from '../../../shared/types/bible/bible.types.js';
-import type { Bookmark } from '../user.types.js';
-import { ConflictError } from '../../../shared/error_handler/errors.js';
-import type { DatabaseError } from 'pg';
+import type { UserVerseMetadata } from '../user.types.js';
 
 @injectable()
-export class BookmarkRepository {
+export class VerseMetadataRepository {
   protected adapter: Kysely<Database>;
 
   constructor(@inject('PostgresAdapter') adapter: Kysely<Database>) {
     this.adapter = adapter;
   }
 
-  /**
-   * Method inserts bookmark into a database
-   * @param bookmark bookmark to be inserted
-   * @returns id of new bookmark
-   */
-  public async insertBookmark(bookmark: Bookmark): Promise<string> {
-    try {
-      const query = await this.adapter
-        .insertInto('user_bookmarks')
-        .values({
-          author_id: bookmark.authorId,
-          bookmark_name: bookmark.name,
-          bible_translation: bookmark.location.translation,
-          bible_book: bookmark.location.book,
-          bible_chapter: bookmark.location.chapter,
-          bible_verse: bookmark.location.verse,
-        })
-        .returning('id')
-        .executeTakeFirst();
-      if (!query) {
-        return undefined;
-      }
-      return query.id;
-    } catch (err: unknown) {
-      if ((err as DatabaseError).code === '23505') {
-        throw new ConflictError('Bookmark already exists');
-      }
+  public async InsertVerseMetadata(
+    authorId: string,
+    color: string,
+    text: string,
+    location: BibleLocation,
+  ): Promise<string> {
+    const query = await this.adapter
+      .insertInto('bible_user_metadata')
+      .values({
+        author_id: authorId,
+        bible_translation: location.translation,
+        bible_book: location.book,
+        bible_chapter: location.chapter,
+        bible_verse: location.verse,
+        highlight_color: color,
+        note_text: text,
+      })
+      .returning('id')
+      .executeTakeFirst();
+
+    if (!query) {
+      return undefined;
     }
+    return query.id;
   }
 
-  public async deleteBookmark(id: string): Promise<bigint> {
+  public async deleteVerseMetadata(id: string): Promise<bigint> {
     const query = await this.adapter
-      .deleteFrom('user_bookmarks')
+      .deleteFrom('bible_user_metadata')
       .where('id', '=', id)
       .executeTakeFirst();
     return query.numDeletedRows;
   }
 
-  public async moveBookmark(
+  public async editVerseMetadata(
     id: string,
-    newLocation: BibleLocation,
+    newText: string,
+    newColor: string,
   ): Promise<BibleLocation | undefined> {
     const query = await this.adapter
-      .updateTable('user_bookmarks')
+      .updateTable('bible_user_metadata')
       .set({
-        bible_translation: newLocation.translation,
-        bible_book: newLocation.book,
-        bible_chapter: newLocation.chapter,
-        bible_verse: newLocation.verse,
+        highlight_color: newColor,
+        note_text: newText,
       })
       .where('id', '=', id)
       .returning([
@@ -85,12 +78,15 @@ export class BookmarkRepository {
     } as BibleLocation;
   }
 
-  public async findBookmarkById(id: string): Promise<Bookmark | undefined> {
+  public async findVerseMetadatakById(
+    id: string,
+  ): Promise<UserVerseMetadata | undefined> {
     const query = await this.adapter
-      .selectFrom('user_bookmarks')
+      .selectFrom('bible_user_metadata')
       .select([
         'id',
-        'bookmark_name',
+        'note_text',
+        'highlight_color',
         'bible_translation',
         'bible_book',
         'bible_chapter',
@@ -104,32 +100,32 @@ export class BookmarkRepository {
     }
     return {
       id: query.id,
-      name: query.bookmark_name,
+      noteText: query.note_text,
+      highlightColor: query.highlight_color,
       location: {
         translation: query.bible_translation,
         book: query.bible_book,
         chapter: query.bible_chapter,
         verse: query.bible_verse,
       },
-    } as Bookmark;
+    } as UserVerseMetadata;
   }
 
-  public async findBookmarksByTranslation(
-    authorId: string,
-    translation: string,
-  ): Promise<Bookmark[]> {
+  public async findVerseMetadataByLocation(
+    location: BibleLocation,
+  ): Promise<UserVerseMetadata[]> {
     const query = await this.adapter
-      .selectFrom('user_bookmarks')
+      .selectFrom('bible_user_metadata')
       .select([
         'id',
-        'bookmark_name',
+        'note_text',
+        'highlight_color',
         'bible_translation',
         'bible_book',
         'bible_chapter',
         'bible_verse',
       ])
-      .where('bible_translation', '=', translation)
-      .where('author_id', '=', authorId)
+      .where('bible_translation', '=', location.translation)
       .execute();
     if (query.length == 0) {
       return [];
@@ -138,14 +134,15 @@ export class BookmarkRepository {
       (e) =>
         ({
           id: e.id,
-          name: e.bookmark_name,
+          noteText: e.note_text,
+          highlightColor: e.highlight_color,
           location: {
             translation: e.bible_translation,
             book: e.bible_book,
             chapter: e.bible_chapter,
             verse: e.bible_verse,
           },
-        }) as Bookmark,
+        }) as UserVerseMetadata,
     );
   }
 }
