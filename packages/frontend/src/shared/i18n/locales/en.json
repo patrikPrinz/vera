@@ -19,5 +19,8 @@
   "navigation": {
     "home": "Home",
     "bible": "Bible"
+  },
+  "user": {
+    "bookmarks": "Bookmarks"
   }
 }

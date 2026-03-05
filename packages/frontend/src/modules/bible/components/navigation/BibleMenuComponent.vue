@@ -13,13 +13,27 @@
 
     <p v-if="activeVerse">{{ activeVerse.verse }}</p>
 
-    <div class="hover:bg-secondary cursor-pointer p-2">
-      <BiDotsVerticalRounded />
+    <div class="hover:bg-secondary cursor-pointer p-0.5">
+      <Dropdown class="m-0 p-0">
+        <template #trigger class="m-0">
+          <i class="hover:bg-secondary m-0 cursor-pointer p-1"
+            ><BiDotsVerticalRounded
+          /></i>
+        </template>
+        <DropdownContent>
+          <div>
+            <router-link to="/user/bookmarks">
+              {{ $t('user.bookmarks') }}
+            </router-link>
+          </div>
+        </DropdownContent>
+      </Dropdown>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
+import { Dropdown, DropdownContent } from 'v-dropdown';
 import type { BibleVerse } from '@/shared/types/bible/bible.types';
 import {
   BiNote,

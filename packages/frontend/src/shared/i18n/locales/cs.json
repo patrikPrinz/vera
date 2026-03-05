@@ -19,5 +19,8 @@
   "navigation": {
     "home": "Domů",
     "bible": "Bible"
+  },
+  "user": {
+    "bookmarks": "Záložky"
   }
 }
