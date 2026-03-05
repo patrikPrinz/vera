@@ -24,9 +24,6 @@
 <script setup lang="ts">
 import { BiUserCircle } from 'vue-icons-plus/bi';
 import { ref } from 'vue';
-import { useAuthStore } from '../authStore';
 
 const showMenu = ref(false);
-
-const authStore = useAuthStore();
 </script>
