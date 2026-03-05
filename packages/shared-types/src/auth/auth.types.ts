@@ -20,3 +20,7 @@ export interface AuthProvider {
   code: string;
   name: string;
 }
+
+export interface User {
+  id: string;
+}
