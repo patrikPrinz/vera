@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { i18n } from './shared/i18n/index';
+import { createTranslation } from './shared/i18n/index';
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
@@ -15,7 +15,7 @@ const app = createApp(App);
 
 app.use(Toast);
 app.use(pinia);
-app.use(i18n);
+app.use(await createTranslation());
 app.use(router);
 
 app.mount('#app');

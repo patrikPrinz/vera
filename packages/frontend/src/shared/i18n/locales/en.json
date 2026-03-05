@@ -1,0 +1,22 @@
+{
+  "general": {
+    "appName": "Vera",
+    "send": "send",
+    "email": "E-mail",
+    "password": "Password",
+    "passwordConfirm": "Password confirm",
+    "serverError": "Failed loading data from server."
+  },
+  "login": {
+    "register": "Register",
+    "login": "Log in",
+    "missingCredentials": "Fill out the username and password fields.",
+    "incorrectCredentials": "Incorrect credentials.",
+    "duplicateRegisterMethod": "User is already registered,",
+    "wrongPasswordCheck": "Passwords do not match"
+  },
+  "navigation": {
+    "home": "Home",
+    "bible": "Bible"
+  }
+}

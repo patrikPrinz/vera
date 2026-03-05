@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import app from './bootstrap.js';
 
 const PORT = process.env.PORT || 3000;
