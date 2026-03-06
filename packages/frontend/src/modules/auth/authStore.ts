@@ -6,6 +6,13 @@ import { ref, type Ref } from 'vue';
 export const useAuthStore = defineStore('auth', () => {
   const email: Ref<string | null> = ref(null);
 
+  function getEmail(): string {
+    if (email.value) {
+      return email.value;
+    }
+    return '';
+  }
+
   async function login(login: string, password: string) {
     const loginResult = await getAuthService().login(login, password);
     if (loginResult) {
@@ -19,6 +26,7 @@ export const useAuthStore = defineStore('auth', () => {
     const logoutResult = await getAuthService().logout();
     if (logoutResult) {
       email.value = null;
+      localStorage.removeItem('authenticated');
     }
   }
 
@@ -27,17 +35,30 @@ export const useAuthStore = defineStore('auth', () => {
     if (authResult && email == null) {
       await loadUserData();
     }
+    if (authResult === true) {
+      localStorage.setItem('authenticated', 'true');
+    } else {
+      localStorage.removeItem('authenticated');
+    }
     return authResult;
+  }
+
+  function isAuthenticatedSync(): boolean {
+    if (localStorage.getItem('authenticated') === null) {
+      return false;
+    }
+    return localStorage.getItem('authenticated') === 'true';
   }
 
   async function loadUserData() {
     const data = await getAuthService().userDetails();
     if (data) {
       email.value = data.email;
+      localStorage.setItem('authenticated', 'true');
     }
   }
 
-  return { login, logout, isAuthenticated };
+  return { login, logout, isAuthenticated, isAuthenticatedSync, getEmail };
 });
 
 let authService: IAuthService | null = null;

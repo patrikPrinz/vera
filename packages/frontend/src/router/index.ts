@@ -30,6 +30,13 @@ const routes: Array<RouteRecordRaw> = [
     name: 'register',
     component: () => import('../modules/auth/views/RegisterView.vue'),
   },
+
+  {
+    path: '/user/bookmarks',
+    name: 'bookmarks',
+    meta: { requiresAuth: true },
+    component: () => import('../modules/user/views/BookmarkView.vue'),
+  },
 ];
 
 const router = createRouter({

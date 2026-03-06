@@ -90,6 +90,7 @@ export class BookmarkRepository {
       .selectFrom('user_bookmarks')
       .select([
         'id',
+        'author_id',
         'bookmark_name',
         'bible_translation',
         'bible_book',
@@ -104,6 +105,7 @@ export class BookmarkRepository {
     }
     return {
       id: query.id,
+      authorId: query.author_id,
       name: query.bookmark_name,
       location: {
         translation: query.bible_translation,
