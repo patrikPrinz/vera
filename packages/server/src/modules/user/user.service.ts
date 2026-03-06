@@ -1,12 +1,13 @@
 import { inject, injectable } from 'tsyringe';
 import { BookmarkRepository } from './repositories/bookmark.repository.js';
 import type { VerseMetadataRepository } from './repositories/verseMetadata.repository.js';
-import type { Bookmark } from './user.types.js';
+import type { Bookmark, UserVerseMetadata } from './user.types.js';
 import {
+  AppError,
   NotFoundError,
   PermissionError,
 } from '../../shared/error_handler/errors.js';
-import type { BibleLocation } from '../bible/bible.types.js';
+import type { BibleChapter, BibleLocation } from '../bible/bible.types.js';
 
 @injectable()
 export class UserService {
@@ -86,5 +87,105 @@ export class UserService {
       newLocation,
     );
     return movedBookmark;
+  };
+
+  // **************
+  // verse metadata
+  // **************
+
+  findVerseMetadataById = async (
+    userId: string,
+    id: string,
+  ): Promise<UserVerseMetadata> => {
+    const bookmark =
+      await this.verseMetadataRepository.findVerseMetadatakById(id);
+    if (!bookmark) {
+      throw new NotFoundError();
+    }
+    if (userId !== bookmark.authorId) {
+      throw new PermissionError();
+    }
+    return bookmark;
+  };
+
+  findVerseMetadataByTranslation = async (
+    userId: string,
+    translation: string,
+  ): Promise<UserVerseMetadata[]> => {
+    const bookmarks =
+      await this.verseMetadataRepository.findVerseMetadataByTranslation(
+        userId,
+        translation,
+      );
+    return bookmarks;
+  };
+
+  findVerseMetadataByChapter = async (
+    userId: string,
+    location: BibleChapter,
+  ): Promise<UserVerseMetadata[]> => {
+    const bookmarks =
+      await this.verseMetadataRepository.findVerseMetadataByChapter(
+        userId,
+        location,
+      );
+    return bookmarks;
+  };
+
+  createVerseMetadata = async (
+    userId: string,
+    metadata: UserVerseMetadata,
+  ): Promise<UserVerseMetadata> => {
+    if (userId !== metadata.authorId) {
+      throw new PermissionError();
+    }
+    const insertedData =
+      await this.verseMetadataRepository.InsertVerseMetadata(metadata);
+    if (!insertedData) {
+      throw new AppError();
+    }
+    metadata.id = insertedData;
+    return metadata;
+  };
+
+  deleteVerseMetadata = async (
+    userId: string,
+    id: string,
+  ): Promise<boolean> => {
+    const metadataFromDb =
+      await this.verseMetadataRepository.findVerseMetadatakById(id);
+    if (!metadataFromDb) {
+      throw new NotFoundError();
+    }
+    if (userId !== metadataFromDb.authorId) {
+      throw new PermissionError();
+    }
+    const deletedData =
+      await this.verseMetadataRepository.deleteVerseMetadata(id);
+    return deletedData > 0;
+  };
+
+  editVerseMetadata = async (
+    userId: string,
+    id: string,
+    noteText: string,
+    highlightColor: string | null,
+  ): Promise<UserVerseMetadata> => {
+    const metadataFromDb =
+      await this.verseMetadataRepository.findVerseMetadatakById(id);
+    if (!metadataFromDb) {
+      throw new NotFoundError();
+    }
+    if (userId !== metadataFromDb.authorId) {
+      throw new PermissionError();
+    }
+    await this.verseMetadataRepository.editVerseMetadata(
+      id,
+      noteText,
+      highlightColor,
+    );
+    metadataFromDb.noteText = noteText;
+    metadataFromDb.highlightColor = highlightColor;
+    return metadataFromDb;
   };
 }

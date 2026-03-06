@@ -1,8 +1,13 @@
 import type { Kysely } from 'kysely';
 import { inject, injectable } from 'tsyringe';
 import type { Database } from '../../../shared/postgres/schema.js';
-import type { BibleLocation } from '../../../shared/types/bible/bible.types.js';
+import type {
+  BibleChapter,
+  BibleLocation,
+} from '../../../shared/types/bible/bible.types.js';
 import type { UserVerseMetadata } from '../user.types.js';
+import type { DatabaseError } from 'pg';
+import { ConflictError } from '../../../shared/error_handler/errors.js';
 
 @injectable()
 export class VerseMetadataRepository {
@@ -13,29 +18,32 @@ export class VerseMetadataRepository {
   }
 
   public async InsertVerseMetadata(
-    authorId: string,
-    color: string,
-    text: string,
-    location: BibleLocation,
+    metadata: UserVerseMetadata,
   ): Promise<string> {
-    const query = await this.adapter
-      .insertInto('bible_user_metadata')
-      .values({
-        author_id: authorId,
-        bible_translation: location.translation,
-        bible_book: location.book,
-        bible_chapter: location.chapter,
-        bible_verse: location.verse,
-        highlight_color: color,
-        note_text: text,
-      })
-      .returning('id')
-      .executeTakeFirst();
+    try {
+      const query = await this.adapter
+        .insertInto('bible_user_metadata')
+        .values({
+          author_id: metadata.authorId,
+          bible_translation: metadata.location.translation,
+          bible_book: metadata.location.book,
+          bible_chapter: metadata.location.chapter,
+          bible_verse: metadata.location.verse,
+          highlight_color: metadata.highlightColor,
+          note_text: metadata.noteText,
+        })
+        .returning('id')
+        .executeTakeFirst();
 
-    if (!query) {
-      return undefined;
+      if (!query) {
+        return undefined;
+      }
+      return query.id;
+    } catch (err: unknown) {
+      if ((err as DatabaseError).code === '23505') {
+        throw new ConflictError('Bookmark already exists');
+      }
     }
-    return query.id;
   }
 
   public async deleteVerseMetadata(id: string): Promise<bigint> {
@@ -112,6 +120,7 @@ export class VerseMetadataRepository {
   }
 
   public async findVerseMetadataByLocation(
+    userId: string,
     location: BibleLocation,
   ): Promise<UserVerseMetadata[]> {
     const query = await this.adapter
@@ -126,6 +135,86 @@ export class VerseMetadataRepository {
         'bible_verse',
       ])
       .where('bible_translation', '=', location.translation)
+      .where('bible_book', '=', location.book)
+      .where('bible_chapter', '=', location.chapter)
+      .where('bible_verse', '=', location.verse)
+      .where('author_id', '=', userId)
+      .execute();
+    if (query.length == 0) {
+      return [];
+    }
+    return query.map(
+      (e) =>
+        ({
+          id: e.id,
+          noteText: e.note_text,
+          highlightColor: e.highlight_color,
+          location: {
+            translation: e.bible_translation,
+            book: e.bible_book,
+            chapter: e.bible_chapter,
+            verse: e.bible_verse,
+          },
+        }) as UserVerseMetadata,
+    );
+  }
+
+  public async findVerseMetadataByChapter(
+    userId: string,
+    location: BibleChapter,
+  ): Promise<UserVerseMetadata[]> {
+    const query = await this.adapter
+      .selectFrom('bible_user_metadata')
+      .select([
+        'id',
+        'note_text',
+        'highlight_color',
+        'bible_translation',
+        'bible_book',
+        'bible_chapter',
+        'bible_verse',
+      ])
+      .where('bible_translation', '=', location.translation)
+      .where('bible_book', '=', location.book)
+      .where('bible_chapter', '=', location.chapter)
+      .where('author_id', '=', userId)
+      .execute();
+    if (query.length == 0) {
+      return [];
+    }
+    return query.map(
+      (e) =>
+        ({
+          id: e.id,
+          noteText: e.note_text,
+          highlightColor: e.highlight_color,
+          location: {
+            translation: e.bible_translation,
+            book: e.bible_book,
+            chapter: e.bible_chapter,
+            verse: e.bible_verse,
+          },
+        }) as UserVerseMetadata,
+    );
+  }
+
+  public async findVerseMetadataByTranslation(
+    authorId: string,
+    translation: string,
+  ): Promise<UserVerseMetadata[]> {
+    const query = await this.adapter
+      .selectFrom('bible_user_metadata')
+      .select([
+        'id',
+        'note_text',
+        'highlight_color',
+        'bible_translation',
+        'bible_book',
+        'bible_chapter',
+        'bible_verse',
+      ])
+      .where('bible_translation', '=', translation)
+      .where('author_id', '=', authorId)
       .execute();
     if (query.length == 0) {
       return [];
