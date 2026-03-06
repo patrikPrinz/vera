@@ -8,9 +8,13 @@ import { injectable, inject } from 'tsyringe';
 import type { ZodType } from 'zod';
 import type { UserController } from './user.controller.js';
 import {
-  bookmarkByIdSchema,
+  idSchema,
   createBookmarkSchema,
-  bookmarksByTranslationSchema,
+  getByTranslationSchema,
+  createVerseMetadataSchema,
+  getByChapterSchema,
+  updateVerseMetadataSchema,
+  moveBookmarkSchema,
 } from './user.schema.js';
 
 @injectable()
@@ -37,20 +41,56 @@ export class UserRouterFactory {
 
     router.get(
       '/bookmarks/:translation',
-      requestValidator(bookmarksByTranslationSchema, 'params'),
+      requestValidator(getByTranslationSchema, 'params'),
       controller.getBookmarks,
     );
 
     router.get(
       '/bookmark/:id',
-      requestValidator(bookmarkByIdSchema, 'params'),
+      requestValidator(idSchema, 'params'),
       controller.getBookmarkById,
     );
 
     router.delete(
       '/bookmarks/:id',
-      requestValidator(bookmarkByIdSchema, 'params'),
+      requestValidator(idSchema, 'params'),
       controller.deleteBookmark,
+    );
+
+    router.put(
+      'bookmarks/move',
+      requestValidator(moveBookmarkSchema, 'body'),
+      controller.moveBookmark,
+    );
+
+    router.post(
+      '/user-verse-metadata',
+      requestValidator(createVerseMetadataSchema, 'body'),
+      controller.createVerseMetadata,
+    );
+
+    router.delete(
+      '/user-verse-metadata/:id',
+      requestValidator(idSchema, 'params'),
+      controller.deleteVerseMetadata,
+    );
+
+    router.get(
+      '/user-verse-metadata/:id',
+      requestValidator(idSchema, 'body'),
+      controller.getVerseMetadataById,
+    );
+
+    router.get(
+      '/user-verse-metadata',
+      requestValidator(getByChapterSchema, 'query'),
+      controller.getVerseMetadataByChapter,
+    );
+
+    router.put(
+      '/user-verse-metadata',
+      requestValidator(updateVerseMetadataSchema, 'body'),
+      controller.updateVerseMetadata,
     );
 
     return router;
