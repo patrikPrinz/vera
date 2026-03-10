@@ -58,7 +58,7 @@ export class UserRouterFactory {
     );
 
     router.put(
-      'bookmarks/move',
+      '/bookmarks/move',
       requestValidator(moveBookmarkSchema, 'body'),
       controller.moveBookmark,
     );

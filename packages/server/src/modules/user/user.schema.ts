@@ -33,8 +33,8 @@ export const createVerseMetadataSchema = z.object({
 
 export const getByChapterSchema = z.object({
   translation: z.string(),
-  book: z.number(),
-  chapter: z.number(),
+  book: z.string(),
+  chapter: z.string(),
 });
 
 export const updateVerseMetadataSchema = z.object({

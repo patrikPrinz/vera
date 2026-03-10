@@ -93,6 +93,7 @@ export class VerseMetadataRepository {
       .selectFrom('bible_user_metadata')
       .select([
         'id',
+        'author_id',
         'note_text',
         'highlight_color',
         'bible_translation',
@@ -108,6 +109,7 @@ export class VerseMetadataRepository {
     }
     return {
       id: query.id,
+      authorId: query.author_id,
       noteText: query.note_text,
       highlightColor: query.highlight_color,
       location: {
@@ -127,6 +129,7 @@ export class VerseMetadataRepository {
       .selectFrom('bible_user_metadata')
       .select([
         'id',
+        'author_id',
         'note_text',
         'highlight_color',
         'bible_translation',
@@ -147,6 +150,7 @@ export class VerseMetadataRepository {
       (e) =>
         ({
           id: e.id,
+          authorId: e.author_id,
           noteText: e.note_text,
           highlightColor: e.highlight_color,
           location: {
@@ -167,6 +171,7 @@ export class VerseMetadataRepository {
       .selectFrom('bible_user_metadata')
       .select([
         'id',
+        'author_id',
         'note_text',
         'highlight_color',
         'bible_translation',
@@ -186,6 +191,7 @@ export class VerseMetadataRepository {
       (e) =>
         ({
           id: e.id,
+          authorId: e.author_id,
           noteText: e.note_text,
           highlightColor: e.highlight_color,
           location: {
