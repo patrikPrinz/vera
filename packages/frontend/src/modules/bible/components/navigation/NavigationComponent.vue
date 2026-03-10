@@ -11,13 +11,13 @@
 
 <script setup lang="ts">
 import { BsArrowUpSquare } from 'vue-icons-plus/bs';
-import { useKeyboardHandler } from '../../../../composables/keyboardHandler';
+import { keyboardHandler } from '@/composables/keyboardHandler.provider';
 import { onMounted, onUnmounted } from 'vue';
 
 const props = defineProps(['title']);
 const emit = defineEmits(['returnEvent']);
 
-const { registerKey, unregisterKey } = useKeyboardHandler();
+const { registerKey, unregisterKey } = keyboardHandler;
 onMounted(() => {
   registerKey('Backspace', () => {
     emit('returnEvent');
