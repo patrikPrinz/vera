@@ -14,11 +14,11 @@ import { createVfm } from 'vue-final-modal';
 
 const pinia = createPinia();
 const app = createApp(App);
-
 const vfm = createVfm();
-app.use(vfm).mount('#app');
+
 app.use(Toast);
 app.use(pinia);
+app.use(vfm);
 app.use(await createTranslation());
 app.use(router);
 
