@@ -1,10 +1,9 @@
-import type { PostgresPort } from './postgres_port.js';
 import { Pool } from 'pg';
 import { PostgresDialect } from 'kysely';
 import { Kysely } from 'kysely';
 import type { Database } from './schema.js';
 
-export class PostgresAdapter implements PostgresPort {
+export class PostgresAdapter {
   protected builder: Kysely<Database>;
 
   constructor(
