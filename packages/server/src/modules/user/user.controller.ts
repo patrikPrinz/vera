@@ -126,9 +126,14 @@ export class UserController {
     res: Response,
     _next: NextFunction,
   ) => {
+    const { translation, book, chapter } = req.validated;
     const result = await this.service.findVerseMetadataByChapter(
       (req.user as User).id,
-      req.validated as BibleChapter,
+      {
+        translation,
+        book: new Number(book),
+        chapter: new Number(chapter),
+      } as BibleChapter,
     );
     res.json(result);
   };

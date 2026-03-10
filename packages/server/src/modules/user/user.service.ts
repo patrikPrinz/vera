@@ -136,7 +136,8 @@ export class UserService {
     userId: string,
     metadata: UserVerseMetadata,
   ): Promise<UserVerseMetadata> => {
-    if (userId !== metadata.authorId) {
+    console.log(userId);
+    if (userId != metadata.authorId) {
       throw new PermissionError();
     }
     const insertedData =
@@ -173,10 +174,12 @@ export class UserService {
   ): Promise<UserVerseMetadata> => {
     const metadataFromDb =
       await this.verseMetadataRepository.findVerseMetadatakById(id);
+    console.log(userId);
+    console.log(metadataFromDb);
     if (!metadataFromDb) {
       throw new NotFoundError();
     }
-    if (userId !== metadataFromDb.authorId) {
+    if (String(userId) !== metadataFromDb.authorId) {
       throw new PermissionError();
     }
     await this.verseMetadataRepository.editVerseMetadata(
