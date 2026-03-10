@@ -1,6 +1,6 @@
 {
   "name": "bp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "prod": "docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up",
     "test:unit": "pnpm --filter server run test:unit",
     "test:integration": "pnpm --filter server run test:integration",
-    "test": "pnpm --filter server run test",
+    "test": "pnpm -r run test",
     "lint": "eslint --fix 'packages/*/{src,tests}/**/*.{ts,tsx,vue}'",
     "format": "prettier -w 'packages/*/{src,tests}/**/*.{ts,js,json,md}'",
     "ci:lint": "eslint 'packages/*/{src,tests}/**/*.{ts,tsx,vue}' --max-warnings=0",
@@ -22,27 +22,27 @@
   "license": "ISC",
   "packageManager": "pnpm@10.11.0",
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@types/node": "^24.10.3",
-    "@typescript-eslint/eslint-plugin": "^8.49.0",
-    "@typescript-eslint/parser": "^8.49.0",
-    "eslint": "^9.39.1",
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^24.10.13",
+    "@typescript-eslint/eslint-plugin": "^8.56.0",
+    "@typescript-eslint/parser": "^8.56.0",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin": "^1.0.1",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-vue": "^10.6.2",
+    "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-vue": "^10.8.0",
     "globals": "^16.5.0",
-    "prettier": "^3.7.4",
+    "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tslib": "^2.8.1",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.49.0",
-    "vite": "^7.2.7",
-    "vue-eslint-parser": "^10.2.0"
+    "typescript-eslint": "^8.56.0",
+    "vite": "^7.3.1",
+    "vue-eslint-parser": "^10.4.0"
   },
   "private": true,
   "dependencies": {
-    "ajv": "^8.17.1",
-    "vue": "^3.5.25"
+    "ajv": "^8.18.0",
+    "vue": "^3.5.28"
   }
 }

@@ -13,7 +13,7 @@ It provides these basic features (or will provide in the future):
 ## Prerequisites
 - Docker with docker compose
 - Internet connection
-- Node.js and pnpm (optional, for build and developpurposes)
+- Node.js and pnpm (optional, for build and development purposes)
 
 ## How to run it
 Each release of the application builds new docker images for each app package.
@@ -29,7 +29,7 @@ To run the containers you can download and run the docker compose like this:
 ### Linux/MacOS
 ```bash
 mkdir vera && cd vera
-wget https://github.com/patrikPrinz/vera/deployment/docker-compose.yaml
+wget https://github.com/patrikPrinz/vera/raw/refs/heads/main/release/docker-compose.yaml
 
 docker compose up
 ```

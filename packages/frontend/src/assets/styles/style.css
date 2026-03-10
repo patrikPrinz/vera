@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@source inline('bg-red-400 bg-red-500 bg-sky-500 bg-pink-600 bg-green-400');
+
 @theme {
   --color-primary: #173a60;
   --color-secondary: #32506c;
