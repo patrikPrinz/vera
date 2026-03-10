@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';
 
 const serverPort = (import.meta.env.SERVER_PORT || '3000') as string;
@@ -24,8 +23,7 @@ httpClient.interceptors.response.use(
   function onRejected(error) {
     console.trace(error);
     const toast = useToast();
-    const i18n = useI18n();
-    toast.error(i18n.t('general.serverError'));
+    toast.error('Server error.');
     return Promise.reject(new Error(JSON.stringify(error)));
   },
 );

@@ -35,9 +35,9 @@ window.addEventListener('keyup', (e: KeyboardEvent) => {
 });
 
 /**
- * Composable with keyboad press handling functionality.
+ * Composable with keyboard press handling functionality.
  *
- * Function provides interface for registering keybord callbacks.
+ * Function provides interface for registering keyboard callbacks.
  * It checks, that each key has only one callback. Next can be mounted only if
  * the previous one was removed.
  *
