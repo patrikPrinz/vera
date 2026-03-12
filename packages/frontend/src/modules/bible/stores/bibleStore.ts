@@ -74,7 +74,9 @@ export const useBibleStore = defineStore('bible', () => {
 
   async function initialize() {
     if (!getCurrentTranslation()) {
-      await setCurrentTranslation('CZECEP');
+      const translation = (import.meta.env.FALLBACK_TRANSLATION ??
+        'CZECEP') as string;
+      await setCurrentTranslation(translation);
       currentBook.value = undefined;
       currentChapter.value = undefined;
     }
