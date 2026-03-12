@@ -18,7 +18,6 @@ export const useBibleStore = defineStore('bible', () => {
     ref(undefined);
   const booksMetadata: Ref<Record<number, BibleBookMetadata> | undefined> =
     ref(undefined);
-  //const httpService = new BibleHttpPort(httpClient);
 
   function getCurrentTranslation() {
     return currentTranslation.value;

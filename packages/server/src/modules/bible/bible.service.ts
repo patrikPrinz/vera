@@ -74,7 +74,7 @@ export class BibleService implements IBibleService {
     const translation = await parser.getTranslation();
     const insertion = await this.repository.insertTranslation(translation);
     if (!insertion) {
-      throw new ConflictError('Translation already exists in datatbase');
+      throw new ConflictError('Translation already exists in datatabase');
     }
   };
 }
