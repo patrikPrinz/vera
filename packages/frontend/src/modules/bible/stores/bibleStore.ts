@@ -72,6 +72,14 @@ export const useBibleStore = defineStore('bible', () => {
     return undefined;
   }
 
+  async function listTranslations(): Promise<{ translation: string }[]> {
+    if (bibleService) {
+      const result = await bibleService.getTranslations();
+      return result;
+    }
+    throw new ReferenceError('Bible service not provided.');
+  }
+
   async function initialize() {
     if (!getCurrentTranslation()) {
       const translation = (import.meta.env.FALLBACK_TRANSLATION ??
@@ -98,6 +106,7 @@ export const useBibleStore = defineStore('bible', () => {
     getCurrentChapter,
     setCurrentChapter,
     getBookMetadata,
+    listTranslations,
     initialize,
   };
 });

@@ -17,6 +17,8 @@ export interface IBibleHttpService {
     chapter: number,
   ): Promise<BibleVerse[]>;
 
+  getTranslations(): Promise<{ translation: string }[]>;
+
   getTranslationMetadata(
     translation: string,
   ): Promise<BibleTranslationMetadata | undefined>;
@@ -62,6 +64,14 @@ export class BibleHttpService implements IBibleHttpService {
     );
     if (data.data) {
       return data.data as BibleVerse[];
+    }
+    return [];
+  }
+
+  public async getTranslations(): Promise<{ translation: string }[]> {
+    const data = await this.client.get('bible/translations');
+    if (data.data) {
+      return data.data as Promise<{ translation: string }[]>;
     }
     return [];
   }
