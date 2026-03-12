@@ -39,10 +39,10 @@ services:
     networks:
       - vera_network
 
-  elastic-initializer:
+  initializer:
     build:
       context: .
-      dockerfile: packages/elastic-initializer/Dockerfile
+      dockerfile: packages/initializer/Dockerfile
       target: dev
     depends_on:
       - elastic-search
@@ -51,7 +51,7 @@ services:
       - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
     volumes:
-      - ./packages/elastic-initializer/src:/app/packages/elastic-initializer/src:z
+      - ./packages/initializer/src:/app/packages/initializer/src:z
     networks:
       - vera_network
 

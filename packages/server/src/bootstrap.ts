@@ -30,7 +30,12 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
+app.use(
+  cors({
+    origin: process.env.SERVER_ALLOWED_ORIGIN ?? 'http://localhost:3001',
+    credentials: true,
+  }),
+);
 
 app.use('/api/bible', bibleRouter);
 app.use('/api/auth', authRouter);

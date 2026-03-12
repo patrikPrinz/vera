@@ -39,16 +39,14 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
 
-  elastic-initializer:
-    image: 'ghcr.io/patrikprinz/vera-elastic-initializer:latest'
+  initializer:
+    image: 'ghcr.io/patrikprinz/vera-initializer:latest'
     depends_on:
       - elastic-search
     environment:
       - ELASTIC_NODE=${ELASTIC_NODE:-http://elastic-search:9200}
       - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
-    volumes:
-      - ./packages/elastic-initializer/src:/app/packages/elastic-initializer/src
     networks:
       - vera_network
 

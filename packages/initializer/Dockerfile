@@ -19,28 +19,28 @@ COPY package.json \
   ./
 
 # copy package-specific configs
-COPY packages/elastic-initializer/package.json \
-  packages/elastic-initializer/tsconfig.json \
-  ./packages/elastic-initializer/
+COPY packages/initializer/package.json \
+  packages/initializer/tsconfig.json \
+  ./packages/initializer/
 
-RUN pnpm install --filter elastic-initializer
+RUN pnpm install --filter initializer
 
 
 # build: run typescript build to create production artifacts
 FROM dependencies AS build
 # copy source code files onto the container
-COPY packages/elastic-initializer/src ./packages/elastic-initializer/src
+COPY packages/initializer/src ./packages/initializer/src
 
-RUN pnpm --filter elastic-initializer build
+RUN pnpm --filter initializer build
 
 
-# dev: run development elastic-initializer
+# dev: run development initializer
 FROM dependencies AS dev
 ENV NODE_ENV=development
 
-CMD ["pnpm", "--filter", "elastic-initializer", "dev"]
+CMD ["pnpm", "--filter", "initializer", "dev"]
 
-# runtime: production elastic-initializer container
+# runtime: production initializer container
 FROM node:22-alpine3.22 AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
@@ -54,19 +54,19 @@ COPY --chown=node:node \
 
 # copy package-specific config
 COPY --chown=node:node \
-  packages/elastic-initializer/package.json \
-  ./packages/elastic-initializer/
+  packages/initializer/package.json \
+  ./packages/initializer/
 
 # set up pnpm
 RUN corepack enable && corepack prepare pnpm@10 --activate
 
 # install pnpm production packages
-RUN pnpm install --filter elastic-initializer --prod --no-optional
+RUN pnpm install --filter initializer --prod --no-optional
 
 # copy source files
-COPY --from=build --chown=node:node /app/packages/elastic-initializer/dist ./packages/elastic-initializer/dist
+COPY --from=build --chown=node:node /app/packages/initializer/dist ./packages/initializer/dist
 
 EXPOSE 3000
 
 USER node
-CMD ["node", "packages/elastic-initializer/dist/index.js"]
+CMD ["node", "packages/initializer/dist/index.js"]
