@@ -72,9 +72,19 @@ export const useBibleStore = defineStore('bible', () => {
     return undefined;
   }
 
+  async function listTranslations(): Promise<{ translation: string }[]> {
+    if (bibleService) {
+      const result = await bibleService.getTranslations();
+      return result;
+    }
+    throw new ReferenceError('Bible service not provided.');
+  }
+
   async function initialize() {
     if (!getCurrentTranslation()) {
-      await setCurrentTranslation('CZECEP');
+      const translation = (import.meta.env.FALLBACK_TRANSLATION ??
+        'CZECEP') as string;
+      await setCurrentTranslation(translation);
       currentBook.value = undefined;
       currentChapter.value = undefined;
     }
@@ -96,6 +106,7 @@ export const useBibleStore = defineStore('bible', () => {
     getCurrentChapter,
     setCurrentChapter,
     getBookMetadata,
+    listTranslations,
     initialize,
   };
 });

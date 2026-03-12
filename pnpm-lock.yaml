@@ -112,6 +112,9 @@ importers:
       v-dropdown:
         specifier: ^3.5.1
         version: 3.5.1(vue@3.5.28(typescript@5.9.3))
+      v-selectmenu:
+        specifier: ^3.1.2
+        version: 3.1.2(vue@3.5.28(typescript@5.9.3))
       vue:
         specifier: ^3.5.28
         version: 3.5.28(typescript@5.9.3)
@@ -5187,10 +5190,20 @@ packages:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
 
+  v-dropdown@3.3.0:
+    resolution: {integrity: sha512-OkNipbg+V4vQ6xyYLxTk+WQOs3A17nXtoqY9kqHRSAXnpE6mlwdsxar/qIgAAbhDpF0RYI8v4p75809S6ch+Rg==}
+    peerDependencies:
+      vue: ^3.3.0
+
   v-dropdown@3.5.1:
     resolution: {integrity: sha512-shX+jBf+RXLPYiaklE5l2XvJFWd/4eNMN2oVKeITzBMMOAFjI9pGxCMm8g3nz3tCbpOLzD3mwv+WfygeBTpSsg==}
     peerDependencies:
       vue: ^3.5.0
+
+  v-selectmenu@3.1.2:
+    resolution: {integrity: sha512-UzX8vyG4mOFzIyEM8GRVWaPF02ZFrJXDzyd3NQ0ICjq4h+16x4VSOAt1Z92AzVwZr5rHnqKii2TestcNUwhdZw==}
+    peerDependencies:
+      vue: ^3.4.0
 
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
@@ -10740,8 +10753,17 @@ snapshots:
 
   uuid@8.3.2: {}
 
+  v-dropdown@3.3.0(vue@3.5.28(typescript@5.9.3)):
+    dependencies:
+      vue: 3.5.28(typescript@5.9.3)
+
   v-dropdown@3.5.1(vue@3.5.28(typescript@5.9.3)):
     dependencies:
+      vue: 3.5.28(typescript@5.9.3)
+
+  v-selectmenu@3.1.2(vue@3.5.28(typescript@5.9.3)):
+    dependencies:
+      v-dropdown: 3.3.0(vue@3.5.28(typescript@5.9.3))
       vue: 3.5.28(typescript@5.9.3)
 
   v8-compile-cache-lib@3.0.1: {}

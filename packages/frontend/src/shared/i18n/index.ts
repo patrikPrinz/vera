@@ -19,10 +19,11 @@ async function loadMessages(
 }
 
 export async function createTranslation() {
+  const defaultLocale = (import.meta.env.DEFAULT_LOCALE ?? 'cs') as string;
   return createI18n({
     legacy: false,
-    locale: 'cs',
-    fallbackLocale: 'cs',
+    locale: defaultLocale,
+    fallbackLocale: defaultLocale,
     messages: await loadMessages(registeredLocales),
   });
 }
