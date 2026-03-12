@@ -12,6 +12,7 @@ export default defineConfig({
     },
   },
   server: {
+    allowedHosts: [process.env.FRONTEND_ADDRESS ?? 'localhost'],
     host: true, // = 0.0.0.0
     port: 3001,
     watch: {
