@@ -32,3 +32,30 @@ CREATE TABLE credentials (
     authentication_id bigint UNIQUE NOT NULL REFERENCES authentication(id),
     password_hash varchar(255) NOT NULL
 );
+
+
+/*
+User data for Bible texts
+*/
+CREATE TABLE user_bookmarks (
+    id bigserial PRIMARY KEY,
+    bible_translation varchar(10) NOT NULL,
+    bible_book smallint NOT NULL,
+    bible_chapter smallint NOT NULL,
+    bible_verse smallint NOT NULL,
+    author_id bigint NOT NULL REFERENCES user_details(id),
+    bookmark_name varchar(50) NOT NULL,
+    UNIQUE (author_id, bookmark_name, bible_translation)
+);
+
+CREATE TABLE bible_user_metadata (
+    id bigserial PRIMARY KEY,
+    bible_translation varchar(10) NOT NULL,
+    bible_book smallint NOT NULL,
+    bible_chapter smallint NOT NULL,
+    bible_verse smallint NOT NULL,
+    author_id bigint NOT NULL REFERENCES user_details(id),
+    highlight_color varchar(10) NULL,
+    note_text text NULL,
+    UNIQUE (bible_translation, bible_book, bible_chapter, bible_verse, author_id)
+);

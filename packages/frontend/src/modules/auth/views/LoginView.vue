@@ -41,13 +41,13 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { useAuthStore } from '../authStore';
 import router from '@/router';
 import { useToast } from 'vue-toastification';
-import { useKeyboardHandler } from '@/composables/keyboardHandler';
+import { keyboardHandler } from '@/composables/keyboardHandler.provider';
 import { useI18n } from 'vue-i18n';
 
 const toast = useToast();
 const login = ref('');
 const password = ref('');
-const { registerKey, unregisterKey } = useKeyboardHandler();
+const { registerKey, unregisterKey } = keyboardHandler;
 const i18n = useI18n();
 
 async function loginAction() {

@@ -5,6 +5,8 @@ export interface Database {
   auth_provider: AuthProviderTable;
   authentication: AuthenticationTable;
   credentials: CredentialsTable;
+  user_bookmarks: UserBookmarksTable;
+  bible_user_metadata: BibleUserMetadataTable;
 }
 
 export interface UserDetailsTable {
@@ -29,4 +31,26 @@ export interface CredentialsTable {
   id: Generated<string>;
   authentication_id: string;
   password_hash: string;
+}
+
+// user data
+export interface UserBookmarksTable {
+  id: Generated<string>;
+  bible_translation: string;
+  bible_book: number;
+  bible_chapter: number;
+  bible_verse: number;
+  author_id: string;
+  bookmark_name: string;
+}
+
+export interface BibleUserMetadataTable {
+  id: Generated<string>;
+  bible_translation: string;
+  bible_book: number;
+  bible_chapter: number;
+  bible_verse: number;
+  author_id: string;
+  highlight_color: string | null;
+  note_text: string | null;
 }

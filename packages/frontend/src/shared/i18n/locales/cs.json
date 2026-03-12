@@ -10,6 +10,7 @@
   "login": {
     "register": "Zaregistrovat se",
     "login": "Přihlásit se",
+    "logout": "Odhlásit se",
     "missingCredentials": "Vyplňte prosím jméno a heslo.",
     "incorrectCredentials": "Chybné jméno, nebo heslo.",
     "duplicateRegisterMethod": "Uživatel již je zaregistrovám.",
@@ -18,5 +19,8 @@
   "navigation": {
     "home": "Domů",
     "bible": "Bible"
+  },
+  "user": {
+    "bookmarks": "Záložky"
   }
 }

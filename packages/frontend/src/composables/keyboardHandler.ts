@@ -6,19 +6,23 @@
  * returned from useKeyboardHandler.
  */
 
-interface RegisterKey {
+export interface RegisterKey {
   registerKey: (code: string, callback: () => void | Promise<void>) => boolean;
   unregisterKey: (code: string) => boolean;
+  setActive: () => void;
+  setInactive: () => void;
 }
 
 const keyBindings: Map<string, () => void | Promise<void>> = new Map();
+
+let active: boolean = true;
 
 function registered(code: string) {
   return keyBindings.has(code);
 }
 
 async function execute(code: string) {
-  if (registered(code)) {
+  if (registered(code) && active) {
     const callback = keyBindings.get(code);
     if (typeof callback === 'function') {
       await callback();
@@ -31,9 +35,9 @@ window.addEventListener('keyup', (e: KeyboardEvent) => {
 });
 
 /**
- * Composable with keyboad press handling functionality.
+ * Composable with keyboard press handling functionality.
  *
- * Function provides interface for registering keybord callbacks.
+ * Function provides interface for registering keyboard callbacks.
  * It checks, that each key has only one callback. Next can be mounted only if
  * the previous one was removed.
  *
@@ -69,5 +73,19 @@ export function useKeyboardHandler(): RegisterKey {
     return false;
   };
 
-  return { registerKey: registerKey, unregisterKey: unregisterKey };
+  const setActive = (): void => {
+    active = true;
+  };
+
+  const setInactive = (): void => {
+    active = false;
+    console.log(active);
+  };
+
+  return {
+    registerKey: registerKey,
+    unregisterKey: unregisterKey,
+    setActive: setActive,
+    setInactive: setInactive,
+  };
 }

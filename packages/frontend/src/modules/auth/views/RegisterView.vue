@@ -50,7 +50,7 @@
   </form>
 </template>
 <script setup lang="ts">
-import { useKeyboardHandler } from '@/composables/keyboardHandler';
+import { keyboardHandler } from '@/composables/keyboardHandler.provider';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';
@@ -64,7 +64,7 @@ const passwordCheck = ref('');
 const toast = useToast();
 const i18n = useI18n();
 
-const { registerKey, unregisterKey } = useKeyboardHandler();
+const { registerKey, unregisterKey } = keyboardHandler;
 
 async function registerAction() {
   if (!comparePasswords(password.value, passwordCheck.value)) {

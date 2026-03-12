@@ -11,6 +11,7 @@ import type { Database } from './shared/postgres/schema.js';
 import { kyselyFactory } from './shared/postgres/postgres_factory.js';
 import { registerAuthModule } from './modules/auth/container.js';
 import { authenticated } from './shared/auth/auth.middleware.js';
+import { registerUserContainer } from './modules/user/container.js';
 
 container.registerSingleton<LoggerPort>('Logger', WinstonLogger);
 container.register<ElasticPort>('ElasticAdapter', {
@@ -40,5 +41,12 @@ const bibleContainer = container.createChildContainer();
 registerBibleModule(bibleContainer);
 const authContainer = container.createChildContainer();
 registerAuthModule(authContainer);
+const userContainer = container.createChildContainer();
+registerUserContainer(userContainer);
 
-export { container as rootContainer, bibleContainer, authContainer };
+export {
+  container as rootContainer,
+  bibleContainer,
+  authContainer,
+  userContainer,
+};

@@ -8,6 +8,7 @@ import type {
   UserDetails,
 } from '../../shared/types/auth/auth.types.js';
 import { AppError } from '../../shared/error_handler/errors.js';
+import { PostgresError } from '../../shared/postgres/postgres.errors.js';
 
 @injectable()
 export class AuthRepository {
@@ -124,7 +125,7 @@ export class AuthRepository {
       .executeTakeFirst();
     if (query) {
       return query.id;
-    } else throw new Error();
+    } else throw new PostgresError();
   }
 
   protected async insertAuthenticationMethod(
@@ -171,6 +172,6 @@ export class AuthRepository {
     if (query) {
       return query.id;
     }
-    throw new Error();
+    throw new PostgresError();
   }
 }

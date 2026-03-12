@@ -10,6 +10,7 @@
   "login": {
     "register": "Register",
     "login": "Log in",
+    "logout": "Log out",
     "missingCredentials": "Fill out the username and password fields.",
     "incorrectCredentials": "Incorrect credentials.",
     "duplicateRegisterMethod": "User is already registered,",
@@ -18,5 +19,8 @@
   "navigation": {
     "home": "Home",
     "bible": "Bible"
+  },
+  "user": {
+    "bookmarks": "Bookmarks"
   }
 }

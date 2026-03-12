@@ -17,13 +17,13 @@
 
 <script setup lang="ts">
 import { BsArrowLeftSquare, BsArrowRightSquare } from 'vue-icons-plus/bs';
-import { useKeyboardHandler } from '../../../../composables/keyboardHandler';
+import { keyboardHandler } from '@/composables/keyboardHandler.provider';
 import { onMounted, onUnmounted } from 'vue';
 
 const props = defineProps(['firstItem', 'lastItem']);
 const emit = defineEmits(['previousItemEvent', 'nextItemEvent']);
 
-const { registerKey, unregisterKey } = useKeyboardHandler();
+const { registerKey, unregisterKey } = keyboardHandler;
 onMounted(() => {
   registerKey('ArrowLeft', () => {
     emit('previousItemEvent');

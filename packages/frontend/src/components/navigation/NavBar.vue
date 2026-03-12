@@ -72,8 +72,7 @@ import { useThemeStore } from '@/stores/themeStore';
 import { useI18n } from 'vue-i18n';
 import LocaleSwitcher from '@/shared/i18n/components/LocaleSwitcher.vue';
 import UserSwitcher from '@/modules/auth/components/UserSwitcher.vue';
-import { useKeyboardHandler } from '@/composables/keyboardHandler';
-
+import { keyboardHandler } from '@/composables/keyboardHandler.provider';
 const i18n = useI18n();
 
 const menuOptions = ['bible'];
@@ -87,7 +86,7 @@ function hideMenu() {
   showMenu.value = false;
 }
 
-const { registerKey, unregisterKey } = useKeyboardHandler();
+const { registerKey, unregisterKey } = keyboardHandler;
 
 onMounted(() => registerKey('Escape', hideMenu));
 onUnmounted(() => unregisterKey('Escape'));
