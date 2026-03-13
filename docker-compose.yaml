@@ -9,8 +9,15 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
       - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
+      - SERVER_ALLOWED_ORIGIN=${FRONTEND_ADDRESS:-localhost:3001}
     networks:
       - vera_network
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.server.rule=Host(`${SERVER_ADDRESS}`)
+      - traefik.http.routers.server.entrypoints=websecure
+      - traefik.http.routers.server.tls.certresolver=le
 
   frontend:
     build:
@@ -19,8 +26,14 @@ services:
     networks:
       - vera_network
     environment:
-      - SERVER_PORT=${SERVER_PORT:-3000}
-      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost}
+      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost:3000}
+      - FRONTEND_ADDRESS=${FRONTEND_ADDRESS:-localhost:3001}
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.frontend.rule=Host(`${FRONTEND_ADDRESS}`)
+      - traefik.http.routers.frontend.entrypoints=websecure
+      - traefik.http.routers.frontend.tls.certresolver=le
 
   elastic-search:
     image: elasticsearch:9.1.2

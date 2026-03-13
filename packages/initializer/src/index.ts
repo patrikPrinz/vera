@@ -3,7 +3,7 @@ import { Client } from '@elastic/elasticsearch';
 import type { estypes } from '@elastic/elasticsearch';
 
 async function waitForElastic(connection: Client) {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 30; i++) {
     try {
       await connection.ping();
       console.log('Elasticsearch is ready!');

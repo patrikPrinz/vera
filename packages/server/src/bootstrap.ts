@@ -30,9 +30,11 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
+const domain = process.env.SERVER_ALLOWED_ORIGIN ?? 'localhost:3001';
+
 app.use(
   cors({
-    origin: process.env.SERVER_ALLOWED_ORIGIN ?? 'http://localhost:3001',
+    origin: [`http://${domain}`, `https://${domain}`],
     credentials: true,
   }),
 );
