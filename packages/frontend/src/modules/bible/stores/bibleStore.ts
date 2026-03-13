@@ -4,9 +4,11 @@ import type {
 } from '@/shared/types/bible/bible.types';
 import { defineStore } from 'pinia';
 import { ref, type Ref } from 'vue';
-import { type BibleHttpPort } from '../services/bibleHttp.port';
 import { httpClient } from '@/shared/httpClient/HttpProvider';
-import { BibleHttpService } from '../services/bibleHttp.service';
+import {
+  BibleHttpService,
+  type IBibleHttpService,
+} from '../services/bibleHttp.service';
 
 export const useBibleStore = defineStore('bible', () => {
   const currentTranslation: Ref<string | undefined> = ref(undefined);
@@ -70,10 +72,22 @@ export const useBibleStore = defineStore('bible', () => {
     return undefined;
   }
 
+  async function listTranslations(): Promise<{ translation: string }[]> {
+    if (bibleService) {
+      const result = await bibleService.getTranslations();
+      return result;
+    }
+    throw new ReferenceError('Bible service not provided.');
+  }
+
   async function initialize() {
-    await setCurrentTranslation('CZECEP');
-    currentBook.value = undefined;
-    currentChapter.value = undefined;
+    if (!getCurrentTranslation()) {
+      const translation = (import.meta.env.FALLBACK_TRANSLATION ??
+        'CZECEP') as string;
+      await setCurrentTranslation(translation);
+      currentBook.value = undefined;
+      currentChapter.value = undefined;
+    }
   }
 
   return {
@@ -92,17 +106,18 @@ export const useBibleStore = defineStore('bible', () => {
     getCurrentChapter,
     setCurrentChapter,
     getBookMetadata,
+    listTranslations,
     initialize,
   };
 });
 
-let bibleService: BibleHttpPort | null = null;
+let bibleService: IBibleHttpService | null = null;
 
-export function setBibleService(service: BibleHttpPort | null) {
+export function setBibleService(service: IBibleHttpService | null) {
   bibleService = service;
 }
 
-function getBibleService(): BibleHttpPort {
+function getBibleService(): IBibleHttpService {
   if (!bibleService) {
     bibleService = new BibleHttpService(httpClient);
   }

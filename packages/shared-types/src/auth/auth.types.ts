@@ -5,10 +5,14 @@ export interface AuthenticationRequest {
   password?: string;
 }
 
+export interface User {
+  id: string;
+}
+
 export interface UserDetails {
   id: string;
   email: string;
-  username: string;
+  username?: string;
 }
 
 export interface AuthProvider {

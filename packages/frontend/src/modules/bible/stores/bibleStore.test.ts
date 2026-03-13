@@ -1,10 +1,10 @@
-import type { BibleHttpPort } from '../services/bibleHttp.port';
+import type { IBibleHttpService } from '../services/bibleHttp.service';
 import { vi } from 'vitest';
 import { setBibleService, useBibleStore } from './bibleStore';
 import { createPinia, setActivePinia } from 'pinia';
 import translationMetadataFixture from './__fixtures__/bibleMetadata.mock.json';
 
-class BibleHttpServiceMock implements BibleHttpPort {
+class BibleHttpServiceMock implements IBibleHttpService {
   public getTranslationMetadata = vi
     .fn()
     .mockResolvedValue(translationMetadataFixture);

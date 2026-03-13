@@ -20,6 +20,7 @@ const app: Express = express();
 
 app.use(
   expressSession({
+    name: 'vera_sid',
     secret: 'VeraAppSecret',
     saveUninitialized: false,
     cookie: { httpOnly: true, sameSite: 'lax', secure: false },
