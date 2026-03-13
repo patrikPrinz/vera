@@ -59,3 +59,34 @@ CREATE TABLE bible_user_metadata (
     note_text text NULL,
     UNIQUE (bible_translation, bible_book, bible_chapter, bible_verse, author_id)
 );
+
+/*
+roles and pemissions
+*/
+
+CREATE TABLE groups(
+    id bigserial PRIMARY KEY,
+    name varchar(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE user_groups(
+    id bigserial PRIMARY KEY,
+    user_id bigint NOT NULL REFERENCES user_details(id),
+    group_id bigint NOT NULL REFERENCES group,
+    UNIQUE (user_id, group_id)
+);
+
+CREATE TABLE roles(
+    id bigserial PRIMARY KEY,
+    code varchar(20) UNIQUE NOT NULL,
+    name varchar(50) NOT NULL,
+    is_group_role BOOLEAN NOT NULL DEFAULT false
+);
+
+CREATE TABLE user_roles(
+    id bigserial PRIMARY KEY,
+    user_id bigint NOT NULL REFERENCES user_details(id),
+    role_id bigint NOT NULL REFERENCES roles(id),
+    group_id bigint NULL REFERENCES groups(id),
+    UNIQUE (user_id, role_id, group_id)
+);
