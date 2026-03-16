@@ -55,5 +55,5 @@ Backend part of the application provides API for frontend  and performs communic
 ## Frontend
 User web interface with PWA support.
 
-## Elastic-initializer
+## Iinitializer
 Package performs checks and initialization of Elasticsearch database. Initializes indices on startup.

@@ -22,7 +22,7 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
 
-  elastic-initializer:
+  initializer:
 
   kibana:
 
