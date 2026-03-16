@@ -19,7 +19,7 @@ export class BookmarkRepository {
    * @param bookmark bookmark to be inserted
    * @returns id of new bookmark
    */
-  public async insertBookmark(bookmark: Bookmark): Promise<string> {
+  public async insertBookmark(bookmark: Bookmark): Promise<string | undefined> {
     try {
       const query = await this.adapter
         .insertInto('user_bookmarks')
