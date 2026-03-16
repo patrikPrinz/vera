@@ -1,14 +1,14 @@
-import { inject, injectable } from 'tsyringe';
 import bcrypt from 'bcrypt';
 import { Kysely } from 'kysely';
-import { type Database } from '../../shared/postgres/schema.js';
+import { inject, injectable } from 'tsyringe';
+import { AppError } from '../../../shared/error_handler/errors.js';
+import { PostgresError } from '../../../shared/postgres/postgres.errors.js';
+import { type Database } from '../../../shared/postgres/schema.js';
 import type {
   AuthenticationRequest,
   AuthProvider,
   UserDetails,
-} from '../../shared/types/auth/auth.types.js';
-import { AppError } from '../../shared/error_handler/errors.js';
-import { PostgresError } from '../../shared/postgres/postgres.errors.js';
+} from '../../../shared/types/auth/auth.types.js';
 
 @injectable()
 export class AuthRepository {

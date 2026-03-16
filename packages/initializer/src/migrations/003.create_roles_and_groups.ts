@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
@@ -41,6 +42,25 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('group_id', 'bigint', (col) =>
       col.references('groups.id').onDelete('cascade'),
     )
+    .execute();
+
+  await db
+    .insertInto('roles')
+    .values([
+      { code: 'admin', name: 'global admin' },
+      { code: 'translation_admin', name: 'translation admin' },
+      { code: 'calendar_admin', name: 'calendar admin' },
+      {
+        code: 'prayer_admin',
+        name: 'prayer admin',
+      },
+      { code: 'group_admin', name: 'group admin', is_group_role: true },
+      {
+        code: 'group_content_admin',
+        name: 'group content admin',
+        is_group_role: true,
+      },
+    ])
     .execute();
 }
 

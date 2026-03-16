@@ -1,10 +1,10 @@
 import { injectable, inject } from 'tsyringe';
-import type { AuthRepository } from './auth.repository.js';
+import type { AuthRepository } from '../repositories/auth.repository.js';
 import type {
   AuthenticationRequest,
   UserDetails,
-} from '../../shared/types/auth/auth.types.js';
-import { ValidationError } from '../../shared/error_handler/errors.js';
+} from '../../../shared/types/auth/auth.types.js';
+import { ValidationError } from '../../../shared/error_handler/errors.js';
 
 @injectable()
 export class AuthService {
