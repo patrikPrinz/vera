@@ -1,9 +1,11 @@
 import { initializeIndex } from './lib/elasticsearch/elastic.js';
 import { Client } from '@elastic/elasticsearch';
 import type { estypes } from '@elastic/elasticsearch';
+import { migrateToLatest } from './lib/postgres/postgres.js';
+import { createMigrator, db } from './lib/postgres/migrator-provider.js';
 
 async function waitForElastic(connection: Client) {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 30; i++) {
     try {
       await connection.ping();
       console.log('Elasticsearch is ready!');
@@ -59,6 +61,9 @@ const MAPPINGS: estypes.IndicesCreateRequest[] = [
     },
   },
 ];
+
+const migrator = createMigrator(db);
+await migrateToLatest(migrator, db);
 
 await waitForElastic(connection);
 
