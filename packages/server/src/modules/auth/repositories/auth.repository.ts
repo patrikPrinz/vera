@@ -60,8 +60,10 @@ export class AuthRepository {
   protected async findUserMethods(
     email: string,
   ): Promise<string[] | undefined> {
+    console.log(email);
     const query = await this.adapter
       .selectFrom('user_details')
+      .where('user_details.email', '=', email)
       .leftJoin('authentication', 'user_details.id', 'authentication.user_id')
       .innerJoin(
         'auth_provider',
@@ -69,8 +71,8 @@ export class AuthRepository {
         'auth_provider.id',
       )
       .select(['user_details.id', 'auth_provider.code'])
-      .where('user_details.email', '=', email)
       .execute();
+    console.log(query);
     if (query.length == 0) return [];
     const result = query.map((e) => e.code);
     return result;

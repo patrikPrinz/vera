@@ -81,4 +81,20 @@ export class GroupsService {
     }
     throw new PermissionError('User not permitted to unassign roles.');
   }
+
+  public async listGroupUsers(author: User, groupId: string) {
+    if (await this.rolesService.hasRole(author)) {
+      const result = await this.repository.listGroupUsers(groupId);
+      return result;
+    }
+    throw new PermissionError('User not permitted to list group users.');
+  }
+
+  public async listUserGroups(author: User, userId: string) {
+    if (author.id === userId || (await this.rolesService.hasRole(author))) {
+      const result = await this.repository.listUserGroups(userId);
+      return result;
+    }
+    throw new PermissionError('User not permitted to list user roles.');
+  }
 }

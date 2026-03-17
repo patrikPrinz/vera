@@ -9,6 +9,9 @@ import { postRegisterSchema } from './auth.schema.js';
 import type { AdminController } from './controllers/admin.controller.js';
 import {
   createGroupSchema,
+  getUserGroupsSchema,
+  getUserRolesSchema,
+  listGroupUsersSchema,
   manageRoleSchema,
   manageUserGroupSchema,
   updateGroupSchema,
@@ -89,6 +92,24 @@ export class AuthRouterFactory {
     );
 
     router.post(
+      '/groups/assign',
+      requestValidator(manageUserGroupSchema, 'body'),
+      adminController.addToGroup,
+    );
+
+    router.post(
+      '/groups/unassign',
+      requestValidator(manageUserGroupSchema, 'body'),
+      adminController.removeFromGroup,
+    );
+
+    router.get(
+      '/group/:groupId/users',
+      requestValidator(listGroupUsersSchema, 'params'),
+      adminController.listGroupUsers,
+    );
+
+    router.post(
       '/roles/assign',
       requestValidator(manageRoleSchema, 'body'),
       adminController.assignRole,
@@ -98,6 +119,18 @@ export class AuthRouterFactory {
       '/roles/unassign',
       requestValidator(manageRoleSchema, 'body'),
       adminController.unassignRole,
+    );
+
+    router.get(
+      '/user-roles/:id',
+      requestValidator(getUserRolesSchema, 'params'),
+      adminController.listUserRoles,
+    );
+
+    router.get(
+      '/user-groups/:userId',
+      requestValidator(getUserGroupsSchema, 'params'),
+      adminController.listUserGroups,
     );
 
     return router;
