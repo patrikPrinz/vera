@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky top-0">
+  <div class="sticky top-0 z-50">
     <header
       class="bg-primary text-text-inverse dark:text-text flex justify-between"
     >
