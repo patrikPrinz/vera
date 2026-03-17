@@ -32,6 +32,12 @@ export interface Role {
   groupRole: boolean;
 }
 
+export interface UserRole {
+  userId: string;
+  roleId: string;
+  group?: string;
+}
+
 export interface Group {
   id?: string;
   name: string;

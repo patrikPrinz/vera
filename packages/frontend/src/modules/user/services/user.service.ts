@@ -8,8 +8,11 @@ import {
   getTranslationBookmarksSchema,
   getChapterUserMetadata,
   createUserVerseMetadata,
+  getUserGroupsSchema,
 } from './userService.schema';
 import type { BibleLocation } from '@/shared/types/bible/bible.types';
+import type { Group } from '@/shared/types/auth/auth.types';
+import { useAuthStore } from '@/modules/auth/authStore';
 
 export class UserService {
   protected client: Axios;
@@ -110,5 +113,19 @@ export class UserService {
       noteText: metadata.noteText,
       highlightColor: metadata.highlightColor,
     });
+  }
+
+  public async getUserGroups(): Promise<Group[]> {
+    const response = await this.client.get(
+      `admin/user-groups/${useAuthStore().getId()}`,
+    );
+    if (response.status == 401) {
+      return [];
+    }
+    const validatedData = getUserGroupsSchema.safeParse(response.data);
+    if (!validatedData.success) {
+      throw new HttpError();
+    }
+    return validatedData.data as Group[];
   }
 }

@@ -8,7 +8,7 @@
     "send": "Odeslat"
   },
   "login": {
-    "register": "Zaregistrovat se",
+    "register": "Zaregistrovat",
     "login": "Přihlásit se",
     "logout": "Odhlásit se",
     "missingCredentials": "Vyplňte prosím jméno a heslo.",
