@@ -7,39 +7,48 @@ import { AuthError } from '../../../shared/error_handler/errors.js';
 import type { ValidatedRequest } from '../../../shared/request_validator/request_validator.types.js';
 import {
   createGroupSchema,
+  getUserGroupsSchema,
+  getUserRolesSchema,
+  listGroupUsersSchema,
   manageRoleSchema,
   manageUserGroupSchema,
   updateGroupSchema,
 } from '../admin.schema.js';
 import z from 'zod';
+import type { RolesService } from '../services/roles.service.js';
 
 @injectable()
 export class AdminController {
   protected groupsService: GroupsService;
   protected usersService: UsersService;
+  protected rolesService: RolesService;
 
   constructor(
     @inject('GroupsService') groupsService: GroupsService,
     @inject('UsersService') usersService: UsersService,
+    @inject('RolesService') rolesService: RolesService,
   ) {
     this.groupsService = groupsService;
     this.usersService = usersService;
+    this.rolesService = rolesService;
   }
 
   listGroups = async (req: Request, res: Response, next: NextFunction) => {
     if (req.user) {
       const groups = await this.groupsService.listGroups(req.user as User);
       res.json(groups);
+    } else {
+      next(new AuthError());
     }
-    next(new AuthError());
   };
 
   listUsers = async (req: Request, res: Response, next: NextFunction) => {
     if (req.user) {
       const users = await this.usersService.listUsers(req.user as User);
       res.json(users);
+    } else {
+      next(new AuthError());
     }
-    next(new AuthError());
   };
 
   // groups
@@ -64,7 +73,7 @@ export class AdminController {
   ) => {
     const { id } = req.validated;
     const result = await this.groupsService.removeGroup(req.user as User, id);
-    res.json({ deleted: result });
+    res.json({ deleted: result.toString() });
   };
 
   updateGroup = async (
@@ -105,7 +114,33 @@ export class AdminController {
       userId,
       groupId,
     );
-    res.json(result);
+    res.json(result.toString());
+  };
+
+  listUserGroups = async (
+    req: ValidatedRequest<z.infer<typeof getUserGroupsSchema>>,
+    res: Response,
+    _next: NextFunction,
+  ) => {
+    const { userId } = req.validated;
+    const groups = await this.groupsService.listUserGroups(
+      req.user as User,
+      userId,
+    );
+    res.json(groups);
+  };
+
+  listGroupUsers = async (
+    req: ValidatedRequest<z.infer<typeof listGroupUsersSchema>>,
+    res: Response,
+    _next: NextFunction,
+  ) => {
+    const { groupId } = req.validated;
+    const groupUsers = await this.groupsService.listGroupUsers(
+      req.user as User,
+      groupId,
+    );
+    res.json(groupUsers);
   };
 
   // roles
@@ -115,11 +150,10 @@ export class AdminController {
     res: Response,
     _next: NextFunction,
   ) => {
-    const { userId, roleId } = req.validated;
-    const result = await this.groupsService.addToGroup(
+    const { userRole } = req.validated;
+    const result = await this.rolesService.assignRole(
       req.user as User,
-      userId,
-      roleId,
+      userRole,
     );
     res.json(result);
   };
@@ -129,12 +163,22 @@ export class AdminController {
     res: Response,
     _next: NextFunction,
   ) => {
-    const { userId, roleId } = req.validated;
-    const result = await this.groupsService.removeFromGroup(
+    const { userRole } = req.validated;
+    const result = await this.rolesService.unassignRole(
       req.user as User,
-      userId,
-      roleId,
+      userRole,
     );
-    res.json(result);
+    res.json(result.toString());
+  };
+
+  listUserRoles = async (
+    req: ValidatedRequest<z.infer<typeof getUserRolesSchema>>,
+    res: Response,
+    _next: NextFunction,
+  ) => {
+    const { userId } = req.validated;
+    const roles =
+      (await this.rolesService.listUserRoles(req.user as User, userId)) ?? [];
+    res.json(roles);
   };
 }

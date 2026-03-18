@@ -34,6 +34,9 @@
       </button>
     </div>
   </div>
+  <router-link to="/auth/register" class="">
+    {{ i18n.t('login.register') }}
+  </router-link>
 </template>
 
 <script setup lang="ts">

@@ -126,17 +126,23 @@ export class RolesRepository {
     return false;
   }
 
-  public async listUserRoles(userId: string): Promise<string[]> {
+  public async listUserRoles(userId: string): Promise<Role[]> {
     const query = await this.adapter
       .selectFrom('user_roles')
       .innerJoin('roles', 'user_roles.role_id', 'roles.id')
-      .select('roles.code')
+      .select(['roles.code', 'roles.id', 'roles.name', 'roles.is_group_role'])
       .where('user_id', '=', userId)
       .execute();
 
     if (query.length > 0) {
-      return query.map((e) => e.code);
+      return query.map((e) => ({
+        id: e.id,
+        code: e.code,
+        name: e.name,
+        groupRole: e.is_group_role,
+      }));
+
+      return [];
     }
-    return [];
   }
 }

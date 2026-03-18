@@ -22,7 +22,22 @@ export const manageUserGroupSchema = z.object({
   groupId: z.string(),
 });
 
-export const manageRoleSchema = z.object({
+export const getUserGroupsSchema = z.object({
   userId: z.string(),
-  roleId: z.string(),
+});
+
+export const listGroupUsersSchema = z.object({
+  groupId: z.string(),
+});
+
+export const manageRoleSchema = z.object({
+  userRole: z.object({
+    userId: z.string(),
+    roleId: z.string(),
+    group: z.string().optional(),
+  }),
+});
+
+export const getUserRolesSchema = z.object({
+  userId: z.string(),
 });

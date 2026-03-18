@@ -1,7 +1,7 @@
 import type { Kysely } from 'kysely';
 import { inject, injectable } from 'tsyringe';
 import type { Database } from '../../../shared/postgres/schema.js';
-import type { Group } from '../../auth/auth.types.js';
+import type { Group, User } from '../../auth/auth.types.js';
 import type { DatabaseError } from 'pg';
 import { ConflictError } from '../../../shared/error_handler/errors.js';
 
@@ -118,6 +118,27 @@ export class GroupsRepository {
       return true;
     }
     return false;
+  }
+
+  public async listGroupUsers(groupId: string): Promise<User[]> {
+    const query = await this.adapter
+      .selectFrom('user_groups')
+      .innerJoin('user_details', 'user_details.id', 'user_groups.user_id')
+      .select([
+        'user_details.id',
+        'user_details.username',
+        'user_details.email',
+      ])
+      .where('user_groups.group_id', '=', groupId)
+      .execute();
+    if (query.length > 0) {
+      return query.map((e) => ({
+        id: e.id,
+        username: e.username,
+        email: e.email,
+      }));
+    }
+    return [];
   }
 
   public async listUserGroups(userId: string): Promise<Group[]> {

@@ -10,3 +10,5 @@ export const postLoginSchema = z.object({
   login: z.string(),
   password: z.string(),
 });
+
+export const hasRoleSchema = z.array(z.string());

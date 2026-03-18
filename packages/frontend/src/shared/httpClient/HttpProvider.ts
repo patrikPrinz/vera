@@ -17,7 +17,7 @@ export const httpClient = axios.create({
   baseURL: serverUrl,
   timeout: 1000,
   validateStatus: function (status) {
-    return (status >= 200 && status < 300) || status == 401; // default
+    return (status >= 200 && status < 300) || status == 401 || status == 403;
   },
 });
 

@@ -1,27 +1,36 @@
 <template>
   <VueFinalModal
-    class="flex items-end justify-start bg-transparent"
-    content-class="mb-4 ml-4 bg-gray-800 rounded p-4 shadow"
+    class="flex items-center justify-center bg-transparent"
+    content-class="mb-4 ml-4 bg-secondary rounded p-4 shadow"
   >
-    <form class="mb-2 flex gap-2">
-      <span v-for="color in colors">
+    <form class="mb-2 flex flex-col gap-2">
+      <div v-for="color in colors" class="h-min" :class="`bg-${color}`">
         <input
           name="color"
           type="radio"
           :key="color"
           :id="`highlight-color-${color}`"
           :value="color"
-          class="cursor-pointer"
+          class="m-2 cursor-pointer"
+          :class="color == 'null' ? 'hidden' : ''"
           v-model="selectedColor"
         />
-        <label :for="`highlight-color-${color}`" class="text-text-inverse">
-          <BiX v-if="color == 'null'"></BiX>
+        <label
+          :for="`highlight-color-${color}`"
+          class="text-text-inverse cursor-pointer"
+        >
+          <BiX v-if="color == 'null'" class="text-xl text-red-800"></BiX>
           <span v-else>{{ color }}</span>
         </label>
-      </span>
+      </div>
     </form>
 
-    <button @click="submit" class="text-amber-50">Ok</button>
+    <button
+      @click="submit"
+      class="bg-primary cursor-pointer rounded p-1 px-3 text-xl text-amber-50 hover:border-slate-950"
+    >
+      Ok
+    </button>
   </VueFinalModal>
 </template>
 
@@ -35,12 +44,12 @@ const props = defineProps<{
   color?: string;
 }>();
 const colors = [
-  'null',
   'red-400',
   'red-500',
   'sky-500',
   'pink-600',
   'green-400',
+  'null',
 ];
 
 onBeforeMount(() => {

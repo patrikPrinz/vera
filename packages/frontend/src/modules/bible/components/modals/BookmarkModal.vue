@@ -1,17 +1,24 @@
 <template>
   <VueFinalModal
-    class="flex items-end justify-start bg-transparent"
-    content-class="mb-4 ml-4 bg-gray-800 rounded p-4 shadow"
+    class="flex items-center justify-center bg-transparent"
+    content-class="mb-4 ml-4 bg-secondary rounded p-4 shadow"
   >
-    <div class="mb-2 flex gap-2">
-      <span v-for="bookmark in bookmarks">
-        <button @click="submit(bookmark.id)">
-          {{ bookmark.name }}
-        </button>
-      </span>
+    <div class="mb-2 flex flex-col gap-2">
+      <button
+        v-for="bookmark in bookmarks"
+        class="text-text-inverse hover:bg-primary cursor-pointer rounded p-1 text-xl"
+        @click="submit(bookmark.id)"
+      >
+        {{ bookmark.name }}
+      </button>
     </div>
 
-    <button @click="newBookmark" class="text-amber-50">+</button>
+    <button
+      @click="newBookmark"
+      class="text-text-inverse hover:bg-primary cursor-pointer rounded p-1 text-center text-2xl"
+    >
+      +
+    </button>
   </VueFinalModal>
 </template>
 
