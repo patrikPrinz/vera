@@ -27,18 +27,24 @@
 <script setup lang="ts">
 import type { UserRoleRecord } from '@/shared/types/auth/auth.types';
 import { onBeforeMount, ref, type Ref } from 'vue';
-import { adminService } from '../../services/adminService.provider';
-import { useAuthStore } from '@/modules/auth/authStore';
+import { authService } from '@/modules/auth/services/authService.provider';
 
 const props = defineProps<{ userId: string }>();
-
-const authStore = useAuthStore();
 const roles: Ref<UserRoleRecord[]> = ref([]);
 const assignedRoles: Ref<UserRoleRecord[]> = ref([]);
 
 onBeforeMount(async () => {
-  const loadedRoles = await adminService.listRoles();
-  roles.value = loadedRoles;
-  const loadedUserRoles = authStore.getUserRoles();
+  //const loadedRoles = await adminService.listRoles();
+  //roles.value = loadedRoles;
+  const loadedUserRoles = await authService.userRoles(props.userId);
+  assignedRoles.value = loadedUserRoles;
 });
+
+function assignRole(roleCode: string) {
+  console.log(roleCode);
+}
+
+function unassignRole(roleCode: string) {
+  console.log(roleCode);
+}
 </script>

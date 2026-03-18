@@ -98,9 +98,9 @@ export class AdminService {
     throw new HttpError();
   }
 
-  public async listRoles() {}
+  //  public async listRoles() {}
 
-  public async assignRole(userId: string, roleId: string, group?: string) {}
+  //  public async assignRole(userId: string, roleId: string, group?: string) {}
 
-  public async unassignRole(userId: string, roleId: string, group?: string) {}
+  //  public async unassignRole(userId: string, roleId: string, group?: string) {}
 }
