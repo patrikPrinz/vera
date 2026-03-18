@@ -5,7 +5,7 @@ import type { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { type AuthController } from './controllers/auth.controller.js';
 import type { ZodType } from 'zod';
-import { postRegisterSchema } from './auth.schema.js';
+import { hasRoleSchema, postRegisterSchema } from './auth.schema.js';
 import type { AdminController } from './controllers/admin.controller.js';
 import {
   createGroupSchema,
@@ -45,11 +45,13 @@ export class AuthRouterFactory {
 
     router.post('/logout', authenticated, controller.postLogout);
 
-    router.get(
-      '/me',
+    router.get('/me', authenticated, controller.getMe);
 
+    router.post(
+      '/has-roles',
       authenticated,
-      controller.getMe,
+      requestValidator(hasRoleSchema, 'body'),
+      controller.hasRoel,
     );
 
     return router;
@@ -122,7 +124,7 @@ export class AuthRouterFactory {
     );
 
     router.get(
-      '/user-roles/:id',
+      '/user-roles/:userId',
       requestValidator(getUserRolesSchema, 'params'),
       adminController.listUserRoles,
     );

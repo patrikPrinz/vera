@@ -68,7 +68,21 @@ export class AdminService {
       return undefined;
     }
     return response.data as string;
-    throw new HttpError();
+  }
+
+  public async removeUserFromGroup(
+    groupId: string,
+    userId: string,
+  ): Promise<boolean> {
+    const response = await this.client.post('admin/groups/unassign', {
+      userId: userId,
+      groupId: groupId,
+    });
+    if (response.status == 401 || response.status == 403) {
+      toast.error('Log in as admin to view this section.');
+      return false;
+    }
+    return (response.data as number) > 0;
   }
 
   public async listGroupUsers(groupId: string): Promise<UserDetails[]> {
@@ -83,4 +97,10 @@ export class AdminService {
     }
     throw new HttpError();
   }
+
+  public async listRoles() {}
+
+  public async assignRole(userId: string, roleId: string, group?: string) {}
+
+  public async unassignRole(userId: string, roleId: string, group?: string) {}
 }

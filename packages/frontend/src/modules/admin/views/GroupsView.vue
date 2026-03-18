@@ -30,7 +30,7 @@
 import type { Group } from '@/shared/types/auth/auth.types';
 import { onBeforeMount, type Ref, ref } from 'vue';
 import { BiSolidPlusSquare } from 'vue-icons-plus/bi';
-import AddUsersModal from '../components/AddUsersModal.vue';
+import AddUsersModal from '../components/modals/AddUsersModal.vue';
 import { adminService } from '../services/adminService.provider';
 import { useModal } from 'vue-final-modal';
 

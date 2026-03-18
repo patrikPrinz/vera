@@ -37,16 +37,18 @@ export class AdminController {
     if (req.user) {
       const groups = await this.groupsService.listGroups(req.user as User);
       res.json(groups);
+    } else {
+      next(new AuthError());
     }
-    next(new AuthError());
   };
 
   listUsers = async (req: Request, res: Response, next: NextFunction) => {
     if (req.user) {
       const users = await this.usersService.listUsers(req.user as User);
       res.json(users);
+    } else {
+      next(new AuthError());
     }
-    next(new AuthError());
   };
 
   // groups
@@ -71,7 +73,7 @@ export class AdminController {
   ) => {
     const { id } = req.validated;
     const result = await this.groupsService.removeGroup(req.user as User, id);
-    res.json({ deleted: result });
+    res.json({ deleted: result.toString() });
   };
 
   updateGroup = async (
@@ -112,7 +114,7 @@ export class AdminController {
       userId,
       groupId,
     );
-    res.json(result);
+    res.json(result.toString());
   };
 
   listUserGroups = async (
@@ -166,7 +168,7 @@ export class AdminController {
       req.user as User,
       userRole,
     );
-    res.json(result);
+    res.json(result.toString());
   };
 
   listUserRoles = async (
@@ -175,10 +177,8 @@ export class AdminController {
     _next: NextFunction,
   ) => {
     const { userId } = req.validated;
-    const roles = await this.rolesService.listUserRoles(
-      req.user as User,
-      userId,
-    );
+    const roles =
+      (await this.rolesService.listUserRoles(req.user as User, userId)) ?? [];
     res.json(roles);
   };
 }

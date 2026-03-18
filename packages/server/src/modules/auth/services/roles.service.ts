@@ -64,7 +64,9 @@ export class RolesService {
   }
 
   public async listUserRoles(author: User, userId: string): Promise<Role[]> {
-    if (author.id === userId || (await this.hasRole(author))) {
+    console.log(author);
+    console.log(userId);
+    if (author.id == userId || (await this.hasRole(author))) {
       const result = await this.repository.listUserRoles(userId);
       return result;
     }

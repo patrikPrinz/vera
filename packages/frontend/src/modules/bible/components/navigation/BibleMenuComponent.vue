@@ -56,7 +56,7 @@
             </template>
             <SelectMenuItem
               v-for="translation in translations"
-              @click="bibleStore.setCurrentTranslation(translation.translation)"
+              @click="switchTranslation(translation.translation)"
               >{{ translation.translation }}</SelectMenuItem
             >
           </SelectMenuChildLevel>
@@ -102,7 +102,7 @@ const props = defineProps<{
 }>();
 const { chapters, activeVerse, metadata } = toRefs(props);
 const translations: Ref<{ translation: string }[]> = ref([]);
-
+const emits = defineEmits(['reloadBibleEvent', 'unsetVerseEvent']);
 onBeforeMount(async () => {
   translations.value = await bibleStore.listTranslations();
 });
@@ -179,6 +179,11 @@ async function moveOrCreateBookmark(id: string | undefined) {
       await userService.createBookmark(bookmark);
     }
   }
+}
+
+async function switchTranslation(translation: string) {
+  await bibleStore.setCurrentTranslation(translation);
+  emits('reloadBibleEvent');
 }
 
 async function openHighlightModal(color: string): Promise<string> {

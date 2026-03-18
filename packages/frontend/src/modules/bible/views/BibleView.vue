@@ -18,6 +18,7 @@
   <BibleMenuComponent
     v-if="authStore.isAuthenticatedSync()"
     @unsetVerseEvent="unsetVerseEvent"
+    @reloadBibleEvent="reloadBibleEvent"
     :chapters="bibleStore.isChapterSet()"
     :activeVerse="activeVerse"
     :metadata="metadata"
@@ -56,5 +57,10 @@ function selectVerseEvent(verse: BibleVerse) {
 
 function unsetVerseEvent() {
   activeVerse.value = undefined;
+}
+
+async function reloadBibleEvent() {
+  await bibleStore.initialize();
+  location.reload();
 }
 </script>
