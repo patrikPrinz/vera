@@ -1,13 +1,13 @@
 <template>
-  <router-link to="/auth/register">
-    <BiSolidPlusSquare class="text-2xl"></BiSolidPlusSquare>
+  <router-link class="w-min" to="/auth/register">
+    <BiSolidPlusSquare class="h-auto w-8 cursor-pointer"></BiSolidPlusSquare>
   </router-link>
   <table class="table-auto, m-auto mt-5 w-1/2">
     <thead>
       <tr>
         <th>#</th>
-        <th>Name</th>
-        <th>Email</th>
+        <th>{{ i18n.t('general.email') }}</th>
+        <th>{{ i18n.t('general.name') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -16,22 +16,36 @@
         <td>{{ user.email }}</td>
         <td>{{ user.username ?? '-' }}</td>
         <td>
-          <BiRefresh
+          <button
+            :title="i18n.t('admin.manageRoles')"
             class="cursor-pointer text-xl"
-            @click="resetPassword(user.id)"
-          ></BiRefresh>
+            @click="openURolesModal(user.id)"
+          >
+            <BiEdit></BiEdit>
+          </button>
         </td>
+        <button
+          :title="i18n.t('admin.resetPassword')"
+          class="cursor-pointer text-xl"
+          @click="resetPassword(user.id)"
+        >
+          <BiRefresh />
+        </button>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script setup lang="ts">
-import { BiSolidPlusSquare, BiRefresh } from 'vue-icons-plus/bi';
+import { BiSolidPlusSquare, BiRefresh, BiEdit } from 'vue-icons-plus/bi';
 import { onBeforeMount, ref, type Ref } from 'vue';
 import type { UserDetails } from '@/shared/types/auth/auth.types';
 import { adminService } from '../services/adminService.provider';
+import ManageRolesModal from '../components/modals/ManageRolesModal.vue';
+import { useModal } from 'vue-final-modal';
+import { useI18n } from 'vue-i18n';
 
+const i18n = useI18n();
 const users: Ref<UserDetails[]> = ref([]);
 
 onBeforeMount(async () => {
@@ -44,4 +58,19 @@ const resetPassword = (userId: string) => {
   //await adminService.resetPassword(userId);
   //toast.success('Password reset sent.');
 };
+
+async function openURolesModal(userId: string | undefined): Promise<void> {
+  if (!userId) {
+    throw new ReferenceError('Group ID is required');
+  }
+  return new Promise(() => {
+    const { open } = useModal({
+      component: ManageRolesModal,
+      attrs: {
+        userId: userId,
+      },
+    });
+    void open();
+  });
+}
 </script>

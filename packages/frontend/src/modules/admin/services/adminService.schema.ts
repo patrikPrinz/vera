@@ -19,3 +19,12 @@ export const createGroupResponseSchema = z.object({
   id: z.string(),
   name: z.string(),
 });
+
+export const getRolesResponseSchema = z.array(
+  z.object({
+    id: z.string(),
+    name: z.string(),
+    code: z.string(),
+    groupRole: z.boolean(),
+  }),
+);

@@ -111,6 +111,8 @@ export class AuthRouterFactory {
       adminController.listGroupUsers,
     );
 
+    router.get('/roles', adminController.listRoles);
+
     router.post(
       '/roles/assign',
       requestValidator(manageRoleSchema, 'body'),
