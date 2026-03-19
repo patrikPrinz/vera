@@ -3,9 +3,16 @@
     "appName": "Vera",
     "send": "send",
     "email": "E-mail",
+    "name": "Username",
     "password": "Password",
     "passwordConfirm": "Password confirm",
     "serverError": "Failed loading data from server."
+  },
+  "admin": {
+    "groups": "Groups",
+    "users": "Users",
+    "manageRoles": "Manage roles",
+    "resetPassword": "Reset password"
   },
   "login": {
     "register": "Register",
@@ -18,7 +25,8 @@
   },
   "navigation": {
     "home": "Home",
-    "bible": "Bible"
+    "bible": "Bible",
+    "adminSection": "Admin panel"
   },
   "user": {
     "bookmarks": "Bookmarks"
