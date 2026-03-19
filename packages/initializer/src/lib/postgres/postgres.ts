@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // SOURCE: https://www.kysely.dev/docs/migrations
 
-import { Kysely, Migrator } from 'kysely';
+import { Migrator } from 'kysely';
 
-export async function migrateToLatest(migrator: Migrator, db: Kysely<unknown>) {
+export async function migrateToLatest(migrator: Migrator) {
   const { error, results } = await migrator.migrateToLatest();
 
   results?.forEach((it) => {
@@ -18,6 +19,4 @@ export async function migrateToLatest(migrator: Migrator, db: Kysely<unknown>) {
     console.error(error);
     process.exit(1);
   }
-
-  await db.destroy();
 }
