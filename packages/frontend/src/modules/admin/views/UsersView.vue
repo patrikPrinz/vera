@@ -16,6 +16,12 @@
         <td>{{ user.email }}</td>
         <td>{{ user.username ?? '-' }}</td>
         <td>
+          <BiPen
+            class="cursor-pointer text-xl"
+            @click="openURolesModal(user.id)"
+          ></BiPen>
+        </td>
+        <td>
           <BiRefresh
             class="cursor-pointer text-xl"
             @click="resetPassword(user.id)"
@@ -27,10 +33,12 @@
 </template>
 
 <script setup lang="ts">
-import { BiSolidPlusSquare, BiRefresh } from 'vue-icons-plus/bi';
+import { BiSolidPlusSquare, BiRefresh, BiPen } from 'vue-icons-plus/bi';
 import { onBeforeMount, ref, type Ref } from 'vue';
 import type { UserDetails } from '@/shared/types/auth/auth.types';
 import { adminService } from '../services/adminService.provider';
+import ManageRolesModal from '../components/modals/ManageRolesModal.vue';
+import { useModal } from 'vue-final-modal';
 
 const users: Ref<UserDetails[]> = ref([]);
 
@@ -44,4 +52,19 @@ const resetPassword = (userId: string) => {
   //await adminService.resetPassword(userId);
   //toast.success('Password reset sent.');
 };
+
+async function openURolesModal(userId: string | undefined): Promise<void> {
+  if (!userId) {
+    throw new ReferenceError('Group ID is required');
+  }
+  return new Promise(() => {
+    const { open } = useModal({
+      component: ManageRolesModal,
+      attrs: {
+        userId: userId,
+      },
+    });
+    void open();
+  });
+}
 </script>

@@ -38,6 +38,12 @@ export interface UserRole {
   group?: string;
 }
 
+export interface UserRoleRecord {
+  code: string;
+  name?: string;
+  group?: string;
+}
+
 export interface Group {
   id?: string;
   name: string;

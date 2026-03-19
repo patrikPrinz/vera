@@ -9,21 +9,27 @@
         class="text-text-inverse cursor-pointer rounded p-1 text-xl"
       >
         {{ user.email }}
-        <button class="cursor-pointer" @click="addUserToGroup(user.id)">
-          <BiCheck v-if="assignedUserIds.includes(user.id)" />
-          <BiUserCheck v-else />
-        </button>
+
+        <div v-if="assignedUserIds.includes(user.id)">
+          <BiCheck />
+          <BiX class="text-red-800" @click="removeUserFromGroup(user.id)" />
+        </div>
+        <div v-else>
+          <button class="cursor-pointer" @click="addUserToGroup(user.id)">
+            <BiUserCheck />
+          </button>
+        </div>
       </span>
     </div>
   </VueFinalModal>
 </template>
 
 <script setup lang="ts">
-import { BiUserCheck, BiCheck } from 'vue-icons-plus/bi';
+import { BiUserCheck, BiCheck, BiX } from 'vue-icons-plus/bi';
 import { VueFinalModal } from 'vue-final-modal';
 import { onBeforeMount, ref, type Ref } from 'vue';
 import type { UserDetails } from '@/shared/types/auth/auth.types';
-import { adminService } from '../services/adminService.provider';
+import { adminService } from '../../services/adminService.provider';
 
 const users: Ref<UserDetails[]> = ref([]);
 const props = defineProps<{
@@ -38,11 +44,23 @@ onBeforeMount(async () => {
 });
 
 async function addUserToGroup(userId: string) {
-  console.log(userId);
   if (!assignedUserIds.value.includes(userId)) {
     const result = await adminService.addUserToGroup(props.groupId, userId);
     if (result) {
       assignedUserIds.value.push(userId);
+    }
+  }
+}
+
+async function removeUserFromGroup(userId: string) {
+  if (assignedUserIds.value.includes(userId)) {
+    const result = await adminService.removeUserFromGroup(
+      props.groupId,
+      userId,
+    );
+    if (result) {
+      const userIndex = assignedUserIds.value.indexOf(userId);
+      assignedUserIds.value.splice(userIndex, 1);
     }
   }
 }

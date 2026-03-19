@@ -58,6 +58,11 @@
                 {{ i18n.t(option) }}
               </router-link>
             </li>
+            <li>
+              <router-link to="/admin" v-if="authStore.hasRoles(['admin'])"
+                >Admin</router-link
+              >
+            </li>
           </ul>
         </nav>
       </aside>
@@ -73,8 +78,10 @@ import { useI18n } from 'vue-i18n';
 import LocaleSwitcher from '@/shared/i18n/components/LocaleSwitcher.vue';
 import UserSwitcher from '@/modules/auth/components/UserSwitcher.vue';
 import { keyboardHandler } from '@/composables/keyboardHandler.provider';
+import { useAuthStore } from '@/modules/auth/authStore';
 const i18n = useI18n();
 
+const authStore = useAuthStore();
 const menuOptions = ['bible'];
 const showMenu = ref(false);
 

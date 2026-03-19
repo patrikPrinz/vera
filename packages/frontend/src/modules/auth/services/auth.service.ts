@@ -2,15 +2,21 @@ import type { Axios } from 'axios';
 import {
   logoutResponseSchema,
   userDetailsResponseSchema,
+  userRolesResponseSchema,
 } from './authService.schema';
 import { HttpError } from '@/shared/httpClient/http.errors';
-import type { UserDetails } from '@/shared/types/auth/auth.types';
+import type {
+  UserDetails,
+  UserRoleRecord,
+} from '@/shared/types/auth/auth.types';
 
 export interface IAuthService {
   login(login: string, password: string): Promise<boolean>;
   logout(): Promise<boolean>;
   isLoggedIn(): Promise<boolean>;
   userDetails(): Promise<UserDetails | undefined>;
+  userRoles(userId: string): Promise<UserRoleRecord[]>;
+  hasRoles(roles: string[]): Promise<boolean>;
 }
 
 export class AuthService implements IAuthService {
@@ -27,9 +33,6 @@ export class AuthService implements IAuthService {
     if (response.status != 401) {
       return true;
     }
-    /*if (loginResponseSchema.safeParse(response.data).success) {
-      return true;
-      }*/
     if (response.status == 401) {
       return false;
     }
@@ -78,5 +81,28 @@ export class AuthService implements IAuthService {
 
   public async isLoggedIn(): Promise<boolean> {
     return (await this.userDetails()) !== undefined;
+  }
+
+  public async userRoles(userId: string): Promise<UserRoleRecord[]> {
+    const response = await this.client.get(`/admin/user-roles/${userId}`);
+    if (response.status == 401) {
+      return [];
+    }
+    const validatedData = userRolesResponseSchema.safeParse(response.data);
+    if (validatedData.success) {
+      return validatedData.data as UserRoleRecord[];
+    }
+    throw new HttpError();
+  }
+
+  public async hasRoles(roles: string[]): Promise<boolean> {
+    const hasRoles = await this.client.post('/auth/has-roles', roles);
+    if (hasRoles.status == 401) {
+      return false;
+    }
+    if (hasRoles.data) {
+      return hasRoles.data as boolean;
+    }
+    throw new HttpError();
   }
 }
