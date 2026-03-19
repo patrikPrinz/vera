@@ -24,3 +24,27 @@ export interface AuthProvider {
 export interface User {
   id: string;
 }
+
+export interface Role {
+  id?: string;
+  code: string;
+  name?: string;
+  groupRole: boolean;
+}
+
+export interface UserRole {
+  userId: string;
+  roleId: string;
+  group?: string;
+}
+
+export interface UserRoleRecord {
+  code: string;
+  name?: string;
+  group?: string;
+}
+
+export interface Group {
+  id?: string;
+  name: string;
+}

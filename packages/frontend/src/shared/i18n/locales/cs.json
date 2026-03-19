@@ -2,13 +2,20 @@
   "general": {
     "appName": "Vera",
     "serverError": "Načítání dat ze serveru selhalo.",
+    "name": "Jméno",
     "email": "E-mail",
     "password": "Heslo",
     "passwordConfirm": "Heslo znovu",
     "send": "Odeslat"
   },
+  "admin": {
+    "groups": "Skupiny",
+    "users": "Uživatelé",
+    "manageRoles": "Spravovat role",
+    "resetPassword": "Obnovit heslo"
+  },
   "login": {
-    "register": "Zaregistrovat se",
+    "register": "Zaregistrovat",
     "login": "Přihlásit se",
     "logout": "Odhlásit se",
     "missingCredentials": "Vyplňte prosím jméno a heslo.",
@@ -18,7 +25,8 @@
   },
   "navigation": {
     "home": "Domů",
-    "bible": "Bible"
+    "bible": "Bible",
+    "adminSection": "Administrace"
   },
   "user": {
     "bookmarks": "Záložky"

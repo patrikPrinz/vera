@@ -11,3 +11,13 @@ export const userDetailsResponseSchema = z.object({
   email: z.string(),
   name: z.string().optional(),
 });
+
+export const userRolesResponseSchema = z
+  .array(
+    z.object({
+      name: z.string().optional(),
+      code: z.string(),
+      group: z.string().optional(),
+    }),
+  )
+  .min(0);

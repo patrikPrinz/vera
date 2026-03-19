@@ -18,14 +18,21 @@ export const useBibleStore = defineStore('bible', () => {
     ref(undefined);
   const booksMetadata: Ref<Record<number, BibleBookMetadata> | undefined> =
     ref(undefined);
-  //const httpService = new BibleHttpPort(httpClient);
-
   function getCurrentTranslation() {
+    const storageData = localStorage.getItem('currentTranslation');
+    if (!currentTranslation.value && storageData != null) {
+      currentTranslation.value = storageData;
+    }
     return currentTranslation.value;
+  }
+
+  function getTranslationMetadata() {
+    return booksMetadata.value;
   }
 
   async function setCurrentTranslation(value: string) {
     const httpService = getBibleService();
+    localStorage.setItem('currentTranslation', value ?? '');
     currentTranslation.value = value;
     const data = await httpService.getTranslationMetadata(
       currentTranslation.value,
@@ -40,28 +47,46 @@ export const useBibleStore = defineStore('bible', () => {
   }
 
   function isBookSet() {
-    return currentBook.value !== undefined;
+    return getCurrentBook() !== undefined;
   }
 
   function getCurrentBook() {
+    const storageData = localStorage.getItem('currentBook');
+    if (!currentBook.value && storageData != null && storageData != '') {
+      currentBook.value = new Number(storageData) as number;
+    }
     return currentBook.value;
   }
 
   function setCurrentBook(value: number | undefined) {
     if (value === undefined || getBookMetadata(value)) {
+      if (value) {
+        localStorage.setItem('currentBook', value.toString());
+      } else {
+        localStorage.removeItem('currentBook');
+      }
       currentBook.value = value;
     }
   }
 
   function isChapterSet() {
-    return currentChapter.value !== undefined;
+    return getCurrentChapter() !== undefined;
   }
 
   function getCurrentChapter() {
+    const storageData = localStorage.getItem('currentChapter');
+    if (!currentChapter.value && storageData != null && storageData != '') {
+      currentChapter.value = new Number(storageData) as number;
+    }
     return currentChapter.value;
   }
 
   function setCurrentChapter(value: number | undefined) {
+    if (value) {
+      localStorage.setItem('currentChapter', value.toString());
+    } else {
+      localStorage.removeItem('currentChapter');
+    }
     currentChapter.value = value;
   }
 
@@ -72,11 +97,25 @@ export const useBibleStore = defineStore('bible', () => {
     return undefined;
   }
 
+  async function listTranslations(): Promise<{ translation: string }[]> {
+    if (bibleService) {
+      const result = await bibleService.getTranslations();
+      return result;
+    }
+    throw new ReferenceError('Bible service not provided.');
+  }
+
   async function initialize() {
     if (!getCurrentTranslation()) {
-      await setCurrentTranslation('CZECEP');
-      currentBook.value = undefined;
-      currentChapter.value = undefined;
+      const translation = (import.meta.env.FALLBACK_TRANSLATION ??
+        'CZECEP') as string;
+      await setCurrentTranslation(translation);
+      setCurrentBook(undefined);
+      setCurrentChapter(undefined);
+    }
+    const translation = getCurrentTranslation();
+    if (!getTranslationMetadata() && translation) {
+      await setCurrentTranslation(translation);
     }
   }
 
@@ -87,6 +126,7 @@ export const useBibleStore = defineStore('bible', () => {
     translationMetadata,
     booksMetadata,
 
+    getTranslationMetadata,
     getCurrentTranslation,
     setCurrentTranslation,
     isBookSet,
@@ -96,6 +136,7 @@ export const useBibleStore = defineStore('bible', () => {
     getCurrentChapter,
     setCurrentChapter,
     getBookMetadata,
+    listTranslations,
     initialize,
   };
 });

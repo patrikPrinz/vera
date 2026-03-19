@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - package: elastic-initializer
+          - package: initializer
           - package: frontend
           - package: server
 

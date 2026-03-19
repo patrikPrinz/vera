@@ -1,5 +1,5 @@
 <template>
-  <div class="sticky top-0">
+  <div class="sticky top-0 z-50">
     <header
       class="bg-primary text-text-inverse dark:text-text flex justify-between"
     >
@@ -51,12 +51,20 @@
           <ul>
             <li v-for="(option, index) in menuOptions">
               <router-link
-                class="hover:bg-primary block w-full cursor-pointer text-lg font-bold"
+                class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
                 :to="`/${option}`"
                 @click="hideMenu()"
               >
-                {{ i18n.t(option) }}
+                {{ i18n.t(`navigation.${option}`) }}
               </router-link>
+            </li>
+            <li>
+              <router-link
+                to="/admin"
+                class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
+                v-if="authStore.hasRoles(['admin'])"
+                >{{ i18n.t('navigation.adminSection') }}</router-link
+              >
             </li>
           </ul>
         </nav>
@@ -73,8 +81,10 @@ import { useI18n } from 'vue-i18n';
 import LocaleSwitcher from '@/shared/i18n/components/LocaleSwitcher.vue';
 import UserSwitcher from '@/modules/auth/components/UserSwitcher.vue';
 import { keyboardHandler } from '@/composables/keyboardHandler.provider';
+import { useAuthStore } from '@/modules/auth/authStore';
 const i18n = useI18n();
 
+const authStore = useAuthStore();
 const menuOptions = ['bible'];
 const showMenu = ref(false);
 

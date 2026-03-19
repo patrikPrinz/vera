@@ -7,6 +7,10 @@ export interface Database {
   credentials: CredentialsTable;
   user_bookmarks: UserBookmarksTable;
   bible_user_metadata: BibleUserMetadataTable;
+  groups: GroupsTable;
+  user_groups: UserGroupsTable;
+  roles: RolesTable;
+  user_roles: UserRolesTable;
 }
 
 export interface UserDetailsTable {
@@ -53,4 +57,29 @@ export interface BibleUserMetadataTable {
   author_id: string;
   highlight_color: string | null;
   note_text: string | null;
+}
+
+export interface GroupsTable {
+  id: Generated<string>;
+  name: string;
+}
+
+export interface UserGroupsTable {
+  id: Generated<string>;
+  user_id: string;
+  group_id: string;
+}
+
+export interface RolesTable {
+  id: Generated<string>;
+  code: string;
+  name: string;
+  is_group_role: boolean;
+}
+
+export interface UserRolesTable {
+  id: Generated<string>;
+  user_id: string;
+  role_id: string;
+  group_id: string | null;
 }

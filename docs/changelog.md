@@ -1,3 +1,10 @@
+# v0.3.0
+Version introduces basic functionality for role management and groups, also
+adds admin panel with group, role and user management. Groups are not usable
+yet, since they have no contnent and group roles are not implemented yet too.
+
+Version also introduces bunch of smaller UI improvements.
+
 # v0.2.0
 Version introduces authentication and user accounts and also a 
 new features for Bible reader

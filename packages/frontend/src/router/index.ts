@@ -2,6 +2,15 @@ import { useAuthStore } from '@/modules/auth/authStore';
 import HomeView from '../modules/main/views/HomeView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
+import AdminView from '@/modules/admin/views/AdminView.vue';
+import UsersView from '@/modules/admin/views/UsersView.vue';
+import BibleView from '@/modules/bible/views/BibleView.vue';
+import AuthView from '@/modules/auth/views/AuthView.vue';
+import LoginView from '@/modules/auth/views/LoginView.vue';
+import RegisterView from '../modules/auth/views/RegisterView.vue';
+import GroupsView from '@/modules/admin/views/GroupsView.vue';
+import UserGroupsView from '@/modules/user/views/UserGroupsView.vue';
+import BookmarkView from '@/modules/user/views/BookmarkView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -12,30 +21,38 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/bible',
     name: 'bible',
-    component: () => import('../modules/bible/views/BibleView.vue'),
+    component: BibleView,
   },
   {
     path: '/auth',
     name: 'auth',
-    meta: { requiresAuth: true },
-    component: () => import('../modules/auth/views/AuthView.vue'),
-  },
-  {
-    path: '/auth/login',
-    name: 'login',
-    component: () => import('../modules/auth/views/LoginView.vue'),
-  },
-  {
-    path: '/auth/register',
-    name: 'register',
-    component: () => import('../modules/auth/views/RegisterView.vue'),
+    children: [
+      { path: '', meta: { requiresAuth: true }, component: AuthView },
+      { path: 'login', component: LoginView },
+      { path: 'register', component: RegisterView },
+    ],
   },
 
   {
-    path: '/user/bookmarks',
-    name: 'bookmarks',
+    path: '/user',
     meta: { requiresAuth: true },
-    component: () => import('../modules/user/views/BookmarkView.vue'),
+    children: [
+      { path: 'bookmarks', component: BookmarkView },
+      {
+        path: 'groups',
+        component: UserGroupsView,
+      },
+    ],
+  },
+
+  {
+    path: '/admin',
+    meta: { requiresAuth: true },
+    component: AdminView,
+    children: [
+      { path: 'users', component: UsersView },
+      { path: 'groups', component: GroupsView },
+    ],
   },
 ];
 

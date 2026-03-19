@@ -1,14 +1,14 @@
-import { inject, injectable } from 'tsyringe';
 import bcrypt from 'bcrypt';
 import { Kysely } from 'kysely';
-import { type Database } from '../../shared/postgres/schema.js';
+import { inject, injectable } from 'tsyringe';
+import { AppError } from '../../../shared/error_handler/errors.js';
+import { PostgresError } from '../../../shared/postgres/postgres.errors.js';
+import { type Database } from '../../../shared/postgres/schema.js';
 import type {
   AuthenticationRequest,
   AuthProvider,
   UserDetails,
-} from '../../shared/types/auth/auth.types.js';
-import { AppError } from '../../shared/error_handler/errors.js';
-import { PostgresError } from '../../shared/postgres/postgres.errors.js';
+} from '../../../shared/types/auth/auth.types.js';
 
 @injectable()
 export class AuthRepository {
@@ -60,8 +60,10 @@ export class AuthRepository {
   protected async findUserMethods(
     email: string,
   ): Promise<string[] | undefined> {
+    console.log(email);
     const query = await this.adapter
       .selectFrom('user_details')
+      .where('user_details.email', '=', email)
       .leftJoin('authentication', 'user_details.id', 'authentication.user_id')
       .innerJoin(
         'auth_provider',
@@ -69,8 +71,8 @@ export class AuthRepository {
         'auth_provider.id',
       )
       .select(['user_details.id', 'auth_provider.code'])
-      .where('user_details.email', '=', email)
       .execute();
+    console.log(query);
     if (query.length == 0) return [];
     const result = query.map((e) => e.code);
     return result;

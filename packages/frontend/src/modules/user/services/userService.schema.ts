@@ -40,3 +40,10 @@ export const createUserVerseMetadata = z.object({
     verse: z.number(),
   }),
 });
+
+export const getUserGroupsSchema = z.array(
+  z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+);

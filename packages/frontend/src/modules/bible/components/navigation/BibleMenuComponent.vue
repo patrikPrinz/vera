@@ -40,26 +40,39 @@
     </p>
 
     <div class="hover:bg-secondary cursor-pointer p-0.5">
-      <Dropdown class="m-0 p-0">
-        <template #trigger class="m-0">
-          <i class="hover:bg-secondary m-0 cursor-pointer p-1"
-            ><BiDotsVerticalRounded
-          /></i>
-        </template>
-        <DropdownContent>
-          <div>
+      <SelectMenuDropdown>
+        <template #trigger
+          ><i> <BiDotsVerticalRounded /> </i
+        ></template>
+        <SelectMenuBody>
+          <SelectMenuItem>
             <router-link to="/user/bookmarks">
               {{ $t('user.bookmarks') }}
             </router-link>
-          </div>
-        </DropdownContent>
-      </Dropdown>
+          </SelectMenuItem>
+          <SelectMenuChildLevel>
+            <template #trigger>
+              <SelectMenuItem> Změnit překlad </SelectMenuItem>
+            </template>
+            <SelectMenuItem
+              v-for="translation in translations"
+              @click="switchTranslation(translation.translation)"
+              >{{ translation.translation }}</SelectMenuItem
+            >
+          </SelectMenuChildLevel>
+        </SelectMenuBody>
+      </SelectMenuDropdown>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { Dropdown, DropdownContent } from 'v-dropdown';
+import {
+  SelectMenuDropdown,
+  SelectMenuBody,
+  SelectMenuItem,
+  SelectMenuChildLevel,
+} from 'v-selectmenu';
 import type {
   BibleLocation,
   BibleVerse,
@@ -75,7 +88,7 @@ import { useModal } from 'vue-final-modal';
 import HighlightColorModal from '../modals/HighlightColorModal.vue';
 import type { UserVerseMetadata } from '@/shared/types/user/user.types';
 import { userService } from '@/modules/user/services/userService.provider';
-import { toRefs } from 'vue';
+import { toRefs, onBeforeMount, ref, type Ref } from 'vue';
 import { useAuthStore } from '@/modules/auth/authStore';
 import { useBibleStore } from '../../stores/bibleStore';
 import NoteModal from '../modals/NoteModal.vue';
@@ -88,6 +101,11 @@ const props = defineProps<{
   metadata: Record<string, UserVerseMetadata> | undefined;
 }>();
 const { chapters, activeVerse, metadata } = toRefs(props);
+const translations: Ref<{ translation: string }[]> = ref([]);
+const emits = defineEmits(['reloadBibleEvent', 'unsetVerseEvent']);
+onBeforeMount(async () => {
+  translations.value = await bibleStore.listTranslations();
+});
 
 function newVerseMetadata(): UserVerseMetadata | undefined {
   const translation = bibleStore.getCurrentTranslation();
@@ -161,6 +179,11 @@ async function moveOrCreateBookmark(id: string | undefined) {
       await userService.createBookmark(bookmark);
     }
   }
+}
+
+async function switchTranslation(translation: string) {
+  await bibleStore.setCurrentTranslation(translation);
+  emits('reloadBibleEvent');
 }
 
 async function openHighlightModal(color: string): Promise<string> {

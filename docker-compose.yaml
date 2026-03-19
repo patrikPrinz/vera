@@ -9,8 +9,15 @@ services:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
       - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
+      - SERVER_ALLOWED_ORIGIN=${FRONTEND_ADDRESS:-localhost:3001}
     networks:
       - vera_network
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.server.rule=Host(`${SERVER_ADDRESS}`)
+      - traefik.http.routers.server.entrypoints=websecure
+      - traefik.http.routers.server.tls.certresolver=le
 
   frontend:
     build:
@@ -19,8 +26,14 @@ services:
     networks:
       - vera_network
     environment:
-      - SERVER_PORT=${SERVER_PORT:-3000}
-      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost}
+      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost:3000}
+      - FRONTEND_ADDRESS=${FRONTEND_ADDRESS:-localhost:3001}
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.frontend.rule=Host(`${FRONTEND_ADDRESS}`)
+      - traefik.http.routers.frontend.entrypoints=websecure
+      - traefik.http.routers.frontend.tls.certresolver=le
 
   elastic-search:
     image: elasticsearch:9.1.2
@@ -39,10 +52,10 @@ services:
     networks:
       - vera_network
 
-  elastic-initializer:
+  initializer:
     build:
       context: .
-      dockerfile: packages/elastic-initializer/Dockerfile
+      dockerfile: packages/initializer/Dockerfile
       target: dev
     depends_on:
       - elastic-search
@@ -50,8 +63,10 @@ services:
       - ELASTIC_NODE=${ELASTIC_NODE:-http://elastic-search:9200}
       - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
+      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
     volumes:
-      - ./packages/elastic-initializer/src:/app/packages/elastic-initializer/src:z
+      - ./packages/initializer/src:/app/packages/initializer/src:z
     networks:
       - vera_network
 
