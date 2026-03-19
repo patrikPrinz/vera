@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // SOURCE: https://www.kysely.dev/docs/migrations
 
 import { Migrator } from 'kysely';

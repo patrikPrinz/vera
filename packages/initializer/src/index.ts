@@ -16,13 +16,6 @@ const connection = new Client({
 
 const migrator = createMigrator(db);
 await migrateToLatest(migrator);
-if (process.env.ADMIN_USER_NAME) {
-  await seedAdminUser(
-    db,
-    process.env.ADMIN_USER_NAME,
-    process.env.ADMIN_USER_PASSWORD,
-  );
-}
 
 await db.destroy();
 
