@@ -181,4 +181,9 @@ export class AdminController {
       (await this.rolesService.listUserRoles(req.user as User, userId)) ?? [];
     res.json(roles);
   };
+
+  listRoles = async (req: Request, res: Response, _next: NextFunction) => {
+    const roles = await this.rolesService.listRoles(req.user as User);
+    res.json(roles ?? []);
+  };
 }

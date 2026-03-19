@@ -4,47 +4,65 @@
     content-class="mb-4 ml-4 bg-secondary rounded p-4 shadow"
   >
     <div class="mb-2 flex flex-col gap-2">
-      <span
+      <div
         v-for="role in roles"
         class="text-text-inverse cursor-pointer rounded p-1 text-xl"
       >
-        {{ role.name ?? role.code }}
-
-        <div v-if="assignedRoles.find((e) => e.code == role.code)">
-          <BiCheck />
-          <BiX class="text-red-800" @click="unassignRole(role.code)" />
-        </div>
-        <div v-else>
-          <button class="cursor-pointer" @click="assignRole(role.code)">
-            <BiUserCheck />
+        <span v-if="!role.groupRole">
+          {{ role.name ?? role.code }}
+          <button
+            v-if="assignedRoles.find((e) => e.code == role.code)"
+            @click="unassignRole(role)"
+          >
+            <BiX></BiX>
           </button>
-        </div>
-      </span>
+          <button v-else @click="assignRole(role)">
+            <BiPlus></BiPlus>
+          </button>
+        </span>
+      </div>
     </div>
   </VueFinalModal>
 </template>
 
 <script setup lang="ts">
-import type { UserRoleRecord } from '@/shared/types/auth/auth.types';
-import { onBeforeMount, ref, type Ref } from 'vue';
 import { authService } from '@/modules/auth/services/authService.provider';
+import type { Role, UserRoleRecord } from '@/shared/types/auth/auth.types';
+import { onBeforeMount, ref, type Ref } from 'vue';
+import { VueFinalModal } from 'vue-final-modal';
+import { BiPlus, BiX } from 'vue-icons-plus/bi';
+import { adminService } from '../../services/adminService.provider';
 
 const props = defineProps<{ userId: string }>();
-const roles: Ref<UserRoleRecord[]> = ref([]);
+const roles: Ref<Role[]> = ref([]);
 const assignedRoles: Ref<UserRoleRecord[]> = ref([]);
 
 onBeforeMount(async () => {
-  //const loadedRoles = await adminService.listRoles();
-  //roles.value = loadedRoles;
+  const loadedRoles = await adminService.listRoles();
+  roles.value = loadedRoles;
   const loadedUserRoles = await authService.userRoles(props.userId);
   assignedRoles.value = loadedUserRoles;
 });
 
-function assignRole(roleCode: string) {
-  console.log(roleCode);
+async function assignRole(role: Role) {
+  if (!assignedRoles.value.find((e) => e.code == role.code) && role.id) {
+    const result = await adminService.assignRole(role.id, props.userId);
+    if (result) {
+      assignedRoles.value.push({ code: role.code, name: role.name });
+    }
+  }
 }
 
-function unassignRole(roleCode: string) {
-  console.log(roleCode);
+async function unassignRole(role: Role) {
+  if (role.id) {
+    console.log(role);
+    const result = await adminService.unassignRole(role.id, props.userId);
+    console.log(result);
+    if (result) {
+      assignedRoles.value = assignedRoles.value.filter(
+        (e) => e.code != role.code,
+      );
+    }
+  }
 }
 </script>
