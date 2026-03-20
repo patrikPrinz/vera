@@ -90,11 +90,11 @@ export class AuthRepository {
 
   /**
    * Register user, if he is not registered yet with specified authentication method.
-   * @returns `true` if registered successfully, `false` if already registered
+   * @returns user's `id` if registered successfully, `undefined` if already registered
    */
   public async registerUserAuthentication(
     request: AuthenticationRequest,
-  ): Promise<boolean> {
+  ): Promise<string | undefined> {
     const registeredMethods = await this.findUserMethods(request.email);
     if (!registeredMethods.includes(request.provider)) {
       let userId: string;
@@ -107,12 +107,12 @@ export class AuthRepository {
         request.providerAccountId = `local<${userId}>`;
         const authId = await this.insertAuthenticationMethod(userId, request);
         const _credentialsId = await this.insertCredentials(authId, request);
-        return true;
+        return userId;
       }
       await this.insertAuthenticationMethod(userId, request);
-      return true;
+      return userId;
     }
-    return false;
+    return undefined;
   }
 
   protected async insertUserDetails(
