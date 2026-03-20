@@ -12,11 +12,24 @@ export default defineConfig({
     },
   },
   server: {
+    allowedHosts: [process.env.VITE_FRONTEND_ADDRESS ?? 'localhost:3001'],
     host: true, // = 0.0.0.0
     port: 3001,
     watch: {
       usePolling: true,
       interval: 100,
+    },
+  },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    coverage: {
+      enabled: true,
+      provider: 'v8',
+      reporter: ['text', 'html'],
+      all: true,
+      include: ['**/*.{ts,vue}'],
+      exclude: ['dist/*', 'tests/*', '__fixtures__/.*\.ts(?:x)?$'],
     },
   },
 });

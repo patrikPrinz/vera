@@ -2,9 +2,8 @@ services:
   server:
     build:
       target: dependencies
-    command: ["pnpm", "--filter", "server", "test:unit"]
+    command: ['pnpm', '--filter', 'server', 'test:unit']
 
   elastic-search:
 
-  elastic-initializer:
-  
+  initializer:

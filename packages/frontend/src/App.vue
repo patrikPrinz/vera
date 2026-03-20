@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import NavBar from './components/navigation/NavBar.vue';
 import { useThemeStore } from './stores/themeStore';
+import { ModalsContainer } from 'vue-final-modal';
 
 const themeStore = useThemeStore();
 </script>
@@ -10,6 +11,7 @@ const themeStore = useThemeStore();
     <NavBar />
     <div class="bg-background px-4">
       <router-view />
+      <ModalsContainer />
     </div>
   </div>
 </template>

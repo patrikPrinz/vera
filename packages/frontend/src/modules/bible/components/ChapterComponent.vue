@@ -6,9 +6,23 @@
     @previousItemEvent="previousItemEvent"
     @nextItemEvent="nextItemEvent"
   />
-  <p class="py-1 text-left" v-for="verse in verses">
+
+  <p
+    @click="$emit('selectVerseEvent', verse)"
+    v-for="(verse, key) in verses"
+    :id="`verse-${verse.verse}`"
+    class="scroll-ms-8 py-1 text-left"
+    :class="[
+      { 'font-bold': verse == activeVerse },
+      metadata?.[verse.verse] && `bg-${metadata[verse.verse].highlightColor}`,
+    ]"
+  >
     <span class="pe-1 font-bold">{{ verse.verse }}.</span>{{ verse.text }}
+    <br /><i v-if="metadata?.[verse.verse] !== undefined">{{
+      metadata[verse.verse].noteText
+    }}</i>
   </p>
+
   <ChapterNavigationComponent
     :firstItem="firstChapter"
     :lastItem="lastChapter"
@@ -17,13 +31,26 @@
   />
 </template>
 <script setup lang="ts">
-import { computed, onMounted, ref, type Ref } from 'vue';
+import { computed, onMounted, ref, toRefs, type Ref } from 'vue';
 import { useBibleStore } from '../stores/bibleStore';
 import type { BibleVerse } from '@/shared/types/bible/bible.types';
 import { BibleHttpService } from '../services/bibleHttp.service';
 import { httpClient } from '@/shared/httpClient/HttpProvider';
 import NavigationComponent from './navigation/NavigationComponent.vue';
 import ChapterNavigationComponent from './navigation/ChapterNavigationComponent.vue';
+import { userService } from '@/modules/user/services/userService.provider';
+import type { UserVerseMetadata } from '@/shared/types/user/user.types';
+
+const emit = defineEmits([
+  'unsetVerseEvent',
+  'selectVerseEvent',
+  'setMetadataEvent',
+]);
+const props = defineProps<{
+  activeVerse: BibleVerse | undefined;
+  metadata: Record<string, UserVerseMetadata> | undefined;
+}>();
+const { activeVerse, metadata } = toRefs(props);
 
 const verses: Ref<BibleVerse[] | undefined> = ref(undefined);
 const bibleStore = useBibleStore();
@@ -53,6 +80,19 @@ async function refreshChapter() {
     chapterCount.value = (
       await httpService.getBibleChapters(translation, book)
     ).length;
+
+    const metadataRaw = await userService.loadMetadataFromChapter(
+      translation,
+      book,
+      chapter,
+    );
+    if (metadata) {
+      emit(
+        'setMetadataEvent',
+        Object.fromEntries(metadataRaw.map((m) => [m.location.verse, m])),
+      );
+    }
+    emit('unsetVerseEvent');
   }
 }
 

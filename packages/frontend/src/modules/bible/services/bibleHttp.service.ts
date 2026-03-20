@@ -6,7 +6,25 @@ import type {
 } from '@/shared/types/bible/bible.types';
 import { Axios } from 'axios';
 
-export class BibleHttpService {
+export interface IBibleHttpService {
+  getBibleBooks(translation: string): Promise<BibleBook[]>;
+
+  getBibleChapters(translation: string, book: number): Promise<BibleChapter[]>;
+
+  getBibleVerses(
+    translation: string,
+    book: number,
+    chapter: number,
+  ): Promise<BibleVerse[]>;
+
+  getTranslations(): Promise<{ translation: string }[]>;
+
+  getTranslationMetadata(
+    translation: string,
+  ): Promise<BibleTranslationMetadata | undefined>;
+}
+
+export class BibleHttpService implements IBibleHttpService {
   protected client: Axios;
 
   constructor(client: Axios) {
@@ -23,7 +41,10 @@ export class BibleHttpService {
     return [];
   }
 
-  public async getBibleChapters(translation: string, book: number) {
+  public async getBibleChapters(
+    translation: string,
+    book: number,
+  ): Promise<BibleChapter[]> {
     const data = await this.client.get(
       `bible/translation/${translation}/book/${book}/chapters`,
     );
@@ -43,6 +64,14 @@ export class BibleHttpService {
     );
     if (data.data) {
       return data.data as BibleVerse[];
+    }
+    return [];
+  }
+
+  public async getTranslations(): Promise<{ translation: string }[]> {
+    const data = await this.client.get('bible/translations');
+    if (data.data) {
+      return data.data as Promise<{ translation: string }[]>;
     }
     return [];
   }

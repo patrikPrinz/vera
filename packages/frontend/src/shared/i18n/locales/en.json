@@ -1,0 +1,34 @@
+{
+  "general": {
+    "appName": "Vera",
+    "send": "send",
+    "email": "E-mail",
+    "name": "Username",
+    "password": "Password",
+    "passwordConfirm": "Password confirm",
+    "serverError": "Failed loading data from server."
+  },
+  "admin": {
+    "groups": "Groups",
+    "users": "Users",
+    "manageRoles": "Manage roles",
+    "resetPassword": "Reset password"
+  },
+  "login": {
+    "register": "Register",
+    "login": "Log in",
+    "logout": "Log out",
+    "missingCredentials": "Fill out the username and password fields.",
+    "incorrectCredentials": "Incorrect credentials.",
+    "duplicateRegisterMethod": "User is already registered,",
+    "wrongPasswordCheck": "Passwords do not match"
+  },
+  "navigation": {
+    "home": "Home",
+    "bible": "Bible",
+    "adminSection": "Admin panel"
+  },
+  "user": {
+    "bookmarks": "Bookmarks"
+  }
+}

@@ -4,21 +4,34 @@ services:
     ports:
       - '${SERVER_PORT:-3000}:3000'
     environment:
-      - NODE_ENV=production
-      - ELASTIC_PASSWORD="${ELASTIC_PASSWORD:-pass}"
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
+      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
+      - SERVER_ALLOWED_ORIGIN=${FRONTEND_ADDRESS:-localhost:3001}
     networks:
       - vera_network
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.server.rule=Host(`${SERVER_ADDRESS}`)
+      - traefik.http.routers.server.entrypoints=websecure
+      - traefik.http.routers.server.tls.certresolver=le
 
   frontend:
     image: 'ghcr.io/patrikprinz/vera-frontend:latest'
     networks:
       - vera_network
     environment:
-      - SERVER_PORT=${SERVER_PORT:-3000}
-      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost}
-      - NODE_ENV=production
+      - VITE_SERVER_ADDRESS=${SERVER_ADDRESS:-localhost:3000}
+      - VITE_FRONTEND_ADDRESS=${FRONTEND_ADDRESS:-localhost:3001}
     ports:
       - '${FRONTEND_PORT:-3001}:80'
+    labels:
+      - traefik.enable=true
+
+      - traefik.http.routers.frontend.rule=Host(`${FRONTEND_ADDRESS}`)
+      - traefik.http.routers.frontend.entrypoints=websecure
+      - traefik.http.routers.frontend.tls.certresolver=le
 
   elastic-search:
     image: elasticsearch:9.1.2
@@ -39,16 +52,16 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
 
-  elastic-initializer:
-    image: 'ghcr.io/patrikprinz/vera-elastic-initializer:latest'
+  initializer:
+    image: 'ghcr.io/patrikprinz/vera-initializer:latest'
     depends_on:
       - elastic-search
     environment:
       - ELASTIC_NODE=${ELASTIC_NODE:-http://elastic-search:9200}
       - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
-    volumes:
-      - ./packages/elastic-initializer/src:/app/packages/elastic-initializer/src
+      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
     networks:
       - vera_network
 
