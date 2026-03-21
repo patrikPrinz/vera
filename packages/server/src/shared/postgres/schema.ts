@@ -11,6 +11,7 @@ export interface Database {
   user_groups: UserGroupsTable;
   roles: RolesTable;
   user_roles: UserRolesTable;
+  group_posts: GroupContentTable;
 }
 
 export interface UserDetailsTable {
@@ -82,4 +83,11 @@ export interface UserRolesTable {
   user_id: string;
   role_id: string;
   group_id: string | null;
+}
+
+export interface GroupContentTable {
+  id: Generated<string>;
+  group_id: string;
+  title: string;
+  content: string;
 }
