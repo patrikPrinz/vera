@@ -14,5 +14,6 @@ interface TextBlock {
 }
 
 interface ReferenceBlock {
+  type: 'reference';
   id: string;
 }
