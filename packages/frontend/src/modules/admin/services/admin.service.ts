@@ -2,7 +2,7 @@ import type { Axios } from 'axios';
 import {
   getUsersResponseSchema,
   getGroupsResponseSchema,
-  createGroupResponseSchema,
+  groupResponseSchema,
   getRolesResponseSchema,
 } from './adminService.schema';
 import { HttpError } from '@/shared/httpClient/http.errors';
@@ -49,7 +49,7 @@ export class AdminService {
       toast.error('Log in as admin to view this section.');
       return undefined;
     }
-    const validatedData = createGroupResponseSchema.safeParse(response.data);
+    const validatedData = groupResponseSchema.safeParse(response.data);
     if (validatedData.success) {
       return validatedData.data as Group;
     }

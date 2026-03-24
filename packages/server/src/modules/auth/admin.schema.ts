@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+export const findGroupSchema = z.object({
+  groupId: z.string(),
+});
+
 export const createGroupSchema = z.object({
   group: z.object({
     name: z.string(),
