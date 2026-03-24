@@ -8,9 +8,12 @@ import { onBeforeMount, ref, type Ref } from 'vue';
 import { psalterService } from '../services/psalterService.provider';
 const prayer: Ref<Prayer | undefined> = ref(undefined);
 
-const props = defineProps(['number']);
+const props = defineProps<{ number?: number }>();
 
 onBeforeMount(async () => {
-  prayer.value = await psalterService.getKathisma('CZE', props.number);
+  const number = props.number;
+  if (number) {
+    prayer.value = await psalterService.getKathisma('CZE', props.number);
+  }
 });
 </script>

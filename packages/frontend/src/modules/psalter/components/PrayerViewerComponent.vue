@@ -12,5 +12,5 @@
 <script setup lang="ts">
 import type { Prayer } from '@/shared/types/prayer/prayer.types';
 
-const props = defineProps<{ prayer?: Prayer }>();
+const { prayer } = defineProps<{ prayer?: Prayer }>();
 </script>
