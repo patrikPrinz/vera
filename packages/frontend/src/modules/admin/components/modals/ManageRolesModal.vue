@@ -1,9 +1,12 @@
 <template>
   <VueFinalModal
     class="flex items-center justify-center bg-transparent"
-    content-class="mb-4 ml-4 bg-secondary rounded p-4 shadow"
+    content-class="mb-4 ml-4 bg-secondary rounded shadow"
   >
-    <div class="mb-2 flex flex-col gap-2">
+    <div class="bg-primary p-2">
+      <p class="text-text-inverse">{{ i18n.t('admin.manageRoles') }}:</p>
+    </div>
+    <div class="m-4 mb-2 flex flex-col gap-2">
       <div
         v-for="role in roles"
         class="text-text-inverse cursor-pointer rounded p-1 text-xl"
@@ -32,7 +35,9 @@ import { onBeforeMount, ref, type Ref } from 'vue';
 import { VueFinalModal } from 'vue-final-modal';
 import { BiPlus, BiX } from 'vue-icons-plus/bi';
 import { adminService } from '../../services/adminService.provider';
+import { useI18n } from 'vue-i18n';
 
+const i18n = useI18n();
 const props = defineProps<{ userId: string }>();
 const roles: Ref<Role[]> = ref([]);
 const assignedRoles: Ref<UserRoleRecord[]> = ref([]);

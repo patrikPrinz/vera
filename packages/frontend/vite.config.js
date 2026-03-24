@@ -12,7 +12,7 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: [process.env.FRONTEND_ADDRESS ?? 'localhost'],
+    allowedHosts: [process.env.VITE_FRONTEND_ADDRESS ?? 'localhost:3001'],
     host: true, // = 0.0.0.0
     port: 3001,
     watch: {
