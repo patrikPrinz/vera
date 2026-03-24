@@ -16,6 +16,7 @@
     "tailwindcss": "^4.1.18",
     "v-dropdown": "^3.5.1",
     "v-selectmenu": "^3.1.2",
+    "vite-plugin-pwa": "^1.2.0",
     "vue": "^3.5.28",
     "vue-final-modal": "^4.5.5",
     "vue-i18n": "^11.2.8",

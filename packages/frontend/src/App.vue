@@ -2,6 +2,7 @@
 import NavBar from './components/navigation/NavBar.vue';
 import { useThemeStore } from './stores/themeStore';
 import { ModalsContainer } from 'vue-final-modal';
+import FooterComponent from './components/FooterComponent.vue';
 
 const themeStore = useThemeStore();
 </script>
@@ -14,6 +15,7 @@ const themeStore = useThemeStore();
       <ModalsContainer />
     </div>
   </div>
+  <FooterComponent />
 </template>
 
 <style lang="scss">

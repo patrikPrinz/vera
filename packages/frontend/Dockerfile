@@ -17,6 +17,7 @@ RUN pnpm install --filter frontend... --no-frozen-lockfile
 # Copy package config files from root of the package (not needed for installing dependencies)
 COPY packages/frontend/vite.config.js\
     packages/frontend/index.html\
+    packages/frontend/public\
     ./packages/frontend/
 
 # ---- builder: produkční build artefaktů ----

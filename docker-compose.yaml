@@ -26,8 +26,8 @@ services:
     networks:
       - vera_network
     environment:
-      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost:3000}
-      - FRONTEND_ADDRESS=${FRONTEND_ADDRESS:-localhost:3001}
+      - VITE_SERVER_ADDRESS=${SERVER_ADDRESS:-localhost:3000}
+      - VITE_FRONTEND_ADDRESS=${FRONTEND_ADDRESS:-localhost:3001}
     labels:
       - traefik.enable=true
 
