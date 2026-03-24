@@ -3,14 +3,20 @@ import HomeView from '../modules/main/views/HomeView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
 import AdminView from '@/modules/admin/views/AdminView.vue';
-import UsersView from '@/modules/admin/views/UsersView.vue';
+import UsersAdminView from '@/modules/admin/views/UsersAdminView.vue';
 import BibleView from '@/modules/bible/views/BibleView.vue';
 import AuthView from '@/modules/auth/views/AuthView.vue';
 import LoginView from '@/modules/auth/views/LoginView.vue';
 import RegisterView from '../modules/auth/views/RegisterView.vue';
-import GroupsView from '@/modules/admin/views/GroupsView.vue';
+import GroupsAdminView from '@/modules/admin/views/GroupsAdminView.vue';
 import UserGroupsView from '@/modules/user/views/UserGroupsView.vue';
 import BookmarkView from '@/modules/user/views/BookmarkView.vue';
+import PsalterView from '@/modules/psalter/views/PsalterView.vue';
+import KathismaView from '@/modules/psalter/views/KathismaView.vue';
+import PsalmView from '@/modules/psalter/views/PsalmView.vue';
+import GroupsView from '@/modules/groups/views/GroupsView.vue';
+import GroupAdminView from '@/modules/groups/views/GroupAdminView.vue';
+import GroupView from '@/modules/groups/views/GroupView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -44,14 +50,32 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
-
   {
     path: '/admin',
     meta: { requiresAuth: true },
     component: AdminView,
     children: [
-      { path: 'users', component: UsersView },
-      { path: 'groups', component: GroupsView },
+      { path: 'users', component: UsersAdminView },
+      { path: 'groups', component: GroupsAdminView },
+    ],
+  },
+  {
+    path: '/psalter',
+    component: PsalterView,
+    children: [
+      { path: 'kathisma', component: KathismaView },
+      { path: 'kathisma/:number', component: KathismaView },
+      { path: 'psalm', component: PsalmView },
+      { path: 'psalm/:number', component: PsalmView },
+    ],
+  },
+
+  {
+    path: '/groups',
+    children: [
+      { path: '', component: GroupsView },
+      { path: 'admin/:id', component: GroupAdminView },
+      { path: ':id', component: GroupView },
     ],
   },
 ];
