@@ -4,7 +4,7 @@ import { BookmarkRepository } from './repositories/bookmark.repository.js';
 import { VerseMetadataRepository } from './repositories/verseMetadata.repository.js';
 import { UserService } from './user.service.js';
 
-export function registerUserContainer(container: DependencyContainer) {
+export function registerUserModule(container: DependencyContainer) {
   container.register('BookmarkRepository', BookmarkRepository);
   container.register('VerseMetadataRepository', VerseMetadataRepository);
   container.register('UserService', UserService);
