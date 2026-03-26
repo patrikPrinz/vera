@@ -47,6 +47,7 @@ export class RolesService {
       const result = await this.repository.assignRole(
         userRole.userId,
         userRole.roleId,
+        userRole.groupId,
       );
       return result;
     }

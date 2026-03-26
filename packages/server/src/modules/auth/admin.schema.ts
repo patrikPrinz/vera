@@ -38,7 +38,7 @@ export const manageRoleSchema = z.object({
   userRole: z.object({
     userId: z.string(),
     roleId: z.string(),
-    group: z.string().optional(),
+    groupId: z.string().optional(),
   }),
 });
 
