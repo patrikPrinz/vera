@@ -12,6 +12,7 @@ import {
   bibleContainer,
   userContainer,
   psalterContainer,
+  groupContainer,
 } from './container.js';
 import {
   registerAdminRouter,
@@ -20,12 +21,14 @@ import {
 import { registerBibleRouter } from './modules/bible/index.js';
 import { registerPsalterRouter } from './modules/psalter/bootstrap.js';
 import { registerUserRouter } from './modules/user/bootstrap.js';
+import { registerGroupRouter } from './modules/group/bootstrap.js';
 
 const bibleRouter = registerBibleRouter(bibleContainer);
 const authRouter = registerAuthRouter(authContainer);
 const adminRouter = registerAdminRouter(authContainer);
 const userRouter = registerUserRouter(userContainer);
 const psalterRouter = registerPsalterRouter(psalterContainer);
+const groupRouter = registerGroupRouter(groupContainer);
 
 const app: Express = express();
 
@@ -55,6 +58,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/user', userRouter);
 app.use('/api/psalter', psalterRouter);
+app.use('/api/group', groupRouter);
 
 app.use(errorHandler);
 
