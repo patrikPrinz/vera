@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { container, Lifecycle } from 'tsyringe';
+import { container } from 'tsyringe';
 import type { LoggerPort } from './shared/logger/logger_port.js';
 import { WinstonLogger } from './shared/logger/logger.js';
 import type ElasticPort from './shared/elastic/elastic_port.js';
@@ -14,8 +14,6 @@ import { authenticated } from './shared/auth/auth.middleware.js';
 import { registerUserModule } from './modules/user/container.js';
 import { registerPsalterModule } from './modules/psalter/container.js';
 import { registerGroupModule } from './modules/group/container.js';
-import { RolesService } from './modules/auth/services/roles.service.js';
-import { GroupsService } from './modules/auth/services/groups.service.js';
 container.registerSingleton<LoggerPort>('Logger', WinstonLogger);
 container.register<ElasticPort>('ElasticAdapter', {
   useFactory: () =>

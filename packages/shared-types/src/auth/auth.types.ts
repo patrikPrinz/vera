@@ -35,7 +35,7 @@ export interface Role {
 export interface UserRole {
   userId: string;
   roleId: string;
-  group?: string;
+  groupId?: string;
 }
 
 export interface UserRoleRecord {
