@@ -17,6 +17,8 @@ import PsalmView from '@/modules/psalter/views/PsalmView.vue';
 import GroupsView from '@/modules/groups/views/GroupsView.vue';
 import GroupAdminView from '@/modules/groups/views/GroupAdminView.vue';
 import GroupView from '@/modules/groups/views/GroupView.vue';
+import PostView from '@/modules/groups/views/PostView.vue';
+import CreatePostView from '@/modules/groups/views/CreatePostView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -72,7 +74,10 @@ const routes: Array<RouteRecordRaw> = [
 
   {
     path: '/groups',
+    meta: { requiresAuth: true },
     children: [
+      { path: ':groupId/post/publish', component: CreatePostView },
+      { path: 'post/:postId', component: PostView },
       { path: '', component: GroupsView },
       { path: 'admin/:id', component: GroupAdminView },
       { path: ':id', component: GroupView },

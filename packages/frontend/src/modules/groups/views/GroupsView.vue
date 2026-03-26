@@ -21,7 +21,9 @@
                 <BiDotsVerticalRounded /> </i
             ></template>
             <SelectMenuBody>
-              <SelectMenuItem>
+              <SelectMenuItem
+                v-if="authStore.hasRoles(['admin', 'group_admin'], group.id)"
+              >
                 <router-link :to="`/groups/admin/${group.id}`">
                   {{ $t('groups.adminGroup') }}
                 </router-link>
@@ -50,15 +52,26 @@ import type { Group } from '@/shared/types/auth/auth.types';
 import { onBeforeMount, ref, type Ref } from 'vue';
 import { groupsService } from '../services/groupsService.provider';
 import { useAuthStore } from '@/modules/auth/authStore';
+import { useI18n } from 'vue-i18n';
+import { adminService } from '@/modules/admin/services/adminService.provider';
 
 const groups: Ref<Group[]> = ref([]);
 const authStore = useAuthStore();
+const i18n = useI18n();
 
 onBeforeMount(async () => {
   groups.value = await groupsService.listUserGroups(authStore.getId());
 });
 
-function leaveGroup(groupId?: string) {
-  console.log(`leaving ${groupId}`);
+async function leaveGroup(groupId?: string) {
+  if (groupId && window.confirm(i18n.t('groups.leaveGroupConfirm'))) {
+    const removedFromGroup = await adminService.removeUserFromGroup(
+      groupId,
+      authStore.getId(),
+    );
+    if (removedFromGroup) {
+      groups.value = groups.value.filter((e) => e.id != groupId);
+    }
+  }
 }
 </script>
