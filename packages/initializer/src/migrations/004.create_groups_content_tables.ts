@@ -5,6 +5,9 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable('group_content')
     .addColumn('id', 'bigserial', (col) => col.primaryKey())
+    .addColumn('author_id', 'bigint', (col) =>
+      col.notNull().references('user_details.id').onDelete('cascade'),
+    )
     .addColumn('group_id', 'bigint', (col) =>
       col.notNull().references('groups.id').onDelete('cascade'),
     )
@@ -13,6 +16,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('created_at', 'timestamp', (col) =>
       col.defaultTo(sql`now()`).notNull(),
     )
+    .addColumn('archived', 'boolean', (col) => col.notNull().defaultTo(false))
     .execute();
 }
 
