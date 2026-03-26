@@ -1,11 +1,12 @@
 {
   "general": {
-    "appName": "Vera",
+    "appName": "Viera",
     "serverError": "Načítání dat ze serveru selhalo.",
     "name": "Jméno",
     "email": "E-mail",
     "password": "Heslo",
     "passwordConfirm": "Heslo znovu",
+    "operations": "Akce",
     "send": "Odeslat"
   },
   "admin": {
@@ -27,6 +28,13 @@
     "home": "Domů",
     "bible": "Bible",
     "adminSection": "Administrace"
+  },
+  "groups": {
+    "groupSelection": "Výběr skupin",
+    "leaveGroupConfirm": "Opravdu si přejete opustit tuto skupinu?",
+    "adminGroup": "Spravovat skupinu",
+    "leaveGroup": "Opustit skupinu",
+    "publish": "Vytvořit"
   },
   "user": {
     "bookmarks": "Záložky"

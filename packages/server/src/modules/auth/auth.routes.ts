@@ -9,6 +9,7 @@ import { hasRoleSchema, postRegisterSchema } from './auth.schema.js';
 import type { AdminController } from './controllers/admin.controller.js';
 import {
   createGroupSchema,
+  findGroupSchema,
   getUserGroupsSchema,
   getUserRolesSchema,
   listGroupUsersSchema,
@@ -74,6 +75,12 @@ export class AuthRouterFactory {
     router.get('/users', adminController.listUsers);
 
     router.get('/groups', adminController.listGroups);
+
+    router.get(
+      '/group/:groupId',
+      requestValidator(findGroupSchema, 'params'),
+      adminController.findGroup,
+    );
 
     router.post(
       '/groups',

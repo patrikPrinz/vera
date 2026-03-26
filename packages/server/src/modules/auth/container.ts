@@ -10,7 +10,10 @@ import { RolesService } from './services/roles.service.js';
 import { UsersService } from './services/users.service.js';
 import { AdminController } from './controllers/admin.controller.js';
 
-export function registerAuthModule(container: DependencyContainer) {
+export function registerAuthModule(
+  container: DependencyContainer,
+  rootContainer: DependencyContainer,
+) {
   container.register('RolesRepository', RolesRepository);
   container.register('GroupsRepository', GroupsRepository);
   container.register('UsersRepository', UsersRepository);
@@ -21,4 +24,13 @@ export function registerAuthModule(container: DependencyContainer) {
   container.register('GroupsService', GroupsService);
   container.register('AuthController', AuthController);
   container.register('AdminController', AdminController);
+
+  rootContainer.registerInstance(
+    'RolesService',
+    container.resolve('RolesService'),
+  );
+  rootContainer.registerInstance(
+    'GroupsService',
+    container.resolve('GroupsService'),
+  );
 }

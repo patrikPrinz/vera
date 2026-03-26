@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+export const findGroupSchema = z.object({
+  groupId: z.string(),
+});
+
 export const createGroupSchema = z.object({
   group: z.object({
     name: z.string(),
@@ -34,7 +38,7 @@ export const manageRoleSchema = z.object({
   userRole: z.object({
     userId: z.string(),
     roleId: z.string(),
-    group: z.string().optional(),
+    groupId: z.string().optional(),
   }),
 });
 
