@@ -15,14 +15,22 @@ export const passageLocationSchema = z.object({
 export const passageSchema = z.object({
   id: z.string().optional(),
   authorId: z.string(),
-  title: z.string().nullable(),
-  slug: z.string(),
-  calendarDate: z.string(),
-  priority: z.number(),
+  title: z.string().default(null),
+  slug: z.string().default(null),
+  calendarDate: z.string().default(null),
+  priority: z.number().default(null),
   passageLocation: passageLocationSchema,
   createdAt: z.string().optional(),
 });
 
-export const createPassageSchema = z.object({
+export const passageRequestSchema = z.object({
   passage: passageSchema,
+});
+
+export const findPassageSchema = z.object({
+  param: z.string(),
+});
+
+export const deletePassageSchema = z.object({
+  id: z.string(),
 });

@@ -1,3 +1,4 @@
+import type { User } from '../auth/auth.types.js';
 import type {
   BibleTranslationContainer,
   BibleTranslationMetadata,
@@ -51,5 +52,5 @@ export interface IBibleService {
 
   getVerseService: (id: string) => Promise<BibleVerse>;
 
-  postTranslationService: (fileString: string) => Promise<void>;
+  postTranslationService: (user: User, fileString: string) => Promise<void>;
 }

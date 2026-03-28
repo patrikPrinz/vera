@@ -1,4 +1,4 @@
-import { inject } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import { PassageRepository } from '../repositories/passage.repository.js';
 import type { BiblePassage } from '../../../shared/types/bible/passage.types.js';
 import {
@@ -10,6 +10,7 @@ import {
 import type { User } from '../../auth/auth.types.js';
 import type { RolesService } from '../../auth/services/roles.service.js';
 
+@injectable()
 export class PassageService {
   protected passageRepository: PassageRepository;
   protected rolesService: RolesService;
@@ -63,5 +64,34 @@ export class PassageService {
   public async findPassagesByDate(date: string): Promise<BiblePassage[]> {
     const passages = await this.passageRepository.findPassagesByDate(date);
     return passages;
+  }
+
+  public async updatePassage(
+    author: User,
+    passage: BiblePassage,
+  ): Promise<boolean> {
+    const oldPassage = await this.passageRepository.findPassageById(passage.id);
+    if (
+      oldPassage.authorId == passage.authorId &&
+      (author.id == passage.authorId ||
+        (await this.rolesService.hasRole(author, ['admin'])))
+    ) {
+      const update = await this.passageRepository.updatePassage(passage);
+      return update;
+    }
+  }
+
+  public async deletePassage(
+    author: User,
+    passageId: string,
+  ): Promise<boolean> {
+    const passage = await this.passageRepository.findPassageById(passageId);
+    if (
+      passage.authorId == passage.authorId ||
+      (await this.rolesService.hasRole(author, ['admin']))
+    ) {
+      const deletion = await this.passageRepository.deletePassage(passageId);
+      return deletion;
+    }
   }
 }

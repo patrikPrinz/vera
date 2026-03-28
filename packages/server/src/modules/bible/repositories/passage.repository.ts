@@ -99,10 +99,7 @@ export class PassageRepository {
     );
   }
 
-  public async updatePassage(
-    id: string,
-    passage: BiblePassage,
-  ): Promise<boolean> {
+  public async updatePassage(passage: BiblePassage): Promise<boolean> {
     const query = await this.adapter
       .updateTable('bible_passage')
       .set({
@@ -112,7 +109,7 @@ export class PassageRepository {
         calendar_date: passage.calendarDate,
         passage_location: passage.passageLocation,
       })
-      .where('id', '=', id)
+      .where('id', '=', passage.id)
       .executeTakeFirst();
     return query.numUpdatedRows > 0;
   }
