@@ -1,39 +1,43 @@
 <template>
-  <router-link class="w-min" to="/auth/register">
-    <BiSolidPlusSquare class="h-auto w-8 cursor-pointer"></BiSolidPlusSquare>
-  </router-link>
-  <table class="table-auto, m-auto mt-5 w-1/2">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>{{ i18n.t('general.email') }}</th>
-        <th>{{ i18n.t('general.name') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="user in users" :key="user.id">
-        <td>{{ user.id }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.username ?? '-' }}</td>
-        <td>
+  <section class="m-auto overflow-x-scroll md:w-2/3">
+    <button>
+      <router-link class="w-min" to="/auth/register">
+        <BiSolidPlusSquare
+          class="h-auto w-8 cursor-pointer"
+        ></BiSolidPlusSquare>
+      </router-link>
+    </button>
+    <table class="table-auto, m-auto mt-5 w-1/2">
+      <thead>
+        <tr>
+          <th>{{ i18n.t('general.email') }}</th>
+          <th>{{ i18n.t('general.name') }}</th>
+        </tr>
+      </thead>
+      <tbody class="text-left">
+        <tr v-for="user in users" :key="user.id">
+          <td>{{ user.email }}</td>
+          <td>{{ user.username ?? '-' }}</td>
+          <td>
+            <button
+              :title="i18n.t('admin.manageRoles')"
+              class="cursor-pointer text-xl"
+              @click="openRolesModal(user.id)"
+            >
+              <BiEdit></BiEdit>
+            </button>
+          </td>
           <button
-            :title="i18n.t('admin.manageRoles')"
+            :title="i18n.t('admin.resetPassword')"
             class="cursor-pointer text-xl"
-            @click="openURolesModal(user.id)"
+            @click="resetPassword(user.id)"
           >
-            <BiEdit></BiEdit>
+            <BiRefresh />
           </button>
-        </td>
-        <button
-          :title="i18n.t('admin.resetPassword')"
-          class="cursor-pointer text-xl"
-          @click="resetPassword(user.id)"
-        >
-          <BiRefresh />
-        </button>
-      </tr>
-    </tbody>
-  </table>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -59,7 +63,7 @@ const resetPassword = (userId: string) => {
   //toast.success('Password reset sent.');
 };
 
-async function openURolesModal(userId: string | undefined): Promise<void> {
+async function openRolesModal(userId: string | undefined): Promise<void> {
   if (!userId) {
     throw new ReferenceError('Group ID is required');
   }

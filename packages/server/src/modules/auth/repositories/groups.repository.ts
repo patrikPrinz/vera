@@ -13,6 +13,18 @@ export class GroupsRepository {
     this.adapter = adapter;
   }
 
+  public async findGroup(groupId: string): Promise<Group | undefined> {
+    const query = await this.adapter
+      .selectFrom('groups')
+      .select(['id', 'name'])
+      .where('id', '=', groupId)
+      .executeTakeFirst();
+    if (query) {
+      return query as Group;
+    }
+    return undefined;
+  }
+
   public async insertGroup(group: Group): Promise<string | undefined> {
     const query = await this.adapter
       .insertInto('groups')
@@ -105,13 +117,13 @@ export class GroupsRepository {
     return query.numDeletedRows;
   }
 
-  public async isInGroup(userId: string, group: Group): Promise<boolean> {
+  public async isInGroup(userId: string, groupId: string): Promise<boolean> {
     const query = await this.adapter
       .selectFrom('user_groups')
       .innerJoin('groups', 'user_groups.group_id', 'groups.id')
       .select('user_groups.id')
       .where('user_groups.user_id', '=', userId)
-      .where('groups.id', '=', group.id)
+      .where('groups.id', '=', groupId)
       .execute();
 
     if (query.length > 0) {

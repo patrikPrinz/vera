@@ -26,11 +26,12 @@ export class RolesService {
   public async hasRole(
     user: User,
     roles: string[] = ['admin'],
+    groupId: string = '0',
   ): Promise<boolean> {
     if (!roles.find((e) => e == 'admin')) {
       roles.push('admin');
     }
-    return await this.repository.hasRole(user.id, roles);
+    return await this.repository.hasRole(user.id, roles, groupId);
   }
 
   public async listRoles(author: User) {
@@ -46,6 +47,7 @@ export class RolesService {
       const result = await this.repository.assignRole(
         userRole.userId,
         userRole.roleId,
+        userRole.groupId,
       );
       return result;
     }

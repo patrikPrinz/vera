@@ -4,8 +4,10 @@ services:
     ports:
       - '${SERVER_PORT:-3000}:3000'
     environment:
-      - NODE_ENV=production
-      - ELASTIC_PASSWORD="${ELASTIC_PASSWORD:-pass}"
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
+      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
+      - SERVER_ALLOWED_ORIGIN=${FRONTEND_ADDRESS:-localhost:3001}
     networks:
       - vera_network
     labels:
@@ -20,8 +22,8 @@ services:
     networks:
       - vera_network
     environment:
-      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost:3000}
-      - NODE_ENV=production
+      - VITE_SERVER_ADDRESS=${SERVER_ADDRESS:-localhost:3000}
+      - VITE_FRONTEND_ADDRESS=${FRONTEND_ADDRESS:-localhost:3001}
     ports:
       - '${FRONTEND_PORT:-3001}:80'
     labels:

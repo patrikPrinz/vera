@@ -17,6 +17,7 @@ RUN pnpm install --filter frontend... --no-frozen-lockfile
 # Copy package config files from root of the package (not needed for installing dependencies)
 COPY packages/frontend/vite.config.js\
     packages/frontend/index.html\
+    packages/frontend/public\
     ./packages/frontend/
 
 # ---- builder: produkční build artefaktů ----
@@ -32,6 +33,7 @@ RUN pnpm --filter frontend build
 # (Používá stejné závislosti jako deps; zdrojáky mountneme v compose.)
 FROM deps AS dev
 ENV NODE_ENV=development
+
 # Volitelně lze doplnit nodemon/tsx; ponecháváme na package.json skriptech
 # Defaultní příkaz může být přepsán v docker-compose (pnpm --filter server dev)
 EXPOSE 3001
@@ -39,7 +41,16 @@ CMD ["pnpm", "--filter", "frontend", "dev"]
 
 # ---- runtime: minimální image pro běh v produkci ----
 FROM nginx:stable-alpine-perl AS runtime
+ENV ASSET_DIR="/usr/share/nginx/html"
+ENV APP_PREFIX="VITE_"
+
 COPY packages/frontend/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/packages/frontend/dist /usr/share/nginx/html
+
+COPY packages/frontend/scripts/env.sh /docker-entrypoint.d/env.sh
+RUN dos2unix /docker-entrypoint.d/env.sh
+RUN chmod +x /docker-entrypoint.d/env.sh
+
 EXPOSE 80
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["nginx", "-g", "daemon off;"]

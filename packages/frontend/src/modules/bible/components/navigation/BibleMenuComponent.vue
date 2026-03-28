@@ -93,6 +93,7 @@ import { useAuthStore } from '@/modules/auth/authStore';
 import { useBibleStore } from '../../stores/bibleStore';
 import NoteModal from '../modals/NoteModal.vue';
 import BookmarkModal from '../modals/BookmarkModal.vue';
+
 const bibleStore = useBibleStore();
 const authStore = useAuthStore();
 const props = defineProps<{

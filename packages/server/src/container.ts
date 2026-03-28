@@ -11,8 +11,9 @@ import type { Database } from './shared/postgres/schema.js';
 import { kyselyFactory } from './shared/postgres/postgres_factory.js';
 import { registerAuthModule } from './modules/auth/container.js';
 import { authenticated } from './shared/auth/auth.middleware.js';
-import { registerUserContainer } from './modules/user/container.js';
-
+import { registerUserModule } from './modules/user/container.js';
+import { registerPsalterModule } from './modules/psalter/container.js';
+import { registerGroupModule } from './modules/group/container.js';
 container.registerSingleton<LoggerPort>('Logger', WinstonLogger);
 container.register<ElasticPort>('ElasticAdapter', {
   useFactory: () =>
@@ -37,16 +38,23 @@ container.register<Kysely<Database>>('PostgresAdapter', {
 
 container.registerInstance('requestValidator', requestValidator);
 container.registerInstance('authMiddleware', authenticated);
+const authContainer = container.createChildContainer();
+registerAuthModule(authContainer, container);
+
 const bibleContainer = container.createChildContainer();
 registerBibleModule(bibleContainer);
-const authContainer = container.createChildContainer();
-registerAuthModule(authContainer);
 const userContainer = container.createChildContainer();
-registerUserContainer(userContainer);
+registerUserModule(userContainer);
+const psalterContainer = container.createChildContainer();
+registerPsalterModule(psalterContainer);
+const groupContainer = container.createChildContainer();
+registerGroupModule(groupContainer);
 
 export {
   container as rootContainer,
   bibleContainer,
   authContainer,
   userContainer,
+  psalterContainer,
+  groupContainer,
 };
