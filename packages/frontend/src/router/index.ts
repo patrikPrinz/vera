@@ -63,8 +63,9 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/psalter',
-    component: PsalterView,
+    name: 'psalter',
     children: [
+      { path: '', redirect: 'psalter/kathisma' },
       { path: 'kathisma', component: KathismaView },
       { path: 'kathisma/:number', component: KathismaView },
       { path: 'psalm', component: PsalmView },
