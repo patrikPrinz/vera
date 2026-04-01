@@ -88,13 +88,13 @@ export class BibleRouterFactory {
     );
 
     router.get(
-      'passage/date/:param',
+      '/passage/date/:param',
       requestValidator(findPassageSchema, 'params'),
       passageController.findPassagesByDate,
     );
 
     router.put(
-      'passage',
+      '/passage',
       authenticated,
       requestValidator(passageRequestSchema, 'body'),
       passageController.updatePassage,

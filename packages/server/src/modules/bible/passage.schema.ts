@@ -15,10 +15,10 @@ export const passageLocationSchema = z.object({
 export const passageSchema = z.object({
   id: z.string().optional(),
   authorId: z.string(),
-  title: z.string().default(null),
-  slug: z.string().default(null),
-  calendarDate: z.string().default(null),
-  priority: z.number().default(null),
+  title: z.string().nullish(),
+  slug: z.string().nullish(),
+  calendarDate: z.string().nullish(),
+  priority: z.number().nullish(),
   passageLocation: passageLocationSchema,
   createdAt: z.string().optional(),
 });

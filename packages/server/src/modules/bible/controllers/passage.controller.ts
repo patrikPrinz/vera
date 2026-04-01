@@ -16,39 +16,39 @@ export class PassageController {
     @inject('PassageService') private readonly passageService: PassageService,
   ) {}
 
-  createPassage = (
+  createPassage = async (
     req: ValidatedRequest<z.infer<typeof passageRequestSchema>>,
     res: Response,
     _next: NextFunction,
   ) => {
     const { passage } = req.validated;
-    const createdPassage = this.passageService.createPassage(
+    const createdPassage = await this.passageService.createPassage(
       req.user as User,
       passage,
     );
     res.status(200).json(createdPassage);
   };
 
-  findPassageById = (
+  findPassageById = async (
     req: ValidatedRequest<z.infer<typeof findPassageSchema>>,
     res: Response,
     _next: NextFunction,
   ) => {
     const { param } = req.validated;
-    const passage = this.passageService.findPassageById(
+    const passage = await this.passageService.findPassageById(
       req.user as User,
       param,
     );
     res.status(200).json(passage);
   };
 
-  findPassagesByDate = (
+  findPassagesByDate = async (
     req: ValidatedRequest<z.infer<typeof findPassageSchema>>,
     res: Response,
     _next: NextFunction,
   ) => {
     const { param } = req.validated;
-    const passages = this.passageService.findPassagesByDate(param);
+    const passages = await this.passageService.findPassagesByDate(param);
     res.status(200).json(passages);
   };
 
