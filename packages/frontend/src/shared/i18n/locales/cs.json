@@ -27,7 +27,9 @@
   "navigation": {
     "home": "Domů",
     "bible": "Bible",
-    "adminSection": "Administrace"
+    "adminSection": "Administrace",
+    "passagesCalendar": "Čtení na den",
+    "myPassages": "Moje úryvky"
   },
   "groups": {
     "groupSelection": "Výběr skupin",

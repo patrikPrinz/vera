@@ -60,6 +60,14 @@
             </li>
             <li>
               <router-link
+                to="/bible/calendar"
+                class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
+                v-if="authStore.hasRoles(['admin'])"
+                >{{ i18n.t('navigation.passagesCalendar') }}</router-link
+              >
+            </li>
+            <li>
+              <router-link
                 to="/admin"
                 class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
                 v-if="authStore.hasRoles(['admin'])"

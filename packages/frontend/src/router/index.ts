@@ -19,6 +19,9 @@ import GroupAdminView from '@/modules/groups/views/GroupAdminView.vue';
 import GroupView from '@/modules/groups/views/GroupView.vue';
 import PostView from '@/modules/groups/views/PostView.vue';
 import CreatePostView from '@/modules/groups/views/CreatePostView.vue';
+import PassagesView from '@/modules/bible/views/PassagesView.vue';
+import PassagesAdminView from '@/modules/bible/views/PassagesAdminView.vue';
+import PassagesCalendarView from '@/modules/bible/views/PassagesCalendarView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -29,13 +32,32 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/bible',
     name: 'bible',
-    component: BibleView,
+    children: [
+      { path: '', component: BibleView },
+      { path: 'calendar/:date', component: PassagesCalendarView },
+      { path: 'passage/:id', component: PassagesView },
+      {
+        path: 'admin/passages/:id',
+        meta: { requiresAuth: true },
+        component: PassagesAdminView,
+      },
+      {
+        path: 'admin/passages/',
+        meta: { requiresAuth: true },
+        component: PassagesAdminView,
+      },
+    ],
   },
   {
     path: '/auth',
-    name: 'auth',
+
     children: [
-      { path: '', meta: { requiresAuth: true }, component: AuthView },
+      {
+        path: '',
+        name: 'auth',
+        meta: { requiresAuth: true },
+        component: AuthView,
+      },
       { path: 'login', component: LoginView },
       { path: 'register', component: RegisterView },
     ],
