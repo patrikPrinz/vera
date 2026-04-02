@@ -35,7 +35,7 @@ export interface Role {
 export interface UserRole {
   userId: string;
   roleId: string;
-  group?: string;
+  groupId?: string;
 }
 
 export interface UserRoleRecord {
@@ -48,3 +48,11 @@ export interface Group {
   id?: string;
   name: string;
 }
+
+export type RoleCode =
+  | 'admin'
+  | 'translation_admin'
+  | 'calendar_admin'
+  | 'prayer_admin'
+  | 'group_admin'
+  | 'group_content_admin';

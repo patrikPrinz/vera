@@ -2,10 +2,11 @@ import type { Axios } from 'axios';
 import {
   getUsersResponseSchema,
   getGroupsResponseSchema,
-  createGroupResponseSchema,
+  groupResponseSchema,
+  getRolesResponseSchema,
 } from './adminService.schema';
 import { HttpError } from '@/shared/httpClient/http.errors';
-import type { Group, UserDetails } from '@/shared/types/auth/auth.types';
+import type { Group, Role, UserDetails } from '@/shared/types/auth/auth.types';
 import { useToast } from 'vue-toastification';
 
 const toast = useToast();
@@ -48,7 +49,7 @@ export class AdminService {
       toast.error('Log in as admin to view this section.');
       return undefined;
     }
-    const validatedData = createGroupResponseSchema.safeParse(response.data);
+    const validatedData = groupResponseSchema.safeParse(response.data);
     if (validatedData.success) {
       return validatedData.data as Group;
     }
@@ -98,9 +99,54 @@ export class AdminService {
     throw new HttpError();
   }
 
-  //  public async listRoles() {}
+  public async listRoles() {
+    const rolesResponse = await this.client.get('admin/roles');
+    if (rolesResponse.status == 401 || rolesResponse.status == 403) {
+      toast.error('Log in as admin to view this section.');
+      return [];
+    }
+    const validatedData = getRolesResponseSchema.safeParse(rolesResponse.data);
+    if (validatedData.success) {
+      return validatedData.data as Role[];
+    }
+    throw new HttpError();
+  }
 
-  //  public async assignRole(userId: string, roleId: string, group?: string) {}
+  public async assignRole(
+    roleId: string,
+    userId: string,
+    groupId?: string,
+  ): Promise<string | undefined> {
+    const response = await this.client.post('admin/roles/assign', {
+      userRole: {
+        userId: userId,
+        roleId: roleId,
+        groupId: groupId,
+      },
+    });
+    if (response.status == 401 || response.status == 403) {
+      toast.error('Log in as admin to view this section.');
+      return undefined;
+    }
+    return response.data as string;
+  }
 
-  //  public async unassignRole(userId: string, roleId: string, group?: string) {}
+  public async unassignRole(
+    roleId: string,
+    userId: string,
+    groupId?: string,
+  ): Promise<boolean> {
+    const response = await this.client.post('admin/roles/unassign', {
+      userRole: {
+        userId: userId,
+        roleId: roleId,
+        groupId: groupId,
+      },
+    });
+    if (response.status == 401 || response.status == 403) {
+      toast.error('Log in as admin to view this section.');
+      return false;
+    }
+    return (response.data as number) > 0;
+  }
 }

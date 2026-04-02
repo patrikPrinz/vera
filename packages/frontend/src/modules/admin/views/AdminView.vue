@@ -1,15 +1,19 @@
 <template>
   <div>
-    <nav class="bg-primary fixed left-0 z-0 h-min w-full">
+    <nav
+      class="bg-primary text-text-inverse dark:text-text fixed left-0 z-0 h-min w-full"
+    >
       <ul class="z-0 flex">
         <li>
-          <router-link class="hover:bg-secondary block p-3" to="/admin/users"
-            >Users</router-link
-          >
+          <router-link class="hover:bg-secondary block p-3" to="/admin/users">{{
+            i18n.t('admin.users')
+          }}</router-link>
         </li>
         <li>
-          <router-link class="hover:bg-secondary block p-3" to="/admin/groups"
-            >Groups</router-link
+          <router-link
+            class="hover:bg-secondary block p-3"
+            to="/admin/groups"
+            >{{ i18n.t('admin.groups') }}</router-link
           >
         </li>
       </ul>
@@ -20,3 +24,9 @@
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const i18n = useI18n();
+</script>

@@ -7,6 +7,7 @@ import { AuthError } from '../../../shared/error_handler/errors.js';
 import type { ValidatedRequest } from '../../../shared/request_validator/request_validator.types.js';
 import {
   createGroupSchema,
+  findGroupSchema,
   getUserGroupsSchema,
   getUserRolesSchema,
   listGroupUsersSchema,
@@ -32,6 +33,23 @@ export class AdminController {
     this.usersService = usersService;
     this.rolesService = rolesService;
   }
+
+  findGroup = async (
+    req: ValidatedRequest<z.infer<typeof findGroupSchema>>,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    if (req.user) {
+      const { groupId } = req.validated;
+      const groups = await this.groupsService.findGroup(
+        req.user as User,
+        groupId,
+      );
+      res.json(groups);
+    } else {
+      next(new AuthError());
+    }
+  };
 
   listGroups = async (req: Request, res: Response, next: NextFunction) => {
     if (req.user) {
@@ -180,5 +198,10 @@ export class AdminController {
     const roles =
       (await this.rolesService.listUserRoles(req.user as User, userId)) ?? [];
     res.json(roles);
+  };
+
+  listRoles = async (req: Request, res: Response, _next: NextFunction) => {
+    const roles = await this.rolesService.listRoles(req.user as User);
+    res.json(roles ?? []);
   };
 }

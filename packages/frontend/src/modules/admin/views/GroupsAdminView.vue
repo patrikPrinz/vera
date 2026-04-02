@@ -1,13 +1,13 @@
 <template>
   <div>
-    <button @click="addGroup">
-      <BiSolidPlusSquare class="text-2xl"></BiSolidPlusSquare>
+    <button @click="addGroup" class="justify-self-start">
+      <BiSolidPlusSquare class="h-auto w-8 cursor-pointer"></BiSolidPlusSquare>
     </button>
     <table class="table-auto, m-auto mt-5 w-1/2">
       <thead>
         <tr>
           <th>#</th>
-          <th>Name</th>
+          <th>{{ i18n.t('general.name') }}</th>
         </tr>
       </thead>
       <tbody>
@@ -33,7 +33,9 @@ import { BiSolidPlusSquare } from 'vue-icons-plus/bi';
 import AddUsersModal from '../components/modals/AddUsersModal.vue';
 import { adminService } from '../services/adminService.provider';
 import { useModal } from 'vue-final-modal';
+import { useI18n } from 'vue-i18n';
 
+const i18n = useI18n();
 const groups: Ref<Group[]> = ref([]);
 
 onBeforeMount(async () => {
