@@ -12,19 +12,24 @@ import type {
   BibleVerse,
 } from './bible.types.js';
 import type { TranslationParserFactory } from './translation_parser/translation_parser.js';
+import type { RolesService } from '../auth/services/roles.service.js';
+import type { User } from '../auth/auth.types.js';
 
 @injectable()
 export class BibleService implements IBibleService {
   protected readonly repository: IBibleRepository;
   protected readonly translationParserFactory: TranslationParserFactory;
+  protected readonly rolesService: RolesService;
 
   constructor(
     @inject('BibleRepository') repository: IBibleRepository,
     @inject('TranslationParserFactory')
     translationParserFactory: TranslationParserFactory,
+    @inject('RolesService') rolesService: RolesService,
   ) {
     this.repository = repository;
     this.translationParserFactory = translationParserFactory;
+    this.rolesService = rolesService;
   }
 
   getMetadataService = async (
@@ -68,13 +73,21 @@ export class BibleService implements IBibleService {
     return data;
   };
 
-  postTranslationService = async (fileString: string): Promise<void> => {
+  postTranslationService = async (
+    _user: User,
+    fileString: string,
+  ): Promise<void> => {
+    /*if (
+      !(await this.rolesService.hasRole(user, ['admin', 'translation_admin']))
+    ) {
+      throw new PermissionError('Not permitted to import a translation.');
+      }*/
     const parser =
       this.translationParserFactory.createTranslationParser(fileString);
     const translation = await parser.getTranslation();
     const insertion = await this.repository.insertTranslation(translation);
     if (!insertion) {
-      throw new ConflictError('Translation already exists in datatbase');
+      throw new ConflictError('Translation already exists in database');
     }
   };
 }

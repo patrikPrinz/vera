@@ -5,21 +5,27 @@
 export class AppError extends Error {
   public readonly statusCode: number;
   public readonly code: string;
+  public readonly source: Error;
 
   constructor(
     statusCode: number = 500,
     code: string = 'SERVER_ERROR',
     message: string = 'Internal server error',
+    source: Error | undefined = undefined,
   ) {
     super(message);
     this.statusCode = statusCode;
     this.code = code;
+    this.source = source;
   }
 }
 
 export class ValidationError extends AppError {
-  constructor(message: string = 'Invalid request') {
-    super(400, 'VALIDATION_ERROR', message);
+  constructor(
+    message: string = 'Invalid request',
+    source: Error | undefined = undefined,
+  ) {
+    super(400, 'VALIDATION_ERROR', message, source);
   }
 }
 

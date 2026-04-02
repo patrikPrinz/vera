@@ -48,3 +48,11 @@ export interface Group {
   id?: string;
   name: string;
 }
+
+export type RoleCode =
+  | 'admin'
+  | 'translation_admin'
+  | 'calendar_admin'
+  | 'prayer_admin'
+  | 'group_admin'
+  | 'group_content_admin';
