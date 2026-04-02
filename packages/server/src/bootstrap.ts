@@ -14,6 +14,16 @@ import {
 } from './modules/auth/bootstrap.js';
 import { registerBibleRouter } from './modules/bible/index.js';
 import { registerUserRouter } from './modules/user/bootstrap.js';
+import { container } from 'tsyringe';
+import type { UsersService } from './modules/auth/services/users.service.js';
+
+if (process.env.APP_ADMIN_LOGIN && process.env.APP_ADMIN_PASSWORD) {
+  const usersService: UsersService = container.resolve('UsersService');
+  await usersService.seedAdminUser(
+    process.env.APP_ADMIN_LOGIN,
+    process.env.APP_ADMIN_PASSWORD,
+  );
+}
 
 const bibleRouter = registerBibleRouter(bibleContainer);
 const authRouter = registerAuthRouter(authContainer);
