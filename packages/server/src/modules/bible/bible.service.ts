@@ -75,18 +75,20 @@ export class BibleService implements IBibleService {
   };
 
   postTranslationService = async (
-    user: User,
+    _user: User,
     fileString: string,
   ): Promise<void> => {
-    if (await this.rolesService.hasRole(user, ['admin', 'translation_admin'])) {
-      const parser =
-        this.translationParserFactory.createTranslationParser(fileString);
-      const translation = await parser.getTranslation();
-      const insertion = await this.repository.insertTranslation(translation);
-      if (!insertion) {
-        throw new ConflictError('Translation already exists in database');
-      }
+    /*if (
+      !(await this.rolesService.hasRole(user, ['admin', 'translation_admin']))
+    ) {
+      throw new PermissionError('Not permitted to import a translation.');
+      }*/
+    const parser =
+      this.translationParserFactory.createTranslationParser(fileString);
+    const translation = await parser.getTranslation();
+    const insertion = await this.repository.insertTranslation(translation);
+    if (!insertion) {
+      throw new ConflictError('Translation already exists in database');
     }
-    throw new PermissionError('Not permitted to import a translation.');
   };
 }

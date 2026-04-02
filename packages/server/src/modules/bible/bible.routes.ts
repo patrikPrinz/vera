@@ -68,7 +68,6 @@ export class BibleRouterFactory {
 
     router.post(
       '/translation',
-      authenticated,
       upload.single('translation'),
       controller.postTranslation,
     );
