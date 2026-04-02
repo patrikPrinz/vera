@@ -11,7 +11,6 @@ import RegisterView from '../modules/auth/views/RegisterView.vue';
 import GroupsAdminView from '@/modules/admin/views/GroupsAdminView.vue';
 import UserGroupsView from '@/modules/user/views/UserGroupsView.vue';
 import BookmarkView from '@/modules/user/views/BookmarkView.vue';
-import PsalterView from '@/modules/psalter/views/PsalterView.vue';
 import KathismaView from '@/modules/psalter/views/KathismaView.vue';
 import PsalmView from '@/modules/psalter/views/PsalmView.vue';
 import GroupsView from '@/modules/groups/views/GroupsView.vue';
@@ -85,8 +84,9 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/psalter',
-    component: PsalterView,
+    name: 'psalter',
     children: [
+      { path: '', redirect: 'psalter/kathisma' },
       { path: 'kathisma', component: KathismaView },
       { path: 'kathisma/:number', component: KathismaView },
       { path: 'psalm', component: PsalmView },

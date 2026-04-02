@@ -25,11 +25,13 @@
     "wrongPasswordCheck": "Hesla se neshodují"
   },
   "navigation": {
+    "psalter": "Žaltář",
     "home": "Domů",
     "bible": "Bible",
     "adminSection": "Administrace",
     "passagesCalendar": "Čtení na den",
-    "myPassages": "Moje úryvky"
+    "myPassages": "Moje úryvky",
+    "groups": "Skupiny"
   },
   "groups": {
     "groupSelection": "Výběr skupin",
