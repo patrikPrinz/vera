@@ -2,7 +2,6 @@ import { injectable, inject } from 'tsyringe';
 import {
   ConflictError,
   NotFoundError,
-  PermissionError,
 } from '../../shared/error_handler/errors.js';
 import type { IBibleService, IBibleRepository } from './bible.interfaces.js';
 import type {
