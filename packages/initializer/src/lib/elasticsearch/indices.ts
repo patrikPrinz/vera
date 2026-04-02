@@ -34,4 +34,26 @@ export const MAPPINGS: estypes.IndicesCreateRequest[] = [
       },
     },
   },
+  {
+    index: 'psalm',
+    mappings: {
+      properties: {
+        language: { type: 'keyword' },
+        kathisma_number: { type: 'integer' },
+        psalm_number: { type: 'integer' },
+        title: { type: 'text' },
+        text_segments: { type: 'text' },
+        stasis_end: { type: 'boolean' },
+      },
+    },
+  },
+  {
+    index: 'kathisma',
+    mappings: {
+      properties: {
+        language: { type: 'keyword' },
+        kathisma_number: { type: 'integer' },
+      },
+    },
+  },
 ];
