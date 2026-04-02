@@ -21,6 +21,19 @@ export class GroupsService {
     this.rolesService = rolesService;
   }
 
+  public async findGroup(
+    author: User,
+    groupId: string,
+  ): Promise<Group | undefined> {
+    if (
+      (await this.rolesService.hasRole(author)) ||
+      (await this.isInGroup(author, author.id, groupId))
+    ) {
+      return this.repository.findGroup(groupId);
+    }
+    throw new PermissionError('User not permitted to view this group.');
+  }
+
   public async createGroup(user: User, group: Group): Promise<Group> {
     if (await this.rolesService.hasRole(user)) {
       const result = await this.repository.insertGroup(group);
@@ -96,5 +109,23 @@ export class GroupsService {
       return result;
     }
     throw new PermissionError('User not permitted to list user roles.');
+  }
+
+  public async isInGroup(
+    author: User,
+    userId: string,
+    groupId: string,
+  ): Promise<boolean> {
+    if (
+      author.id == userId ||
+      (await this.rolesService.hasRole(
+        author,
+        ['admin', 'group_admin'],
+        groupId,
+      ))
+    ) {
+      return this.repository.isInGroup(userId, groupId);
+    }
+    throw new PermissionError('User not permitted to access this method.');
   }
 }

@@ -7,8 +7,11 @@ services:
       - '${SERVER_PORT:-3000}:3000'
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
-      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB:-vera}
+      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
       - SERVER_ALLOWED_ORIGIN=${FRONTEND_ADDRESS:-localhost:3001}
     networks:
       - vera_network
@@ -26,8 +29,8 @@ services:
     networks:
       - vera_network
     environment:
-      - SERVER_ADDRESS=${SERVER_ADDRESS:-localhost:3000}
-      - FRONTEND_ADDRESS=${FRONTEND_ADDRESS:-localhost:3001}
+      - VITE_SERVER_ADDRESS=${SERVER_ADDRESS:-localhost:3000}
+      - VITE_FRONTEND_ADDRESS=${FRONTEND_ADDRESS:-localhost:3001}
     labels:
       - traefik.enable=true
 
@@ -47,8 +50,6 @@ services:
       - http.cors.allow-origin=http://localhost:3000
       - http.cors.allow-credentials=true
       - ES_JAVA_OPTS=-Xms1g -Xmx1g
-    ports:
-      - 9200:9200
     networks:
       - vera_network
 
@@ -63,8 +64,11 @@ services:
       - ELASTIC_NODE=${ELASTIC_NODE:-http://elastic-search:9200}
       - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
-      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
+      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB:-vera}
     volumes:
       - ./packages/initializer/src:/app/packages/initializer/src:z
     networks:
@@ -80,16 +84,17 @@ services:
       - 5601:5601
     networks:
       - vera_network
+    profiles: [debug]
 
   postgres:
     image: postgres:18
     volumes:
-      - postgresdata:/var/lib/postgresql/18/docker:z
+      - pgdata:/var/lib/postgresql/18/docker:z
     environment:
+      POSTGRES_USER: '${POSTGRES_USER:-postgres}'
       POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-pass}'
       POSTGRES_PORT: '${POSTGRES_PORT:-5432}'
-    ports:
-      - 5432:5432
+      POSTGRES_DB: '${POSTGRES_DB:-vera}'
     networks:
       - vera_network
 
@@ -106,4 +111,4 @@ networks:
 
 volumes:
   esdata:
-  postgresdata:
+  pgdata:

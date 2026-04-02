@@ -1,4 +1,5 @@
-import type { Generated } from 'kysely';
+import type { Generated, JSONColumnType } from 'kysely';
+import type { PassageLocation } from '../types/bible/passage.types.js';
 
 export interface Database {
   user_details: UserDetailsTable;
@@ -11,6 +12,8 @@ export interface Database {
   user_groups: UserGroupsTable;
   roles: RolesTable;
   user_roles: UserRolesTable;
+  group_content: GroupContentTable;
+  bible_passage: BiblePassageTable;
 }
 
 export interface UserDetailsTable {
@@ -82,4 +85,29 @@ export interface UserRolesTable {
   user_id: string;
   role_id: string;
   group_id: string | null;
+}
+
+export interface GroupContentTable {
+  id: Generated<string>;
+  author_id: string;
+  group_id: string;
+  title: string;
+  content: string;
+  created_at: string;
+  archived: boolean;
+}
+
+export interface BiblePassageTable {
+  id: Generated<string>;
+  author_id: string;
+  title: string | null;
+  slug: string | null;
+  calendar_date: string | null;
+  priority: number | null;
+  passage_location: JSONColumnType<
+    PassageLocation,
+    PassageLocation,
+    PassageLocation
+  >;
+  created_at: string;
 }

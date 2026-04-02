@@ -11,4 +11,13 @@ export const postLoginSchema = z.object({
   password: z.string(),
 });
 
-export const hasRoleSchema = z.array(z.string());
+const roles = [
+  'admin',
+  'translation_admin',
+  'calendar_admin',
+  'prayer_admin',
+  'group_admin',
+  'group_content_admin',
+] as const;
+
+export const hasRoleSchema = z.array(z.enum(roles));

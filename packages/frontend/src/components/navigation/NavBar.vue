@@ -60,11 +60,28 @@
             </li>
             <li>
               <router-link
+                to="/bible/calendar"
+                class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
+                v-if="authStore.hasRoles(['admin'])"
+                >{{ i18n.t('navigation.passagesCalendar') }}</router-link
+              >
+            </li>
+            <li>
+              <router-link
                 to="/admin"
                 class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
                 v-if="authStore.hasRoles(['admin'])"
                 >{{ i18n.t('navigation.adminSection') }}</router-link
               >
+            </li>
+            <li>
+              <router-link
+                to="/groups"
+                class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
+                v-if="authStore.isAuthenticatedSync()"
+              >
+                {{ i18n.t('navigation.groups') }}
+              </router-link>
             </li>
           </ul>
         </nav>
@@ -85,7 +102,7 @@ import { useAuthStore } from '@/modules/auth/authStore';
 const i18n = useI18n();
 
 const authStore = useAuthStore();
-const menuOptions = ['bible'];
+const menuOptions = ['bible', 'psalter'];
 const showMenu = ref(false);
 
 function toggleMenu() {

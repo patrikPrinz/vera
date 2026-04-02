@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const port = (
-  process.env.POSTGRES_DB ? new Number(process.env.POSTGRES_DB) : 5432
+  process.env.POSTGRES_PORT ? new Number(process.env.POSTGRES_PORT) : 5432
 ) as number;
 export const db = new Kysely<unknown>({
   dialect: new PostgresDialect({

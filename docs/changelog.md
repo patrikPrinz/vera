@@ -1,3 +1,7 @@
+# v0.4.0
+This version adds new features to user and admin interface. Also improves groups, where group roles can be managed now.
+Also this version introduces passages and psalter section.
+
 # v0.3.0
 Version introduces basic functionality for role management and groups, also
 adds admin panel with group, role and user management. Groups are not usable
