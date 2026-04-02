@@ -77,7 +77,7 @@ export class BibleHttpService implements IBibleHttpService {
   }
 
   public async getTranslationMetadata(
-    translation: string,
+    translation: string = 'CZECEP',
   ): Promise<BibleTranslationMetadata | undefined> {
     const data = await this.client.get(`bible/translation/${translation}`);
     if (data.data) {

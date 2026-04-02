@@ -11,6 +11,7 @@ import {
   getVerseSchema,
 } from './bible.schema.js';
 import type { IBibleService } from './bible.interfaces.js';
+import type { User } from '../auth/auth.types.js';
 
 @injectable()
 export class BibleController {
@@ -79,7 +80,7 @@ export class BibleController {
 
   postTranslation = async (req: Request, res: Response) => {
     const fileString = req.file.buffer.toString();
-    await this.service.postTranslationService(fileString);
+    await this.service.postTranslationService(req.user as User, fileString);
     res.status(200).json({ result: 'OK' });
   };
 }
