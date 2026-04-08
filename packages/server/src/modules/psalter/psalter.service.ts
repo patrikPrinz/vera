@@ -5,7 +5,7 @@ import type {
   PrayerVerse,
 } from '../../shared/types/prayer/prayer.types.js';
 import { NotFoundError } from '../../shared/error_handler/errors.js';
-import type { Psalm } from './psalter.types.js';
+import type { Psalm, PsalmMetadata } from './psalter.types.js';
 
 @injectable()
 export class PsalterService {
@@ -15,6 +15,11 @@ export class PsalterService {
     @inject('PsalterRepository') psalterRepository: PsalterRepository,
   ) {
     this.psalterRepository = psalterRepository;
+  }
+
+  public async listPsalms(language: string): Promise<PsalmMetadata[]> {
+    const result = await this.psalterRepository.listPsalms(language);
+    return result;
   }
 
   psalmToPrayerText(psalm: Psalm, standalone: boolean = true): PrayerVerse[] {

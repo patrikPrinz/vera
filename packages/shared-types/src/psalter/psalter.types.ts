@@ -13,6 +13,12 @@ export interface Psalm {
   stasisEnd: boolean;
 }
 
+export interface PsalmMetadata {
+  language: string;
+  psalmNumber: number;
+  title: string;
+}
+
 export interface Kathisma {
   language: string;
   kathismaNumber: number;

@@ -1,6 +1,19 @@
 import { injectable, inject } from 'tsyringe';
 import type { ElasticAdapter } from '../../shared/elastic/elastic_adapter.js';
-import type { Psalm, PsalmsQueryRequest } from './psalter.types.js';
+import type {
+  Psalm,
+  PsalmMetadata,
+  PsalmsQueryRequest,
+} from './psalter.types.js';
+
+interface RawPsalm {
+  language: string;
+  kathisma_number: string;
+  psalm_number: string;
+  title: string;
+  text_segments: string[];
+  stasis_end: boolean;
+}
 
 @injectable()
 export class PsalterRepository {
@@ -10,6 +23,23 @@ export class PsalterRepository {
   constructor(@inject('ElasticAdapter') adapter: ElasticAdapter) {
     this.psalmIndex = 'psalm';
     this.adapter = adapter;
+  }
+
+  public async listPsalms(language: string): Promise<PsalmMetadata[]> {
+    const psalms = await this.adapter.search(this.psalmIndex, {
+      match: { language: language },
+    });
+    if (psalms.length == 0) {
+      return [];
+    }
+    return psalms.map((e) => {
+      const fields = e._source as RawPsalm;
+      return {
+        language: fields.language,
+        psalmNumber: new Number(fields.psalm_number),
+        title: fields.title,
+      } as PsalmMetadata;
+    });
   }
 
   public async getPsalm(
@@ -79,14 +109,7 @@ export class PsalterRepository {
   }
 
   mapHitToPsalm(hit: unknown): Psalm {
-    const fields = hit as {
-      language: string;
-      kathisma_number: string;
-      psalm_number: string;
-      title: string;
-      text_segments: string[];
-      stasis_end: boolean;
-    };
+    const fields = hit as RawPsalm;
     return {
       language: fields.language,
       kathismaNumber: new Number(fields.kathisma_number),
