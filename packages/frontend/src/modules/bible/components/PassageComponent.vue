@@ -1,5 +1,5 @@
 <template>
-  <div class="m-auto w-2/3 text-left" v-if="passage">
+  <div class="m-auto text-left" v-if="passage">
     <p class="m-2 text-lg">
       <b>{{ passage?.title }}:</b>
       {{ passageLocation }}

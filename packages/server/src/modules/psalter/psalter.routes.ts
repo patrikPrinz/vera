@@ -7,7 +7,7 @@ import express, {
 import { injectable, inject } from 'tsyringe';
 import type { ZodType } from 'zod';
 import type { PsalterController } from './psalter.controller.js';
-import { psalterRequestSchema } from './psalter.schema.js';
+import { listPsalmsSchema, psalterRequestSchema } from './psalter.schema.js';
 
 @injectable()
 export class PsalterRouterFactory {
@@ -20,6 +20,12 @@ export class PsalterRouterFactory {
     ) => (req: Request, _res: Response, next: NextFunction) => void,
   ): Router {
     const router: Router = express.Router();
+
+    router.get(
+      '/psalms',
+      requestValidator(listPsalmsSchema, 'query'),
+      psalterController.listPsalms,
+    );
 
     router.get(
       '/psalm',

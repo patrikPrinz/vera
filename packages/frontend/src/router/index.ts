@@ -21,6 +21,9 @@ import CreatePostView from '@/modules/groups/views/CreatePostView.vue';
 import PassagesView from '@/modules/bible/views/PassagesView.vue';
 import PassagesAdminView from '@/modules/bible/views/PassagesAdminView.vue';
 import PassagesCalendarView from '@/modules/bible/views/PassagesCalendarView.vue';
+import KathismaSelectView from '@/modules/psalter/views/KathismaSelectView.vue';
+import PsalmSelectView from '@/modules/psalter/views/PsalmSelectView.vue';
+import PassageListView from '@/modules/bible/views/PassageListView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'bible',
     children: [
       { path: '', component: BibleView },
+      {
+        path: 'calendar',
+        redirect: `/bible/calendar/${new Date().toISOString().slice(0, 10)}`,
+      },
+      { path: 'passages', component: PassageListView },
       { path: 'calendar/:date', component: PassagesCalendarView },
       { path: 'passage/:id', component: PassagesView },
       {
@@ -41,6 +49,7 @@ const routes: Array<RouteRecordRaw> = [
         component: PassagesAdminView,
       },
       {
+        name: 'createPassage',
         path: 'admin/passages/',
         meta: { requiresAuth: true },
         component: PassagesAdminView,
@@ -86,10 +95,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/psalter',
     name: 'psalter',
     children: [
-      { path: '', redirect: 'psalter/kathisma' },
-      { path: 'kathisma', component: KathismaView },
+      { path: '', redirect: '/psalter/kathisma' },
+      { path: 'kathisma', component: KathismaSelectView },
       { path: 'kathisma/:number', component: KathismaView },
-      { path: 'psalm', component: PsalmView },
+      { path: 'psalm', component: PsalmSelectView },
       { path: 'psalm/:number', component: PsalmView },
     ],
   },
@@ -119,7 +128,10 @@ router.beforeEach(async (to, _from, next) => {
     const authStore = useAuthStore();
     const authenticated = await authStore.isAuthenticated();
     if (!authenticated) {
-      next('/auth/login');
+      next({
+        path: '/auth/login',
+        query: { redirect: to.fullPath },
+      });
     } else {
       next();
     }

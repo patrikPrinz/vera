@@ -1,4 +1,6 @@
 <template>
+  <router-link to="psalm">{{ i18n.t('psalter.selectPsalm') }}</router-link>
+  <h2 class="p-2 text-2xl">{{ i18n.t('psalter.selectKathisma') }}</h2>
   <ul class="m-auto flex flex-wrap justify-around md:w-1/2">
     <li v-for="kathisma in kathismaCount">
       <button
@@ -14,7 +16,9 @@
 <script setup lang="ts">
 import router from '@/router';
 import { toRefs } from 'vue';
+import { useI18n } from 'vue-i18n';
 
+const i18n = useI18n();
 const props = defineProps<{ kathismaCount?: number }>();
 const { kathismaCount } = toRefs(props);
 

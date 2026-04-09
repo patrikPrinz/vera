@@ -60,9 +60,16 @@
             </li>
             <li>
               <router-link
+                to="/bible/passages"
+                class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
+                v-if="authStore.isAuthenticatedSync()"
+                >{{ i18n.t('passages.myPassages') }}</router-link
+              >
+            </li>
+            <li>
+              <router-link
                 to="/bible/calendar"
                 class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
-                v-if="authStore.hasRoles(['admin'])"
                 >{{ i18n.t('navigation.passagesCalendar') }}</router-link
               >
             </li>
@@ -70,7 +77,10 @@
               <router-link
                 to="/admin"
                 class="hover:bg-primary block w-full cursor-pointer p-2 text-lg font-bold"
-                v-if="authStore.hasRoles(['admin'])"
+                v-if="
+                  authStore.isAuthenticatedSync() &&
+                  authStore.hasRoles(['admin'])
+                "
                 >{{ i18n.t('navigation.adminSection') }}</router-link
               >
             </li>
