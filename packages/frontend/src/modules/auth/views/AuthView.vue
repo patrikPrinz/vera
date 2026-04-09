@@ -1,9 +1,12 @@
 <template>
-  Ahoy-hoy
-  <button @click="logoutAction()">{{ i18n.t('login.logout') }}</button>
+  <p>{{ i18n.t('general.email') }}: {{ authStore.getEmail() }}</p>
+  <ButtonComponent @click="logoutAction()">{{
+    i18n.t('login.logout')
+  }}</ButtonComponent>
 </template>
 
 <script setup lang="ts">
+import ButtonComponent from '@/components/assets/ButtonComponent.vue';
 import router from '@/router';
 import { useAuthStore } from '../authStore';
 import { useI18n } from 'vue-i18n';

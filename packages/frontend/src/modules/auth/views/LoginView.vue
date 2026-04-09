@@ -25,33 +25,33 @@
     />
 
     <div class="flex flex-row">
-      <button
-        @click="loginAction()"
-        type="submit"
-        class="bg-primary border-text text-text-inverse dark:text-text hover:border-text-inverse my-8 cursor-pointer rounded-lg border-2 p-2 px-4 text-xl"
-      >
+      <ButtonComponent @click="loginAction()" type="submit">
         {{ i18n.t('login.login') }}
-      </button>
+      </ButtonComponent>
     </div>
   </div>
-  <router-link to="/auth/register" class="">
+  <LinkComponent to="/auth/register">
     {{ i18n.t('login.register') }}
-  </router-link>
+  </LinkComponent>
 </template>
 
 <script setup lang="ts">
+import LinkComponent from '@/components/assets/LinkComponent.vue';
+import ButtonComponent from '@/components/assets/ButtonComponent.vue';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useAuthStore } from '../authStore';
-import router from '@/router';
 import { useToast } from 'vue-toastification';
 import { keyboardHandler } from '@/composables/keyboardHandler.provider';
 import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 const toast = useToast();
 const login = ref('');
 const password = ref('');
 const { registerKey, unregisterKey } = keyboardHandler;
 const i18n = useI18n();
+const route = useRoute();
+const router = useRouter();
 
 async function loginAction() {
   if (!validateEmail(login.value) || !validatePassword(password.value)) {
@@ -61,8 +61,9 @@ async function loginAction() {
   const authStore = useAuthStore();
   const logInResult = await authStore.login(login.value, password.value);
   if (logInResult) {
-    console.log('success');
-    await router.push({ path: '/auth' });
+    const redirect = route.query.redirect as string | undefined;
+
+    await router.push(redirect ?? '/auth');
   } else {
     toast.error(i18n.t('login.incorrectCredentials'));
   }
@@ -80,6 +81,10 @@ onMounted(() => {
   registerKey('Enter', async () => {
     await loginAction();
   });
+
+  if (route.query.registered) {
+    toast.success(i18n.t('login.registerSuccess'));
+  }
 });
 
 onUnmounted(() => {

@@ -13,8 +13,10 @@
           :key="book.bookNumber"
         >
           {{ book.code }}
-        </option></select
-      ><button @click="savePassage()">Uložit</button>
+        </option></select><br/>
+      <label>Datum:</label>
+      <input type="date" v-model="passage.calendarDate"></input><br/>
+      <button @click="savePassage()">Uložit</button>
       <fieldset
         class="border-text m-auto my-5 rounded-xl border-2 p-3 md:w-2/3 md:text-left"
         v-for="(segment, index) in passage.passageLocation.segments"
@@ -74,11 +76,11 @@ import router from '@/router';
 const { formatBiblePassageLocation } = useBibleReferenceFormatter();
 const bibleStore = useBibleStore();
 const authStore = useAuthStore();
-const props = defineProps<{ id?: string }>();
+const props = defineProps<{ id?: string; date?: string | null }>();
 const passage: Ref<BiblePassage> = ref(newPassage());
 const booksList: Ref<BibleBookMetadata[]> = ref([]);
 const passageLocation = ref('');
-
+console.log(props.date);
 watch(
   passage,
   async (newValue) => {
@@ -100,12 +102,14 @@ onMounted(async () => {
     }
   }
   passageLocation.value = await formatBiblePassageLocation(passage.value);
+  console.log(props.date);
 });
 
 function newPassage(): BiblePassage {
   return {
     authorId: authStore.getId(),
     title: '',
+    calendarDate: props.date ?? null,
     passageLocation: {
       book: 1,
       segments: [newSegment()],

@@ -16,6 +16,13 @@ export class PassagesService {
     } else return [];
   }
 
+  public async findPassagesByAuthor(author: string): Promise<BiblePassage[]> {
+    const response = await this.client.get(`bible/passage/author/${author}`);
+    if (response.data) {
+      return response.data as BiblePassage[];
+    } else return [];
+  }
+
   public async findPassageById(id: string): Promise<BiblePassage | undefined> {
     const response = await this.client.get(`bible/passage/id/${id}`);
     if (response.data) {
