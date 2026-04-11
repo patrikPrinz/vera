@@ -17,6 +17,7 @@ import {
   passageRequestSchema,
   findPassageSchema,
   deletePassageSchema,
+  findUserPassagesSchema,
 } from './passage.schema.js';
 import { PassageController } from './controllers/passage.controller.js';
 
@@ -90,6 +91,13 @@ export class BibleRouterFactory {
       '/passage/date/:param',
       requestValidator(findPassageSchema, 'params'),
       passageController.findPassagesByDate,
+    );
+
+    router.get(
+      '/passage/author/:id',
+      authenticated,
+      requestValidator(findUserPassagesSchema, 'params'),
+      passageController.findPassageByAuthor,
     );
 
     router.put(

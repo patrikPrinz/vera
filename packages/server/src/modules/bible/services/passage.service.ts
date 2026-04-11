@@ -61,6 +61,21 @@ export class PassageService {
     throw new PermissionError('User not permitted to view this passage.');
   }
 
+  public async findPassagesByAuthor(
+    user: User,
+    authorId: string,
+  ): Promise<BiblePassage[]> {
+    if (
+      user.id == authorId ||
+      (await this.rolesService.hasRole(user, ['admin', 'calendar_admin']))
+    ) {
+      const passages =
+        await this.passageRepository.findPassagesByAuthor(authorId);
+      return passages;
+    }
+    throw new PermissionError('User cannot');
+  }
+
   public async findPassagesByDate(date: string): Promise<BiblePassage[]> {
     const passages = await this.passageRepository.findPassagesByDate(date);
     return passages;

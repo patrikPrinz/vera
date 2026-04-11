@@ -7,6 +7,10 @@ export const passageSegmentSchema = z.object({
   endVerse: z.number(),
 });
 
+export const findUserPassagesSchema = z.object({
+  id: z.string(),
+});
+
 export const passageLocationSchema = z.object({
   book: z.number(),
   segments: z.array(passageSegmentSchema),

@@ -5,6 +5,7 @@ import type {
   passageRequestSchema,
   findPassageSchema,
   deletePassageSchema,
+  findUserPassagesSchema,
 } from '../passage.schema.js';
 import type { NextFunction, Response } from 'express';
 import type { User } from '../../auth/auth.types.js';
@@ -27,6 +28,19 @@ export class PassageController {
       passage,
     );
     res.status(200).json(createdPassage);
+  };
+
+  findPassageByAuthor = async (
+    req: ValidatedRequest<z.infer<typeof findUserPassagesSchema>>,
+    res: Response,
+    _next: NextFunction,
+  ) => {
+    const { id } = req.validated;
+    const result = await this.passageService.findPassagesByAuthor(
+      req.user as User,
+      id,
+    );
+    res.status(200).json(result);
   };
 
   findPassageById = async (

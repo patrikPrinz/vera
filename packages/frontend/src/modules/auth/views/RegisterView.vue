@@ -39,17 +39,15 @@
       />
 
       <div class="flex flex-row">
-        <button
-          type="submit"
-          class="bg-primary border-text text-text-inverse dark:text-text hover:border-text-inverse my-8 cursor-pointer rounded-lg border-2 p-2 px-4 text-xl"
-        >
+        <ButtonComponent type="submit">
           {{ i18n.t('general.send') }}
-        </button>
+        </ButtonComponent>
       </div>
     </div>
   </form>
 </template>
 <script setup lang="ts">
+import ButtonComponent from '@/components/assets/ButtonComponent.vue';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useToast } from 'vue-toastification';
@@ -74,7 +72,7 @@ async function registerAction() {
     passwordCheck.value,
   );
   if (registerResult) {
-    await router.push('/');
+    await router.push({ path: '/auth/login', query: { registered: '' } });
   } else {
     toast.error('login.duplicateRegisterMethod');
   }

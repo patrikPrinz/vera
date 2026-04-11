@@ -61,11 +61,10 @@ export class PassageRepository {
     return undefined;
   }
 
-  public async findPassageById(id: string): Promise<BiblePassage | undefined> {
-    return await this.findPassage('id', id);
-  }
-
-  public async findPassagesByDate(date: string): Promise<BiblePassage[]> {
+  async findPassages(
+    mode: 'calendar_date' | 'author_id',
+    value: string,
+  ): Promise<BiblePassage[]> {
     const query = await this.adapter
       .selectFrom('bible_passage')
       .select([
@@ -77,7 +76,7 @@ export class PassageRepository {
         'passage_location',
         'created_at',
       ])
-      .where('calendar_date', '=', date)
+      .where(mode, '=', value)
       .orderBy(sql`priority IS NULL`)
       .orderBy('priority', 'asc')
       .execute();
@@ -97,6 +96,18 @@ export class PassageRepository {
           createdAt: e.created_at,
         }) as BiblePassage,
     );
+  }
+
+  public async findPassageById(id: string): Promise<BiblePassage | undefined> {
+    return await this.findPassage('id', id);
+  }
+
+  public async findPassagesByAuthor(authorId: string): Promise<BiblePassage[]> {
+    return await this.findPassages('author_id', authorId);
+  }
+
+  public async findPassagesByDate(date: string): Promise<BiblePassage[]> {
+    return await this.findPassages('calendar_date', date);
   }
 
   public async updatePassage(passage: BiblePassage): Promise<boolean> {
