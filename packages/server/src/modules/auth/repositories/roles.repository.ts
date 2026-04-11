@@ -111,13 +111,20 @@ export class RolesRepository {
     return result.numDeletedRows;
   }
 
-  public async hasRole(userId: string, role: string[]): Promise<boolean> {
+  public async hasRole(
+    userId: string,
+    role: string[],
+    groupId: string = '0',
+  ): Promise<boolean> {
     const query = await this.adapter
       .selectFrom('user_roles')
       .innerJoin('roles', 'user_roles.role_id', 'roles.id')
       .select('user_roles.id')
       .where('user_roles.user_id', '=', userId)
       .where('roles.code', 'in', role)
+      .where((eb) =>
+        eb.or([eb('group_id', '=', groupId), eb('group_id', 'is', null)]),
+      )
       .execute();
 
     if (query.length > 0) {

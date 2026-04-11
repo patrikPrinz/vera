@@ -11,12 +11,19 @@ import RegisterView from '../modules/auth/views/RegisterView.vue';
 import GroupsAdminView from '@/modules/admin/views/GroupsAdminView.vue';
 import UserGroupsView from '@/modules/user/views/UserGroupsView.vue';
 import BookmarkView from '@/modules/user/views/BookmarkView.vue';
-import PsalterView from '@/modules/psalter/views/PsalterView.vue';
 import KathismaView from '@/modules/psalter/views/KathismaView.vue';
 import PsalmView from '@/modules/psalter/views/PsalmView.vue';
 import GroupsView from '@/modules/groups/views/GroupsView.vue';
 import GroupAdminView from '@/modules/groups/views/GroupAdminView.vue';
 import GroupView from '@/modules/groups/views/GroupView.vue';
+import PostView from '@/modules/groups/views/PostView.vue';
+import CreatePostView from '@/modules/groups/views/CreatePostView.vue';
+import PassagesView from '@/modules/bible/views/PassagesView.vue';
+import PassagesAdminView from '@/modules/bible/views/PassagesAdminView.vue';
+import PassagesCalendarView from '@/modules/bible/views/PassagesCalendarView.vue';
+import KathismaSelectView from '@/modules/psalter/views/KathismaSelectView.vue';
+import PsalmSelectView from '@/modules/psalter/views/PsalmSelectView.vue';
+import PassageListView from '@/modules/bible/views/PassageListView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -27,13 +34,38 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/bible',
     name: 'bible',
-    component: BibleView,
+    children: [
+      { path: '', component: BibleView },
+      {
+        path: 'calendar',
+        redirect: `/bible/calendar/${new Date().toISOString().slice(0, 10)}`,
+      },
+      { path: 'passages', component: PassageListView },
+      { path: 'calendar/:date', component: PassagesCalendarView },
+      { path: 'passage/:id', component: PassagesView },
+      {
+        path: 'admin/passages/:id',
+        meta: { requiresAuth: true },
+        component: PassagesAdminView,
+      },
+      {
+        name: 'createPassage',
+        path: 'admin/passages/',
+        meta: { requiresAuth: true },
+        component: PassagesAdminView,
+      },
+    ],
   },
   {
     path: '/auth',
-    name: 'auth',
+
     children: [
-      { path: '', meta: { requiresAuth: true }, component: AuthView },
+      {
+        path: '',
+        name: 'auth',
+        meta: { requiresAuth: true },
+        component: AuthView,
+      },
       { path: 'login', component: LoginView },
       { path: 'register', component: RegisterView },
     ],
@@ -61,18 +93,22 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/psalter',
-    component: PsalterView,
+    name: 'psalter',
     children: [
-      { path: 'kathisma', component: KathismaView },
+      { path: '', redirect: '/psalter/kathisma' },
+      { path: 'kathisma', component: KathismaSelectView },
       { path: 'kathisma/:number', component: KathismaView },
-      { path: 'psalm', component: PsalmView },
+      { path: 'psalm', component: PsalmSelectView },
       { path: 'psalm/:number', component: PsalmView },
     ],
   },
 
   {
     path: '/groups',
+    meta: { requiresAuth: true },
     children: [
+      { path: ':groupId/post/publish', component: CreatePostView },
+      { path: 'post/:postId', component: PostView },
       { path: '', component: GroupsView },
       { path: 'admin/:id', component: GroupAdminView },
       { path: ':id', component: GroupView },
@@ -92,7 +128,10 @@ router.beforeEach(async (to, _from, next) => {
     const authStore = useAuthStore();
     const authenticated = await authStore.isAuthenticated();
     if (!authenticated) {
-      next('/auth/login');
+      next({
+        path: '/auth/login',
+        query: { redirect: to.fullPath },
+      });
     } else {
       next();
     }

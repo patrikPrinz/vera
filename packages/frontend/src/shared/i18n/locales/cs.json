@@ -1,11 +1,12 @@
 {
   "general": {
-    "appName": "Vera",
+    "appName": "Viera",
     "serverError": "Načítání dat ze serveru selhalo.",
     "name": "Jméno",
     "email": "E-mail",
     "password": "Heslo",
     "passwordConfirm": "Heslo znovu",
+    "operations": "Akce",
     "send": "Odeslat"
   },
   "admin": {
@@ -16,6 +17,7 @@
   },
   "login": {
     "register": "Zaregistrovat",
+    "registerSuccess": "Nový uživatel byl zaregistrován.",
     "login": "Přihlásit se",
     "logout": "Odhlásit se",
     "missingCredentials": "Vyplňte prosím jméno a heslo.",
@@ -24,9 +26,27 @@
     "wrongPasswordCheck": "Hesla se neshodují"
   },
   "navigation": {
+    "psalter": "Žaltář",
     "home": "Domů",
     "bible": "Bible",
-    "adminSection": "Administrace"
+    "adminSection": "Administrace",
+    "passagesCalendar": "Čtení na den",
+    "myPassages": "Moje úryvky",
+    "groups": "Skupiny"
+  },
+  "groups": {
+    "groupSelection": "Výběr skupin",
+    "leaveGroupConfirm": "Opravdu si přejete opustit tuto skupinu?",
+    "adminGroup": "Spravovat skupinu",
+    "leaveGroup": "Opustit skupinu",
+    "publish": "Vytvořit"
+  },
+  "psalter": {
+    "selectKathisma": "Kaftizmy",
+    "selectPsalm": "Žalmy"
+  },
+  "passages": {
+    "myPassages": "Moje úryvky"
   },
   "user": {
     "bookmarks": "Záložky"

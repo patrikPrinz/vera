@@ -7,7 +7,9 @@
     </template>
     <DropdownContent>
       <div v-if="authStore.isAuthenticatedSync()">
-        <div>{{ authStore.getEmail() }}</div>
+        <div>
+          <LinkComponent to="/auth">{{ authStore.getEmail() }}</LinkComponent>
+        </div>
         <div class="cursor-pointer" @click="logoutAction">
           {{ i18n.t('login.logout') }}
         </div>
@@ -20,6 +22,7 @@
 </template>
 
 <script setup lang="ts">
+import LinkComponent from '@/components/assets/LinkComponent.vue';
 import { Dropdown, DropdownContent } from 'v-dropdown';
 import { BiSolidUserCircle } from 'vue-icons-plus/bi';
 import { useAuthStore } from '../authStore';

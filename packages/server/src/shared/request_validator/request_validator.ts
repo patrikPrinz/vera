@@ -19,8 +19,8 @@ export function requestValidator<T extends ZodType>(
       const parsedData = schema.parse(req[part]);
       (req as ValidatedRequest<z.infer<typeof schema>>).validated = parsedData;
       next();
-    } catch (_error) {
-      next(new ValidationError('Bad request format'));
+    } catch (error) {
+      next(new ValidationError('Bad request format', error as Error));
     }
   };
 }
