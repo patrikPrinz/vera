@@ -21,6 +21,11 @@ services:
       - traefik.http.routers.server.rule=Host(`${SERVER_ADDRESS}`)
       - traefik.http.routers.server.entrypoints=websecure
       - traefik.http.routers.server.tls.certresolver=le
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
 
   frontend:
     build:
