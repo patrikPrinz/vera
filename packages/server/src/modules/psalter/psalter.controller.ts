@@ -6,7 +6,9 @@ import type {
   listPsalmsSchema,
   psalterRequestSchema,
 } from './psalter.schema.js';
-import type { NextFunction, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
+import type { User } from '../auth/auth.types.js';
+import type { PsalmRecord } from './psalter.types.js';
 
 @injectable()
 export class PsalterController {
@@ -52,5 +54,16 @@ export class PsalterController {
     );
 
     res.json(kathismaData);
+  };
+
+  importPsalter = async (req: Request, res: Response, _next: NextFunction) => {
+    const fileString = req.file.buffer
+      .toString()
+      .split('\n')
+      .map((e) => {
+        return JSON.parse(e) as PsalmRecord;
+      });
+    await this.psalterService.importPsalter(req.user as User, fileString);
+    res.status(200).json({ result: 'OK' });
   };
 }

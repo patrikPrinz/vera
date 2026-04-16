@@ -1,4 +1,3 @@
-// logging/WinstonLogger.ts
 import winston from 'winston';
 import type { LoggerPort } from './logger_port.js';
 
