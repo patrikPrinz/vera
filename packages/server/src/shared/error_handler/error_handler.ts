@@ -34,7 +34,8 @@ export function errorHandlerFactory(
       responseError = error;
     }
 
-    logger.error('', responseError);
+    // console.log(responseError);
+    logger.error('Response error', responseError);
 
     res.status(responseError.statusCode).json({
       status: responseError.statusCode,

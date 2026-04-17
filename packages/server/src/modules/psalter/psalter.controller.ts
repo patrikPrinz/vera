@@ -9,6 +9,7 @@ import type {
 import type { NextFunction, Request, Response } from 'express';
 import type { User } from '../auth/auth.types.js';
 import type { PsalmRecord } from './psalter.types.js';
+import { ValidationError } from '../../shared/error_handler/errors.js';
 
 @injectable()
 export class PsalterController {
@@ -61,7 +62,17 @@ export class PsalterController {
       .toString()
       .split('\n')
       .map((e) => {
-        return JSON.parse(e) as PsalmRecord;
+        console.log(e);
+        if (e !== '') {
+          try {
+            return JSON.parse(e) as PsalmRecord;
+          } catch (error) {
+            throw new ValidationError(
+              'Psalter should contain only json object separated by newlines.',
+              error as Error,
+            );
+          }
+        }
       });
     await this.psalterService.importPsalter(req.user as User, fileString);
     res.status(200).json({ result: 'OK' });
