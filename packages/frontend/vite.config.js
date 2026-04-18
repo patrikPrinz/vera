@@ -11,7 +11,6 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/icon_192.png', 'icons/icon_512.png'],
       manifest: {
         name: 'Vera',
         short_name: 'Vera',
@@ -19,14 +18,16 @@ export default defineConfig({
         prefer_related_applications: false,
         icons: [
           {
-            src: 'icons/icon_192.png',
+            src: '/icons/icon_192.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'any',
           },
           {
-            src: 'icons/icon_512.png',
+            src: '/icons/icon_512.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any',
           },
         ],
       },
