@@ -11,8 +11,10 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      includeAssets: ['icons/icon_192.png', 'icons/icon_512.png'],
       manifest: {
         name: 'Vera',
+        short_name: 'Vera',
         theme_color: '#173a60',
         prefer_related_applications: false,
         icons: [
