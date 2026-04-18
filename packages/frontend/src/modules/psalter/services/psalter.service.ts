@@ -44,4 +44,31 @@ export class PsalterService {
     }
     return undefined;
   }
+
+  public async importKathisma(
+    file: File,
+    requestTimeoutMs: number | null = null,
+  ): Promise<boolean> {
+    const form = new FormData();
+    form.append('psalter', file);
+
+    const config: Record<string, unknown> = {};
+    if (requestTimeoutMs !== null) {
+      config.timeout = requestTimeoutMs;
+    }
+
+    try {
+      const response = await this.client.post('psalter/import', form, config);
+      if (
+        response.status === 400 ||
+        response.status === 409 ||
+        response.status === 500
+      ) {
+        return false;
+      }
+      return response.status >= 200 && response.status < 300;
+    } catch (_e) {
+      return false;
+    }
+  }
 }
