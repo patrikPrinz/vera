@@ -1,4 +1,12 @@
 # v0.5.0
+In this version I've resolved some problems with startup and initialization of the project:
+  - Added creation of admin user from env variables if there is no user yet
+  - Manage container dependencies and healthchecks to start in right order and timing
+  - Update logging
+  - Add import of texts to user interface
+  - Fix PWA related issues
+
+# v0.5.0
 With this version app introduces more comfortable access to psalms and Bible passages. 
 Also I've made more different UI and UX improvements. 
 
