@@ -12,7 +12,7 @@ import { z, ZodType } from 'zod';
  */
 export function requestValidator<T extends ZodType>(
   schema: T,
-  part: string = 'params',
+  part: 'params' | 'body' | 'query' = 'params',
 ) {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {

@@ -7,7 +7,8 @@ import {
   NotFoundError,
   ValidationError,
 } from './errors.js';
-import { errorHandler } from './error_handler.js';
+import { errorHandlerFactory } from './error_handler.js';
+import { WinstonLogger } from '../logger/logger.js';
 
 const errors = [
   [new AppError(), 500, 'SERVER_ERROR'],
@@ -45,6 +46,8 @@ describe('Test error handler middleware', () => {
         json: jest.fn(),
       } as unknown as Response;
       //const error = new NotFoundError('Message');
+
+      const errorHandler = errorHandlerFactory(new WinstonLogger());
 
       errorHandler(error, mockRequest(), res, jest.fn() as NextFunction);
       expect(res.json).toHaveBeenCalledWith({

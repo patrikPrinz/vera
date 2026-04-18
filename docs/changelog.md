@@ -1,3 +1,7 @@
+# v0.5.0
+With this version app introduces more comfortable access to psalms and Bible passages. 
+Also I've made more different UI and UX improvements. 
+
 # v0.4.0
 This version adds new features to user and admin interface. Also improves groups, where group roles can be managed now.
 Also this version introduces passages and psalter section.
