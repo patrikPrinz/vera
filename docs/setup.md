@@ -2,7 +2,7 @@
 
 This document describes environment variables that can be used in `.env` file. 
 
-`APP:ADMIN_USERNAME` and `APP_ADMIN_PASSWORD` are user for creation of default user account, when datababase is empty to provide and option to initially connect without writing directly into database.
+`APP_ADMIN_USERNAME` and `APP_ADMIN_PASSWORD` are user for creation of default user account, when datababase is empty to provide and option to initially connect without writing directly into database.
 
 If you want to use application services on non-default ports, you should set `SERVER_PORT`, `SERVER_ADDRESS`, `FRONTEND_PORT` and `FRONTEND_ADDRESS` to desired values. These PORT variables are used for docker port forwarding and ADDRESS for use with traefik and setting the correct CORS policy.
 
