@@ -1,4 +1,8 @@
-# v0.5.0
+# v0.6.1
+- add proper timeouts and loading indicator for file import pages.
+- fix typo in changelog of previous version heading
+
+# v0.6.0
 In this version I've resolved some problems with startup and initialization of the project:
   - Added creation of admin user from env variables if there is no user yet
   - Manage container dependencies and healthchecks to start in right order and timing
