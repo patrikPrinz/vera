@@ -32,9 +32,12 @@
     </ul>
     <div v-else></div>
 
-    <p v-if="activeVerse">
-      <span>{{ activeVerse.verse }}</span>
-      <button class="cursor-pointer" @click="$emit('unsetVerseEvent')">
+    <p v-if="activeVerse" class="flex items-center">
+      <span class="text-lg">{{ activeVerse.verse }}</span>
+      <button
+        class="mb-1 cursor-pointer hover:text-pink-900"
+        @click="$emit('unsetVerseEvent')"
+      >
         <i><BiX /></i>
       </button>
     </p>
