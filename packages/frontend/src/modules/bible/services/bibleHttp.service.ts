@@ -98,17 +98,11 @@ export class BibleHttpService implements IBibleHttpService {
     const form = new FormData();
     form.append('translation', file);
 
-    const config: Record<string, unknown> = {};
-    if (requestTimeoutMs !== null) {
-      config.timeout = requestTimeoutMs;
-    }
-
     try {
-      const response = await this.client.post(
-        'bible/translation',
-        form,
-        config,
-      );
+      const response = await this.client.post('bible/translation', form, {
+        timeout: requestTimeoutMs !== null ? requestTimeoutMs : 180000,
+        timeoutErrorMessage: 'Request timed out.',
+      });
       if (
         response.status === 400 ||
         response.status === 409 ||
