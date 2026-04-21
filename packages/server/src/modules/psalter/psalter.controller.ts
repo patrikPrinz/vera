@@ -6,7 +6,10 @@ import type {
   listPsalmsSchema,
   psalterRequestSchema,
 } from './psalter.schema.js';
-import type { NextFunction, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
+import type { User } from '../auth/auth.types.js';
+import type { PsalmRecord } from './psalter.types.js';
+import { ValidationError } from '../../shared/error_handler/errors.js';
 
 @injectable()
 export class PsalterController {
@@ -52,5 +55,26 @@ export class PsalterController {
     );
 
     res.json(kathismaData);
+  };
+
+  importPsalter = async (req: Request, res: Response, _next: NextFunction) => {
+    const fileString = req.file.buffer
+      .toString()
+      .split('\n')
+      .map((e) => {
+        console.log(e);
+        if (e !== '') {
+          try {
+            return JSON.parse(e) as PsalmRecord;
+          } catch (error) {
+            throw new ValidationError(
+              'Psalter should contain only json object separated by newlines.',
+              error as Error,
+            );
+          }
+        }
+      });
+    await this.psalterService.importPsalter(req.user as User, fileString);
+    res.status(200).json({ result: 'OK' });
   };
 }

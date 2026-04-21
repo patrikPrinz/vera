@@ -17,7 +17,7 @@ export class AuthService {
     email: string,
     password: string,
     passwordCheck: string,
-  ): Promise<boolean> => {
+  ): Promise<string | undefined> => {
     if (password !== passwordCheck) {
       throw new ValidationError(
         'Password and password confirmation do not match.',
@@ -30,10 +30,7 @@ export class AuthService {
       providerAccountId: 'local',
     };
     const register = await this.repository.registerUserAuthentication(request);
-    if (register) {
-      return true;
-    }
-    return false;
+    return register;
   };
 
   getUserDetails = async (id: string): Promise<UserDetails | undefined> => {

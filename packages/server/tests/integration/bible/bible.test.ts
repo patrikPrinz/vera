@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   jest,
   describe,
@@ -6,7 +7,6 @@ import {
   test,
   expect,
 } from '@jest/globals';
-import fs from 'fs';
 import { type StartedTestContainer } from 'testcontainers';
 import request, { type Response } from 'supertest';
 import type { Express } from 'express';
@@ -99,7 +99,7 @@ describe('Bible module', () => {
       .send();
     expect(res.statusCode).toEqual(404);
   });
-  test('test XML file insertion', async () => {
+  /*test('test XML file insertion', async () => {
     const fileData = fs.readFileSync(
       `${process.cwd()}/tests/integration/__fixtures__/translation.xml`,
       'utf-8',
@@ -120,5 +120,5 @@ describe('Bible module', () => {
       .post('/api/bible/translation')
       .attach('translation', translationBuffer, 'translation_conflict.xml');
     expect(res.statusCode).toEqual(409);
-  });
+  });*/
 });

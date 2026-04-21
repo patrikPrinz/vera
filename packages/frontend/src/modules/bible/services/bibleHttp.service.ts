@@ -22,6 +22,11 @@ export interface IBibleHttpService {
   getTranslationMetadata(
     translation: string,
   ): Promise<BibleTranslationMetadata | undefined>;
+
+  importTranslation(
+    file: File,
+    requestTimeoutMs?: number | null,
+  ): Promise<boolean>;
 }
 
 export class BibleHttpService implements IBibleHttpService {
@@ -84,5 +89,30 @@ export class BibleHttpService implements IBibleHttpService {
       return data.data as BibleTranslationMetadata;
     }
     return undefined;
+  }
+
+  public async importTranslation(
+    file: File,
+    requestTimeoutMs: number | null = null,
+  ): Promise<boolean> {
+    const form = new FormData();
+    form.append('translation', file);
+
+    try {
+      const response = await this.client.post('bible/translation', form, {
+        timeout: requestTimeoutMs !== null ? requestTimeoutMs : 180000,
+        timeoutErrorMessage: 'Request timed out.',
+      });
+      if (
+        response.status === 400 ||
+        response.status === 409 ||
+        response.status === 500
+      ) {
+        return false;
+      }
+      return response.status >= 200 && response.status < 300;
+    } catch (_e) {
+      return false;
+    }
   }
 }

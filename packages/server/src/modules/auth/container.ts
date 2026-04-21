@@ -33,4 +33,8 @@ export function registerAuthModule(
     'GroupsService',
     container.resolve('GroupsService'),
   );
+  rootContainer.registerInstance(
+    'UsersService',
+    container.resolve('UsersService'),
+  );
 }
