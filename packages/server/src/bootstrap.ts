@@ -3,6 +3,7 @@ import cors from 'cors';
 import type { Express, NextFunction, Request, Response } from 'express';
 import express from 'express';
 import expressSession from 'express-session';
+import createMemoryStore from 'memorystore';
 
 import passport from 'passport';
 import {
@@ -22,6 +23,7 @@ import { registerUserRouter } from './modules/user/bootstrap.js';
 import { registerGroupRouter } from './modules/group/bootstrap.js';
 import { container } from 'tsyringe';
 
+const MemoryStore = createMemoryStore(expressSession);
 const bibleRouter = registerBibleRouter(bibleContainer);
 const authRouter = registerAuthRouter(authContainer);
 const adminRouter = registerAdminRouter(authContainer);
@@ -36,7 +38,14 @@ app.use(
     name: 'vera_sid',
     secret: 'VeraAppSecret',
     saveUninitialized: false,
-    cookie: { httpOnly: true, sameSite: 'lax', secure: false },
+    resave: false,
+    cookie: {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: false,
+      maxAge: 86400000,
+    },
+    store: new MemoryStore({ checkPeriod: 86400000 }),
   }),
 );
 app.use(bodyParser.json());
