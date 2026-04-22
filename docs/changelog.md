@@ -1,4 +1,4 @@
-# vo.6.2
+# v.6.2
 - Updated session store on server
 - Minor UI/UX changes
 
