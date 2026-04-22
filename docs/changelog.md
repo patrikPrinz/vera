@@ -1,3 +1,7 @@
+# vo.6.2
+- Updated session store on server
+- Minor UI/UX changes
+
 # v0.6.1
 - add proper timeouts and loading indicator for file import pages.
 - fix typo in changelog of previous version heading
