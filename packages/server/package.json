@@ -1,6 +1,6 @@
 {
   "name": "server",
-  "version": "0.6.0",
+  "version": "0.6.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "express": "^5.1.0",
     "express-session": "^1.19.0",
     "kysely": "^0.28.11",
+    "memorystore": "^1.6.7",
     "multer": "^2.0.2",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
