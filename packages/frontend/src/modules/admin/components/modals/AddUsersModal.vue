@@ -6,17 +6,19 @@
     <div class="mb-2 flex flex-col gap-2">
       <span
         v-for="user in users"
-        class="text-text-inverse cursor-pointer rounded p-1 text-xl"
+        class="text-text-inverse flex justify-between gap-4 rounded p-1 text-xl"
       >
         {{ user.email }}
 
         <div v-if="assignedUserIds.includes(user.id)">
-          <BiCheck />
-          <BiX class="text-red-800" @click="removeUserFromGroup(user.id)" />
+          <FaUserMinus
+            class="cursor-pointer text-pink-900"
+            @click="removeUserFromGroup(user.id)"
+          />
         </div>
         <div v-else>
           <button class="cursor-pointer" @click="addUserToGroup(user.id)">
-            <BiUserCheck />
+            <FaUserPlus />
           </button>
         </div>
       </span>
@@ -25,7 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import { BiUserCheck, BiCheck, BiX } from 'vue-icons-plus/bi';
+import { BiCheck, BiX } from 'vue-icons-plus/bi';
+import { FaUserPlus, FaUserMinus } from 'vue-icons-plus/fa';
 import { VueFinalModal } from 'vue-final-modal';
 import { onBeforeMount, ref, type Ref } from 'vue';
 import type { UserDetails } from '@/shared/types/auth/auth.types';
