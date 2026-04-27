@@ -1,38 +1,46 @@
 import type { Request, Response, NextFunction } from 'express';
 import { AppError } from './errors.js';
+import type { LoggerPort } from '../logger/logger_port.js';
 
-/**
- * Middleware processing raised error
- *
- * If error is instance of project-specific AppError class that corresponds to
- * some status code, handler will use it. Else it creates basic HTTP 500
- * server error.
- *
- * @param error error that raised while processing request
- * @param _req request object
- * @param res response object
- * @param _next express next function
- * @returns response object
- */
-export const errorHandler = (
-  error: unknown,
-  _req: Request,
-  res: Response,
-  _next: NextFunction,
-) => {
-  // TODO: replace with logger
-  console.trace(error);
-  if (error instanceof AppError) {
-    return res.status(error.statusCode).json({
-      status: error.statusCode,
-      code: error.code,
-      message: error.message,
+export function errorHandlerFactory(
+  logger: LoggerPort,
+): (error: unknown, _req: Request, res: Response, _next: NextFunction) => void {
+  /**
+   * Middleware processing raised error
+   *
+   * If error is instance of project-specific AppError class that corresponds to
+   * some status code, handler will use it. Else it creates basic HTTP 500
+   * server error.
+   *
+   * @param error error that raised while processing request
+   * @param _req request object
+   * @param res response object
+   * @param _next express next function
+   * @returns response object
+   */
+  return (
+    error: unknown,
+    _req: Request,
+    res: Response,
+    _next: NextFunction,
+  ) => {
+    let responseError = new AppError(
+      500,
+      'SERVER_ERROR',
+      'Internal server error',
+      error as Error,
+    );
+    if (error instanceof AppError) {
+      responseError = error;
+    }
+
+    // console.log(responseError);
+    logger.error('Response error', responseError);
+
+    res.status(responseError.statusCode).json({
+      status: responseError.statusCode,
+      code: responseError.code,
+      message: responseError.message,
     });
-  } else {
-    return res.status(500).json({
-      status: 500,
-      code: 'SERVER_ERROR',
-      message: 'Internal server error',
-    });
-  }
-};
+  };
+}

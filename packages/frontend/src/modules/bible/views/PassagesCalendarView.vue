@@ -8,8 +8,16 @@
     />
     <div v-if="passages.length" v-for="passage in passages" :key="passage.id">
       <PassageComponent :passage="passage" />
+      <ButtonComponent
+        @click="editPassage(passage.id)"
+        v-if="authStore.hasRoles(['admin', 'calendar_admin'])"
+        ><BiPencil></BiPencil
+      ></ButtonComponent>
     </div>
-    <ButtonComponent class="w-fit" @click="addPassage(date)"
+    <ButtonComponent
+      v-if="authStore.hasRoles(['admin', 'calendar_admin'])"
+      class="w-fit"
+      @click="addPassage(date)"
       ><BiPlus
     /></ButtonComponent>
   </section>
@@ -17,13 +25,15 @@
 
 <script setup lang="ts">
 import ButtonComponent from '@/components/assets/ButtonComponent.vue';
-import { BiPlus } from 'vue-icons-plus/bi';
+import { BiPlus, BiPencil } from 'vue-icons-plus/bi';
 import PassageComponent from '../components/PassageComponent.vue';
 import { onMounted, ref, type Ref } from 'vue';
 import { passageService } from '../services/bibleServices.provider';
 import { useRoute, useRouter } from 'vue-router';
 import type { BiblePassage } from '@/shared/types/bible/passage.types';
+import { useAuthStore } from '@/modules/auth/authStore';
 
+const authStore = useAuthStore();
 const router = useRouter();
 const route = useRoute();
 const passages: Ref<BiblePassage[]> = ref([]);
@@ -40,6 +50,12 @@ onMounted(async () => {
 
 async function updateDate() {
   await router.push(`${date.value}`);
+}
+
+async function editPassage(id?: string) {
+  if (id) {
+    await router.push(`/bible/admin/passages/${id}`);
+  }
 }
 
 async function addPassage(date: string) {

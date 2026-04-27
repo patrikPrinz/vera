@@ -15,14 +15,14 @@ It provides these basic features (or will provide in the future):
 - Internet connection
 - Node.js and pnpm (optional, for build and development purposes)
 
-## How to run it
+## Quick start
 Each release of the application builds new docker images for each app package.
 
 Default way to run is using docker compose. You can find a basic docker compose file in the repo in `deployment/docker-compose.yaml`.
 
 Default docker compose file will pull images for latest app packages and run them. You can find more about docker compose configuration in Development section.
 
-Docker compose contains its default values for environment variables. Since it is all packaged with docker, it should work out of the box even without `.env`. Still it is a good idea to add the file. Especially if you want to build images and run the containers locally.
+Docker compose contains its default values for environment variables. This setup should work for testing purposes on localhost. If you want to run project on non-default addresses, it is needed to set those addresses in `.env` file. More about environment variables can be found in `docs/setup.md`.
 
 To run the containers you can download and run the docker compose like this:
 

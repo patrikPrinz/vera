@@ -3,6 +3,7 @@ import type { ElasticAdapter } from '../../shared/elastic/elastic_adapter.js';
 import type {
   Psalm,
   PsalmMetadata,
+  PsalmRecord,
   PsalmsQueryRequest,
 } from './psalter.types.js';
 
@@ -118,5 +119,9 @@ export class PsalterRepository {
       segments: fields.text_segments,
       stasisEnd: fields.stasis_end,
     } as Psalm;
+  }
+
+  async importPsalter(data: PsalmRecord[]): Promise<void> {
+    await this.adapter.bulkIndex(this.psalmIndex, data);
   }
 }

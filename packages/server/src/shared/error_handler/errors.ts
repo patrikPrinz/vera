@@ -1,5 +1,5 @@
 /**
- * Class lets user know about exceptions, that occured during request processing.
+ * Class lets user know about exceptions, that ocured during request processing.
  * Each has corresponding message and HTTP status code.
  */
 export class AppError extends Error {
@@ -48,7 +48,7 @@ export class NotFoundError extends AppError {
 }
 
 export class ConflictError extends AppError {
-  constructor(message: string = 'Conflict occured with existing resources') {
+  constructor(message: string = 'Conflict ocured with existing resources') {
     super(409, 'CONFLICT_ERROR', message);
   }
 }

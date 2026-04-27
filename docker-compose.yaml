@@ -5,6 +5,9 @@ services:
       dockerfile: packages/server/Dockerfile
     ports:
       - '${SERVER_PORT:-3000}:3000'
+    depends_on:
+      - initializer
+      - elastic-search
     environment:
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
       - POSTGRES_USER=${POSTGRES_USER:-postgres}
@@ -13,6 +16,8 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-vera}
       - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
       - SERVER_ALLOWED_ORIGIN=${FRONTEND_ADDRESS:-localhost:3001}
+      - APP_ADMIN_USERNAME=${APP_ADMIN_USERNAME:-admin}
+      - APP_ADMIN_PASSWORD=${APP_ADMIN_PASSWORD:-password}
     networks:
       - vera_network
     labels:
@@ -21,6 +26,11 @@ services:
       - traefik.http.routers.server.rule=Host(`${SERVER_ADDRESS}`)
       - traefik.http.routers.server.entrypoints=websecure
       - traefik.http.routers.server.tls.certresolver=le
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
 
   frontend:
     build:
@@ -59,7 +69,10 @@ services:
       dockerfile: packages/initializer/Dockerfile
       target: dev
     depends_on:
-      - elastic-search
+      elastic-search:
+        condition: service_started
+      postgres:
+        condition: service_healthy
     environment:
       - ELASTIC_NODE=${ELASTIC_NODE:-http://elastic-search:9200}
       - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
@@ -90,17 +103,26 @@ services:
     image: postgres:18
     volumes:
       - pgdata:/var/lib/postgresql/18/docker:z
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', '${POSTGRES_USER:-postgres}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
-      POSTGRES_USER: '${POSTGRES_USER:-postgres}'
-      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-pass}'
-      POSTGRES_PORT: '${POSTGRES_PORT:-5432}'
-      POSTGRES_DB: '${POSTGRES_DB:-vera}'
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
+      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB:-vera}
     networks:
       - vera_network
 
   adminer:
     image: adminer
     restart: always
+    depends_on:
+      - postgres
+
     ports:
       - 8081:8080
     networks:

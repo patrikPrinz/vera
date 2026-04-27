@@ -23,3 +23,12 @@ export interface Kathisma {
   language: string;
   kathismaNumber: number;
 }
+
+export interface PsalmRecord {
+  language: string;
+  kathisma_number: number;
+  psalm_number: number;
+  title: string;
+  segments: string[];
+  stasis_end: boolean;
+}

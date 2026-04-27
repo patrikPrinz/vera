@@ -14,6 +14,7 @@ import { authenticated } from './shared/auth/auth.middleware.js';
 import { registerUserModule } from './modules/user/container.js';
 import { registerPsalterModule } from './modules/psalter/container.js';
 import { registerGroupModule } from './modules/group/container.js';
+import { errorHandlerFactory } from './shared/error_handler/error_handler.js';
 container.registerSingleton<LoggerPort>('Logger', WinstonLogger);
 container.register<ElasticPort>('ElasticAdapter', {
   useFactory: () =>
@@ -37,6 +38,10 @@ container.register<Kysely<Database>>('PostgresAdapter', {
 });
 
 container.registerInstance('requestValidator', requestValidator);
+container.registerInstance(
+  'errorHandler',
+  errorHandlerFactory(container.resolve('Logger')),
+);
 container.registerInstance('authMiddleware', authenticated);
 const authContainer = container.createChildContainer();
 registerAuthModule(authContainer, container);

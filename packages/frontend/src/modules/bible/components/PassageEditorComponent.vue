@@ -16,7 +16,7 @@
         </option></select><br/>
       <label>Datum:</label>
       <input type="date" v-model="passage.calendarDate"></input><br/>
-      <button @click="savePassage()">Uložit</button>
+      <ButtonComponent @click="savePassage()">Uložit</ButtonComponent>
       <fieldset
         class="border-text m-auto my-5 rounded-xl border-2 p-3 md:w-2/3 md:text-left"
         v-for="(segment, index) in passage.passageLocation.segments"
@@ -24,7 +24,7 @@
       >
         <p>Začátek:</p>
         <button @click="passage.passageLocation.segments.splice(index, 1)">
-          X
+          <BiX />
         </button>
         <div class="mb-3 flex flex-row space-x-20">
           <span
@@ -49,7 +49,10 @@
           </span>
         </div>
       </fieldset>
-      <button @click="addSegment()">+</button>
+      <div>
+
+      <ButtonComponent @click="addSegment()">+</ButtonComponent>
+      </div>
     </section>
     <section>
       <PassageComponent v-if="passage" :passage="passage" />
@@ -58,6 +61,8 @@
 </template>
 
 <script setup lang="ts">
+import { BiX } from 'vue-icons-plus/bi';
+import ButtonComponent from '@/components/assets/ButtonComponent.vue';
 import PassageComponent from './PassageComponent.vue';
 import { useAuthStore } from '@/modules/auth/authStore';
 import type { BibleBookMetadata } from '@/shared/types/bible/bible.types';

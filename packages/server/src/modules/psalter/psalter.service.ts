@@ -4,17 +4,25 @@ import type {
   Prayer,
   PrayerVerse,
 } from '../../shared/types/prayer/prayer.types.js';
-import { NotFoundError } from '../../shared/error_handler/errors.js';
-import type { Psalm, PsalmMetadata } from './psalter.types.js';
+import {
+  NotFoundError,
+  PermissionError,
+} from '../../shared/error_handler/errors.js';
+import type { Psalm, PsalmMetadata, PsalmRecord } from './psalter.types.js';
+import type { User } from '../auth/auth.types.js';
+import type { RolesService } from '../auth/services/roles.service.js';
 
 @injectable()
 export class PsalterService {
   protected psalterRepository: PsalterRepository;
+  protected rolesService: RolesService;
 
   constructor(
     @inject('PsalterRepository') psalterRepository: PsalterRepository,
+    @inject('RolesService') rolesService: RolesService,
   ) {
     this.psalterRepository = psalterRepository;
+    this.rolesService = rolesService;
   }
 
   public async listPsalms(language: string): Promise<PsalmMetadata[]> {
@@ -124,4 +132,13 @@ export class PsalterService {
       verses: kathismaText,
     } as Prayer;
   }
+
+  importPsalter = async (user: User, data: PsalmRecord[]): Promise<void> => {
+    if (
+      !(await this.rolesService.hasRole(user, ['admin', 'translation_admin']))
+    ) {
+      throw new PermissionError('Not permitted to import a translation.');
+    }
+    await this.psalterRepository.importPsalter(data);
+  };
 }

@@ -12,6 +12,8 @@
   "admin": {
     "groups": "Skupiny",
     "users": "Uživatelé",
+    "translations": "Překlady Bible",
+    "psalter": "Žaltář",
     "manageRoles": "Spravovat role",
     "resetPassword": "Obnovit heslo"
   },

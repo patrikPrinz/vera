@@ -16,6 +16,20 @@
             >{{ i18n.t('admin.groups') }}</router-link
           >
         </li>
+        <li>
+          <router-link
+            class="hover:bg-secondary block p-3"
+            to="/admin/import-translation"
+            >{{ i18n.t('admin.translations') }}</router-link
+          >
+        </li>
+        <li>
+          <router-link
+            class="hover:bg-secondary block p-3"
+            to="/admin/import-psalter"
+            >{{ i18n.t('admin.psalter') }}</router-link
+          >
+        </li>
       </ul>
     </nav>
 

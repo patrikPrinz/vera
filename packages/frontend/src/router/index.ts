@@ -24,6 +24,8 @@ import PassagesCalendarView from '@/modules/bible/views/PassagesCalendarView.vue
 import KathismaSelectView from '@/modules/psalter/views/KathismaSelectView.vue';
 import PsalmSelectView from '@/modules/psalter/views/PsalmSelectView.vue';
 import PassageListView from '@/modules/bible/views/PassageListView.vue';
+import ImportTranslationView from '@/modules/admin/views/ImportTranslationView.vue';
+import ImportPsalterView from '@/modules/admin/views/ImportPsalterView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -89,6 +91,8 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       { path: 'users', component: UsersAdminView },
       { path: 'groups', component: GroupsAdminView },
+      { path: 'import-translation', component: ImportTranslationView },
+      { path: 'import-psalter', component: ImportPsalterView },
     ],
   },
   {

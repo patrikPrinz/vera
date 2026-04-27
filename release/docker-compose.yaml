@@ -4,12 +4,21 @@ services:
     restart: 'on-failure:10'
     ports:
       - '${SERVER_PORT:-3000}:3000'
+    depends_on:
+      initializer:
+        condition: service_started
+      elastic-search:
+        condition: service_started
+      postgres:
+        condition: service_healthy
     environment:
       - NODE_ENV=production
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
       - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
       - SERVER_ALLOWED_ORIGIN=${FRONTEND_ADDRESS:-localhost:3001}
+      - APP_ADMIN_USERNAME=${APP_ADMIN_USERNAME:-admin}
+      - APP_ADMIN_PASSWORD=${APP_ADMIN_PASSWORD:-password}
     networks:
       - vera_network
     labels:
@@ -18,6 +27,11 @@ services:
       - traefik.http.routers.server.rule=Host(`${SERVER_ADDRESS}`)
       - traefik.http.routers.server.entrypoints=websecure
       - traefik.http.routers.server.tls.certresolver=le
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
 
   frontend:
     image: 'ghcr.io/patrikprinz/vera-frontend:latest'
@@ -29,6 +43,8 @@ services:
       - VITE_FRONTEND_ADDRESS=${FRONTEND_ADDRESS:-localhost:3001}
     ports:
       - '${FRONTEND_PORT:-3001}:80'
+    depends_on:
+      - server
     labels:
       - traefik.enable=true
 
@@ -56,15 +72,26 @@ services:
   initializer:
     image: 'ghcr.io/patrikprinz/vera-initializer:latest'
     depends_on:
-      - elastic-search
+      elastic-search:
+        condition: service_started
+      postgres:
+        condition: service_healthy
     environment:
       - ELASTIC_NODE=${ELASTIC_NODE:-http://elastic-search:9200}
       - ELASTIC_USERNAME=${ELASTIC_USERNAME:-elastic}
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD:-pass}
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
       - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB:-vera}
     networks:
       - vera_network
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
 
   kibana:
     image: docker.elastic.co/kibana/kibana:9.1.5
@@ -82,9 +109,17 @@ services:
     image: postgres:18
     volumes:
       - postgresdata:/var/lib/postgresql/18/docker:z
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', '${POSTGRES_USER:-postgres}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
-      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-pass}'
-      POSTGRES_PORT: '${POSTGRES_PORT:-5432}'
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-pass}
+      - POSTGRES_HOST=${POSTGRES_HOST:-postgres}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_DB=${POSTGRES_DB:-vera}
     networks:
       - vera_network
 
@@ -92,7 +127,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8081:8080
+      - 8001:8080
     networks:
       - vera_network
     profiles: [debug]

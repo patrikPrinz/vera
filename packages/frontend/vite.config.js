@@ -12,17 +12,22 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
+        name: 'Vera',
+        short_name: 'Vera',
+        theme_color: '#173a60',
         prefer_related_applications: false,
         icons: [
           {
-            src: 'img/icons/android-chrome-192x192.png',
+            src: '/icons/icon_192.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'any',
           },
           {
-            src: 'img/icons/android-chrome-512x512.png',
+            src: '/icons/icon_512.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any',
           },
         ],
       },
