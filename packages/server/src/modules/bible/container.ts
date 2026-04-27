@@ -1,6 +1,6 @@
 import { BibleController } from './bible.controller.js';
-import { BibleRepository } from './bible.repository.js';
-import { BibleService } from './bible.service.js';
+import { BibleRepository } from './repositories/bible.repository.js';
+import { BibleService } from './services/bible.service.js';
 import { PassageController } from './controllers/passage.controller.js';
 import { PassageRepository } from './repositories/passage.repository.js';
 import { PassageService } from './services/passage.service.js';

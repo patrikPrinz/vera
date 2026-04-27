@@ -2,18 +2,18 @@ import { injectable, inject } from 'tsyringe';
 import {
   ConflictError,
   NotFoundError,
-} from '../../shared/error_handler/errors.js';
-import type { IBibleService, IBibleRepository } from './bible.interfaces.js';
+} from '../../../shared/error_handler/errors.js';
+import type { IBibleService, IBibleRepository } from '../bible.interfaces.js';
 import type {
   BibleBook,
   BibleChapter,
   BibleTranslation,
   BibleTranslationMetadata,
   BibleVerse,
-} from './bible.types.js';
-import type { TranslationParserFactory } from './translation_parser/translation_parser.js';
-import type { RolesService } from '../auth/services/roles.service.js';
-import type { User } from '../auth/auth.types.js';
+} from '../bible.types.js';
+import type { TranslationParserFactory } from '../translation_parser/translation_parser.js';
+import type { RolesService } from '../../auth/services/roles.service.js';
+import type { User } from '../../auth/auth.types.js';
 
 @injectable()
 export class BibleService implements IBibleService {
@@ -73,15 +73,23 @@ export class BibleService implements IBibleService {
     return data;
   };
 
+  fulltextSearch = async (
+    keyword: string,
+    translation: string,
+    books: number[],
+  ): Promise<BibleVerse[]> => {
+    const data = await this.repository.fulltextSearch(
+      keyword,
+      translation,
+      books,
+    );
+    return data;
+  };
+
   postTranslationService = async (
     _user: User,
     fileString: string,
   ): Promise<void> => {
-    /*if (
-      !(await this.rolesService.hasRole(user, ['admin', 'translation_admin']))
-    ) {
-      throw new PermissionError('Not permitted to import a translation.');
-      }*/
     const parser =
       this.translationParserFactory.createTranslationParser(fileString);
     const translation = await parser.getTranslation();
