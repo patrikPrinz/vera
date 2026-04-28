@@ -27,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-import { BiCheck, BiX } from 'vue-icons-plus/bi';
 import { FaUserPlus, FaUserMinus } from 'vue-icons-plus/fa';
 import { VueFinalModal } from 'vue-final-modal';
 import { onBeforeMount, ref, type Ref } from 'vue';
