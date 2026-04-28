@@ -3,7 +3,7 @@
     ><ButtonComponent><BiPlus /></ButtonComponent
   ></router-link>
   <div
-    class="border-text m-auto my-4 rounded-xl border-2 md:w-2/3"
+    class="border-text m-auto my-4 rounded-xl border-2 px-3 md:w-2/3"
     v-for="passage in passages"
   >
     <router-link :to="`/bible/passage/${passage.id}`">
@@ -11,6 +11,7 @@
     /></router-link>
   </div>
 </template>
+
 <script setup lang="ts">
 import { BiPlus } from 'vue-icons-plus/bi';
 import ButtonComponent from '@/components/assets/ButtonComponent.vue';

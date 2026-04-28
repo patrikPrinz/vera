@@ -28,7 +28,15 @@
       color var(--theme-transition) var(--theme-ease);
   }
 
-  /* Pro většinu prvků v UI */
+  input,
+  select,
+  textarea {
+    @apply rounded border p-1;
+  }
+  label {
+    @apply py-1;
+  }
+
   :where(*, *::before, *::after) {
     transition:
       background-color var(--theme-transition) var(--theme-ease),

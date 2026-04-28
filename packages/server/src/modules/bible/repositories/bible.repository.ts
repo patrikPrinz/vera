@@ -1,7 +1,7 @@
 import type { estypes } from '@elastic/elasticsearch';
 import { injectable, inject } from 'tsyringe';
 
-import { ElasticAdapter } from '../../shared/elastic/elastic_adapter.js';
+import { ElasticAdapter } from '../../../shared/elastic/elastic_adapter.js';
 import type {
   BibleBook,
   BibleChapter,
@@ -9,8 +9,9 @@ import type {
   BibleTranslationContainer,
   BibleTranslationMetadata,
   BibleVerse,
-} from './bible.types.js';
-import type { IBibleRepository } from './bible.interfaces.js';
+} from '../bible.types.js';
+import type { IBibleRepository } from '../bible.interfaces.js';
+import type { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types';
 
 @injectable()
 export class BibleRepository implements IBibleRepository {
@@ -170,6 +171,30 @@ export class BibleRepository implements IBibleRepository {
     return chapters;
   }
 
+  async findVerses(
+    query: estypes.QueryDslQueryContainer,
+  ): Promise<BibleVerse[]> {
+    const data = await this.adapter.search(this.bibleIndex, query);
+
+    console.log(data);
+
+    if (!data || data.length == 0) {
+      return [];
+    }
+    const verses = data.map((element) => {
+      const fields = element._source as BibleVerse;
+      return {
+        id: element._id,
+        book: Number(fields.book),
+        chapter: Number(fields.chapter),
+        verse: Number(fields.verse),
+        text: fields.text,
+        isHeader: fields.isHeader,
+      } as BibleVerse;
+    });
+    return verses;
+  }
+
   public async getVerses(
     translation: string,
     book: number,
@@ -196,23 +221,46 @@ export class BibleRepository implements IBibleRepository {
         ],
       },
     };
-    const data = await this.adapter.search(this.bibleIndex, query);
+    return this.findVerses(query);
+  }
 
-    if (!data || data.length == 0) {
-      return undefined;
-    }
-    const verses = data.map((element) => {
-      const fields = element._source as BibleVerse;
-      return {
-        id: element._id,
-        book: Number(fields.book),
-        chapter: Number(fields.chapter),
-        verse: Number(fields.verse),
-        text: fields.text,
-        isHeader: fields.isHeader,
-      } as BibleVerse;
-    });
-    return verses;
+  public async fulltextSearch(
+    keyword: string,
+    translation: string,
+    books: number[] = [],
+  ): Promise<BibleVerse[]> {
+    const query = {
+      bool: {
+        ...(books.length > 0 && {
+          filter: [
+            {
+              terms: {
+                book: books,
+              },
+            },
+          ],
+        }),
+        must: [
+          {
+            term: {
+              translation: translation,
+            },
+          },
+          {
+            fuzzy: {
+              text: {
+                value: keyword,
+                fuzziness: 'AUTO',
+                max_expansions: 10,
+                transpositions: false,
+                prefix_length: Math.floor(keyword.length / 3),
+              },
+            },
+          },
+        ],
+      },
+    } as QueryDslQueryContainer;
+    return this.findVerses(query);
   }
 
   public async insertTranslation(

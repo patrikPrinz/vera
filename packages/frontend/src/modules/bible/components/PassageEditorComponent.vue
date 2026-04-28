@@ -1,31 +1,40 @@
 <template>
-  <div class="flex w-full flex-row">
-    <section>
-      {{ passageLocation }}<br />
-      <div class="flex flex-row">
-        <label for="passage-input-title">Název: </label>
-        <input id="passage-input-title" v-model="passage.title" />
-      </div>
-      <select v-model="passage.passageLocation.book">
+  <div class="flex w-full flex-col md:flex-row">
+    <section class="md:flex-1 flex flex-col gap-2 px-5">
+
+        {{ passageLocation }}<br />
+<div class="flex flex-col">
+      <label class="pr-2" for="passage-input-title">{{ i18n.t('general.title') }}: </label>
+      <input id="passage-input-title" v-model="passage.title" /><br/>
+</div>
+  <div class="flex flex-col">
+      <label class="pr-2" for="passage-input-bookpassage-input-book">{{ i18n.t('bible.book') }}:</label>
+      <select v-model="passage.passageLocation.book" id="passage-input-book">
         <option
           v-for="book in booksList"
           :value="book.bookNumber"
           :key="book.bookNumber"
         >
           {{ book.code }}
-        </option></select><br/>
-      <label>Datum:</label>
-      <input type="date" v-model="passage.calendarDate"></input><br/>
-      <ButtonComponent @click="savePassage()">Uložit</ButtonComponent>
+        </option>
+      </select><br/>
+  </div>
+  <div v-if="authStore.hasRoles(['admin', 'calendar_admin'])" class="flex flex-col">
+      <label class="pr-2" for="passage-input-date">{{ i18n.t('general.date') }}:</label>
+      <input type="date" id="passage-input-date" v-model="passage.calendarDate"></input><br/>
+  </div>
+      <ButtonComponent @click="savePassage()">{{ i18n.t('general.save') }}</ButtonComponent>
+
+
       <fieldset
-        class="border-text m-auto my-5 rounded-xl border-2 p-3 md:w-2/3 md:text-left"
+        class="border-text m-auto my-5 rounded-xl border-2 p-2  md:text-left"
         v-for="(segment, index) in passage.passageLocation.segments"
         :key="index"
       >
-        <p>Začátek:</p>
-        <button @click="passage.passageLocation.segments.splice(index, 1)">
-          <BiX />
-        </button>
+        <div class="flex justify-between"><p class="p-1">Začátek:</p>
+        <button class="cursor-pointer hover:text-pink-900" @click="passage.passageLocation.segments.splice(index, 1)">
+          <BiX class="w-8 h-8" />
+        </button></div>
         <div class="mb-3 flex flex-row space-x-20">
           <span
             ><label>Kapitola: </label>
@@ -37,7 +46,7 @@
           </span>
         </div>
 
-        <p class="border-t-2 pt-3">Konec:</p>
+        <p class="border-t-2 pt-3 text-left">Konec:</p>
         <div class="flex flex-row space-x-20">
           <span
             ><label>Kapitola: </label>
@@ -54,7 +63,7 @@
       <ButtonComponent @click="addSegment()">+</ButtonComponent>
       </div>
     </section>
-    <section>
+    <section class="md:flex-1">
       <PassageComponent v-if="passage" :passage="passage" />
     </section>
   </div>
@@ -78,6 +87,9 @@ import {
 import { useBibleStore } from '../stores/bibleStore';
 import { useBibleReferenceFormatter } from '@/composables/bibleReferenceFormatter';
 import router from '@/router';
+import { useI18n } from 'vue-i18n';
+
+const i18n = useI18n();
 const { formatBiblePassageLocation } = useBibleReferenceFormatter();
 const bibleStore = useBibleStore();
 const authStore = useAuthStore();

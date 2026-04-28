@@ -18,6 +18,7 @@ import {
   findPassageSchema,
   deletePassageSchema,
   findUserPassagesSchema,
+  fulltextSearchSchema,
 } from './passage.schema.js';
 import { PassageController } from './controllers/passage.controller.js';
 
@@ -65,6 +66,12 @@ export class BibleRouterFactory {
       '/translation/:translation/book/:book/chapter/:chapter/verses',
       requestValidator(getVersesSchema, 'params'),
       controller.getVerses,
+    );
+
+    router.post(
+      '/find',
+      requestValidator(fulltextSearchSchema, 'body'),
+      controller.fulltextSearch,
     );
 
     router.post(

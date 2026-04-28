@@ -1,11 +1,11 @@
 <template>
   <router-link v-if="id" :to="`/bible/passage/${id}`"
-    ><BiSolidHappyHeartEyes /></router-link
+    ><BiCheck class="m-2 h-8 w-8 rounded-md border" /></router-link
   ><PassageEditorComponent :id="id" :date="date" />
 </template>
 
 <script setup lang="ts">
-import { BiSolidHappyHeartEyes } from 'vue-icons-plus/bi';
+import { BiCheck } from 'vue-icons-plus/bi';
 import { useRoute } from 'vue-router';
 import PassageEditorComponent from '../components/PassageEditorComponent.vue';
 

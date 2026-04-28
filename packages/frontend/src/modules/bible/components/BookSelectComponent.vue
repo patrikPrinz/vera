@@ -1,0 +1,1 @@
+<template>ahoy-hoy</template>

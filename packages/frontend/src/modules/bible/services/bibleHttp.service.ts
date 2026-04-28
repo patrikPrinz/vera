@@ -27,6 +27,12 @@ export interface IBibleHttpService {
     file: File,
     requestTimeoutMs?: number | null,
   ): Promise<boolean>;
+
+  searchKeyword(
+    keyword: string,
+    translation: string,
+    books: number[],
+  ): Promise<BibleVerse[]>;
 }
 
 export class BibleHttpService implements IBibleHttpService {
@@ -114,5 +120,22 @@ export class BibleHttpService implements IBibleHttpService {
     } catch (_e) {
       return false;
     }
+  }
+
+  public async searchKeyword(
+    keyword: string,
+    translation: string,
+    books: number[] = [],
+  ): Promise<BibleVerse[]> {
+    const response = await this.client.post('bible/find', {
+      keyword: keyword,
+      translation: translation,
+      books: books,
+    });
+
+    if (response.data) {
+      return response.data as BibleVerse[];
+    }
+    return [];
   }
 }

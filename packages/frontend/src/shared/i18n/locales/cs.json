@@ -7,7 +7,13 @@
     "password": "Heslo",
     "passwordConfirm": "Heslo znovu",
     "operations": "Akce",
-    "send": "Odeslat"
+    "send": "Odeslat",
+    "save": "Uložit",
+    "title": "Název",
+    "date": "Datum"
+  },
+  "bible": {
+    "book": "Kniha"
   },
   "admin": {
     "groups": "Skupiny",
