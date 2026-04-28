@@ -1,5 +1,6 @@
 <template>
   <main class="pb-8">
+    <ButtonComponent @click="search"><BiSearch /></ButtonComponent>
     <BooksComponent
       v-if="!bibleStore.isBookSet() && !bibleStore.isChapterSet()"
     />
@@ -26,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import { BiSearch } from 'vue-icons-plus/bi';
 import { onBeforeMount, ref, type Ref } from 'vue';
 import { useBibleStore } from '../stores/bibleStore';
 import BibleMenuComponent from '../components/navigation/BibleMenuComponent.vue';
@@ -35,9 +37,12 @@ import ChapterComponent from '../components/ChapterComponent.vue';
 import type { BibleVerse } from '@/shared/types/bible/bible.types';
 import type { UserVerseMetadata } from '@/shared/types/user/user.types';
 import { useAuthStore } from '@/modules/auth/authStore';
+import ButtonComponent from '@/components/assets/ButtonComponent.vue';
+import { useRouter } from 'vue-router';
 const metadata: Ref<Record<string, UserVerseMetadata> | undefined> = ref({});
 const activeVerse: Ref<BibleVerse | undefined> = ref(undefined);
 
+const router = useRouter();
 const authStore = useAuthStore();
 const bibleStore = useBibleStore();
 
@@ -62,5 +67,9 @@ function unsetVerseEvent() {
 async function reloadBibleEvent() {
   await bibleStore.initialize();
   location.reload();
+}
+
+async function search() {
+  await router.push('/bible/search');
 }
 </script>

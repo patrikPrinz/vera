@@ -26,6 +26,7 @@ import PsalmSelectView from '@/modules/psalter/views/PsalmSelectView.vue';
 import PassageListView from '@/modules/bible/views/PassageListView.vue';
 import ImportTranslationView from '@/modules/admin/views/ImportTranslationView.vue';
 import ImportPsalterView from '@/modules/admin/views/ImportPsalterView.vue';
+import SearchView from '@/modules/bible/views/SearchView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -55,6 +56,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'admin/passages/',
         meta: { requiresAuth: true },
         component: PassagesAdminView,
+      },
+      {
+        name: 'search',
+        path: 'search/',
+        component: SearchView,
       },
     ],
   },

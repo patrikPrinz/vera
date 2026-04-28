@@ -21,6 +21,12 @@ export interface IBibleRepository {
 
   getChapters(translation: string, book: number): Promise<BibleChapter[]>;
 
+  fulltextSearch(
+    keyword: string,
+    translation: string,
+    books: number[],
+  ): Promise<BibleVerse[]>;
+
   getVerses(
     translation: string,
     book: number,
@@ -51,6 +57,12 @@ export interface IBibleService {
   ) => Promise<BibleVerse[]>;
 
   getVerseService: (id: string) => Promise<BibleVerse>;
+
+  fulltextSearch: (
+    keyword: string,
+    translation: string,
+    books: number[],
+  ) => Promise<BibleVerse[]>;
 
   postTranslationService: (user: User, fileString: string) => Promise<void>;
 }
