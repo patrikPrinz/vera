@@ -11,6 +11,7 @@ import type {
   BibleVerse,
 } from '../bible.types.js';
 import type { IBibleRepository } from '../bible.interfaces.js';
+import type { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types';
 
 @injectable()
 export class BibleRepository implements IBibleRepository {
@@ -175,6 +176,8 @@ export class BibleRepository implements IBibleRepository {
   ): Promise<BibleVerse[]> {
     const data = await this.adapter.search(this.bibleIndex, query);
 
+    console.log(data);
+
     if (!data || data.length == 0) {
       return [];
     }
@@ -243,19 +246,20 @@ export class BibleRepository implements IBibleRepository {
               translation: translation,
             },
           },
-        ],
-        should: [
           {
-            match: {
+            fuzzy: {
               text: {
-                query: keyword,
+                value: keyword,
                 fuzziness: 'AUTO',
+                max_expansions: 10,
+                transpositions: false,
+                prefix_length: Math.floor(keyword.length / 3),
               },
             },
           },
         ],
       },
-    };
+    } as QueryDslQueryContainer;
     return this.findVerses(query);
   }
 
