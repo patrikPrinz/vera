@@ -64,7 +64,7 @@ export class BibleService implements IBibleService {
     chapter: number,
   ): Promise<BibleVerse[]> => {
     const data = await this.repository.getVerses(translation, book, chapter);
-    if (data === undefined) throw new NotFoundError();
+    if (data === undefined || data.length == 0) throw new NotFoundError();
     return data;
   };
 
