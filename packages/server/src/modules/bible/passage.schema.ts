@@ -35,6 +35,12 @@ export const findPassageSchema = z.object({
   param: z.string(),
 });
 
+export const fulltextSearchSchema = z.object({
+  keyword: z.string(),
+  translation: z.string(),
+  books: z.array(z.number()),
+});
+
 export const deletePassageSchema = z.object({
   id: z.string(),
 });

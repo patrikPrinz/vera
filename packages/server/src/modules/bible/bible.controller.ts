@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { injectable, inject } from 'tsyringe';
 import { z } from 'zod';
 
@@ -12,6 +12,7 @@ import {
 } from './bible.schema.js';
 import type { IBibleService } from './bible.interfaces.js';
 import type { User } from '../auth/auth.types.js';
+import type { fulltextSearchSchema } from './passage.schema.js';
 
 @injectable()
 export class BibleController {
@@ -75,6 +76,16 @@ export class BibleController {
   ) => {
     const { id } = req.validated;
     const data = await this.service.getVerseService(id);
+    res.json(data);
+  };
+
+  fulltextSearch = async (
+    req: ValidatedRequest<z.infer<typeof fulltextSearchSchema>>,
+    res: Response,
+    _next: NextFunction,
+  ) => {
+    const { keyword, translation, books } = req.validated;
+    const data = await this.service.fulltextSearch(keyword, translation, books);
     res.json(data);
   };
 

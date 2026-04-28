@@ -17,7 +17,7 @@
             v-if="assignedRoles.find((e) => e.code == role.code)"
             @click="unassignRole(role)"
           >
-            <BiX></BiX>
+            <BiX class="h-6 w-6 text-pink-900"></BiX>
           </button>
           <button v-else @click="assignRole(role)">
             <BiPlus></BiPlus>
