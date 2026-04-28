@@ -1,3 +1,8 @@
+# v0.6.3
+- add full-text search
+- UI changes
+- redocument frontend Dockerfile
+
 # v.6.2
 - Updated session store on server
 - Minor UI/UX changes
