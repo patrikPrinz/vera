@@ -30,6 +30,8 @@ RUN pnpm install --filter initializer
 FROM dependencies AS build
 # copy source code files onto the container
 COPY packages/initializer/src ./packages/initializer/src
+COPY packages/shared-types ./packages/shared-types
+COPY packages ./packages
 
 RUN pnpm --filter initializer build
 
