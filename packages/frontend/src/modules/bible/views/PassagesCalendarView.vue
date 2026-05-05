@@ -21,9 +21,11 @@
       ><BiPlus
     /></ButtonComponent>
   </section>
+  <BibleMenuComponent :chapters="false"></BibleMenuComponent>
 </template>
 
 <script setup lang="ts">
+import BibleMenuComponent from '../components/navigation/BibleMenuComponent.vue';
 import ButtonComponent from '@/components/assets/ButtonComponent.vue';
 import { BiPlus, BiPencil } from 'vue-icons-plus/bi';
 import PassageComponent from '../components/PassageComponent.vue';

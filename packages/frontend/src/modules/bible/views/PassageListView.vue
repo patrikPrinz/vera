@@ -10,10 +10,12 @@
       <PassageComponent :passage="passage"
     /></router-link>
   </div>
+  <BibleMenuComponent :chapters="false"></BibleMenuComponent>
 </template>
 
 <script setup lang="ts">
 import { BiPlus } from 'vue-icons-plus/bi';
+import BibleMenuComponent from '../components/navigation/BibleMenuComponent.vue';
 import ButtonComponent from '@/components/assets/ButtonComponent.vue';
 import PassageComponent from '../components/PassageComponent.vue';
 import { useAuthStore } from '@/modules/auth/authStore';

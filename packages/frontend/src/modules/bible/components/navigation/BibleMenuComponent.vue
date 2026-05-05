@@ -3,7 +3,7 @@
     class="bg-primary dark:text-text text-text-inverse fixed bottom-0 left-0 flex w-full justify-between"
   >
     <ul
-      v-if="chapters == true"
+      v-if="isChapterMode() && authStore.isAuthenticatedSync()"
       class="flex space-x-2"
       :class="{ 'pointer-events-none text-gray-600': activeVerse == undefined }"
     >
@@ -32,7 +32,7 @@
     </ul>
     <div v-else></div>
 
-    <p v-if="activeVerse" class="flex items-center">
+    <p v-if="activeVerse && isChapterMode()" class="flex items-center">
       <span class="text-lg">{{ activeVerse.verse }}</span>
       <button
         class="mb-1 cursor-pointer hover:text-pink-900"
@@ -96,20 +96,27 @@ import { useAuthStore } from '@/modules/auth/authStore';
 import { useBibleStore } from '../../stores/bibleStore';
 import NoteModal from '../modals/NoteModal.vue';
 import BookmarkModal from '../modals/BookmarkModal.vue';
+import { useRoute } from 'vue-router';
 
 const bibleStore = useBibleStore();
 const authStore = useAuthStore();
 const props = defineProps<{
   chapters: boolean;
-  activeVerse: BibleVerse | undefined;
-  metadata: Record<string, UserVerseMetadata> | undefined;
+  activeVerse?: BibleVerse | undefined;
+  metadata?: Record<string, UserVerseMetadata> | undefined;
 }>();
 const { chapters, activeVerse, metadata } = toRefs(props);
 const translations: Ref<{ translation: string }[]> = ref([]);
-const emits = defineEmits(['reloadBibleEvent', 'unsetVerseEvent']);
+//const emits = defineEmits(['reloadBibleEvent', 'unsetVerseEvent']);
 onBeforeMount(async () => {
   translations.value = await bibleStore.listTranslations();
 });
+
+const route = useRoute();
+
+function isChapterMode() {
+  return chapters.value == true && route.path === '/bible';
+}
 
 function newVerseMetadata(): UserVerseMetadata | undefined {
   const translation = bibleStore.getCurrentTranslation();
@@ -187,7 +194,9 @@ async function moveOrCreateBookmark(id: string | undefined) {
 
 async function switchTranslation(translation: string) {
   await bibleStore.setCurrentTranslation(translation);
-  emits('reloadBibleEvent');
+  location.reload();
+  await bibleStore.initialize();
+  // emits('reloadBibleEvent');
 }
 
 async function openHighlightModal(color: string): Promise<string> {
