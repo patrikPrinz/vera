@@ -22,6 +22,7 @@ import { registerPsalterRouter } from './modules/psalter/bootstrap.js';
 import { registerUserRouter } from './modules/user/bootstrap.js';
 import { registerGroupRouter } from './modules/group/bootstrap.js';
 import { container } from 'tsyringe';
+import { PostgresAdapter } from './shared/postgres/postgres_adapter.js';
 
 const MemoryStore = createMemoryStore(expressSession);
 const bibleRouter = registerBibleRouter(bibleContainer);
@@ -75,5 +76,10 @@ const errorHandler: (
   _next: NextFunction,
 ) => void = container.resolve('errorHandler');
 app.use(errorHandler);
+
+export async function closeDb() {
+  const adapter: PostgresAdapter = container.resolve('PostgresAdapter');
+  await adapter.destroy();
+}
 
 export default app;
