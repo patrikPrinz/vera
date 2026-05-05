@@ -1,5 +1,5 @@
 <template>
-  <h2 class="text-2xl">Překlady Bible</h2>
+  <h2 class="text-2xl">Překlady Žaltáře</h2>
 
   <input type="file" ref="psalter" /><br />
   <ButtonComponent @click="uploadFile()">{{

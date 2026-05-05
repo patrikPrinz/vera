@@ -1,9 +1,9 @@
 <template>
   <main class="pb-8">
-    <ButtonComponent @click="search"><BiSearch /></ButtonComponent>
-    <BooksComponent
-      v-if="!bibleStore.isBookSet() && !bibleStore.isChapterSet()"
-    />
+    <div v-if="!bibleStore.isBookSet() && !bibleStore.isChapterSet()">
+      <ButtonComponent @click="search"><BiSearch /></ButtonComponent>
+      <BooksComponent />
+    </div>
     <ChaptersComponent
       v-else-if="bibleStore.isBookSet() && !bibleStore.isChapterSet()"
     />
@@ -17,7 +17,6 @@
     />
   </main>
   <BibleMenuComponent
-    v-if="authStore.isAuthenticatedSync()"
     @unsetVerseEvent="unsetVerseEvent"
     @reloadBibleEvent="reloadBibleEvent"
     :chapters="bibleStore.isChapterSet()"
