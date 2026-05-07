@@ -45,6 +45,8 @@ export class PsalterRouterFactory {
       psalterController.getKathisma,
     );
 
+    router.get('/list-languages', psalterController.listLanguages);
+
     router.post(
       '/import',
       upload.single('psalter'),
