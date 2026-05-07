@@ -20,7 +20,7 @@
           class="hover:bg-primary cursor-pointer rounded-xl p-2"
           @click="removeFromGroup(user.id)"
         >
-          Remove
+          {{ i18n.t('general.remove') }}
         </button>
       </td>
       <td>
@@ -28,7 +28,7 @@
           class="hover:bg-primary cursor-pointer rounded-xl p-2"
           @click="openRolesModal(user.id)"
         >
-          Roles
+          {{ i18n.t('admin.roles') }}
         </button>
       </td>
     </tr>

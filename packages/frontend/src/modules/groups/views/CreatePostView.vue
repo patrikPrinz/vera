@@ -1,6 +1,8 @@
 <template>
   <form class="m-auto flex flex-col md:w-2/3">
-    <label class="w-fit" for="create-post-title-input">Název:</label>
+    <label class="w-fit" for="create-post-title-input"
+      >{{ i18n.t('general.title') }}:</label
+    >
     <input
       v-model="postTitle"
       id="create-post-title-input"

@@ -114,6 +114,7 @@ export const useBibleStore = defineStore('bible', () => {
     if (!getTranslationMetadata() && translation) {
       await setCurrentTranslation(translation);
     }
+    return translation;
   }
 
   return {

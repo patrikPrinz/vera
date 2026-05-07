@@ -42,7 +42,6 @@ const metadata: Ref<Record<string, UserVerseMetadata> | undefined> = ref({});
 const activeVerse: Ref<BibleVerse | undefined> = ref(undefined);
 
 const router = useRouter();
-const authStore = useAuthStore();
 const bibleStore = useBibleStore();
 
 onBeforeMount(async () => {

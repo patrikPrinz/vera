@@ -42,16 +42,21 @@ const passages: Ref<BiblePassage[]> = ref([]);
 const date = ref('');
 
 onMounted(async () => {
+  await loadTexts();
+});
+
+async function updateDate() {
+  await router.push(`${date.value}`);
+  await loadTexts();
+}
+
+async function loadTexts() {
   const param = route.params.date;
   date.value = Array.isArray(param) ? param[0] : param;
   const result = await passageService.findPassagesByDate(date.value);
   if (result) {
     passages.value = result;
   }
-});
-
-async function updateDate() {
-  await router.push(`${date.value}`);
 }
 
 async function editPassage(id?: string) {

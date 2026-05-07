@@ -7,7 +7,7 @@
         @click="goToKathisma(kathisma)"
         class="border-text hover:bg-secondary hover:text-text-inverse dark:hover:text-text text-l m-3 h-12 w-12 cursor-pointer rounded-md border-2 py-2"
       >
-        {{ kathisma }}
+        {{ i18n.t('psalter.kathisma') }}
       </button>
     </li>
   </ul>

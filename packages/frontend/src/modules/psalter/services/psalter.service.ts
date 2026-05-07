@@ -69,4 +69,12 @@ export class PsalterService {
       return false;
     }
   }
+
+  public async listLanguages(): Promise<string[]> {
+    const result = await this.client.get(`/psalter/list-languages`);
+    if (result) {
+      return result.data as string[];
+    }
+    return [];
+  }
 }
