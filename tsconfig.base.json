@@ -9,7 +9,12 @@
     "moduleDetection": "force",
     "isolatedModules": true,
 
+    "baseUrl": ".",
     "sourceMap": true,
     "composite": true,
+    "paths": {
+      "@vera/shared": ["packages/shared/index.ts"],
+      "@vera/shared/*": ["packages/shared/*"],
+    },
   },
 }

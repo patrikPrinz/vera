@@ -31,6 +31,7 @@ FROM dependencies AS build
 # copy source code files into the container
 COPY packages/server/src ./packages/server/src
 COPY packages/shared-types ./packages/shared-types
+COPY packages/shared ./packages/shared
 
 RUN pnpm --filter server build
 

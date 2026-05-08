@@ -2,30 +2,23 @@ import { Pool } from 'pg';
 import { PostgresDialect } from 'kysely';
 import { Kysely } from 'kysely';
 import type { Database } from './schema.js';
+import { singleton } from 'tsyringe';
 
-export class PostgresAdapter {
-  protected builder: Kysely<Database>;
-
-  constructor(
-    host: string,
-    userName: string,
-    password: string,
-    dbName: string,
-    port: number = 5432,
-  ) {
+@singleton()
+export class PostgresAdapter extends Kysely<Database> {
+  constructor() {
+    const port = Number(process.env.POSTGRES_PORT);
     const connectionPool = new Pool({
-      host: host,
-      port: port,
-      user: userName,
-      password: password,
-      database: dbName,
+      host: process.env.POSTGRES_HOST ?? 'localhost',
+      user: process.env.POSTGRES_USER ?? 'postgres',
+      password: process.env.POSTGRES_PASSWORD ?? 'pass',
+      database: process.env.POSTGRES_DB ?? 'vera',
+      port: port ?? 5432,
     });
 
     const dialect = new PostgresDialect({
       pool: connectionPool,
     });
-    this.builder = new Kysely<Database>({
-      dialect,
-    });
+    super({ dialect });
   }
 }

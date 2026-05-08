@@ -8,13 +8,13 @@ import { registerBibleModule } from './modules/bible/container.js';
 import { requestValidator } from './shared/request_validator/request_validator.js';
 import type { Kysely } from 'kysely';
 import type { Database } from './shared/postgres/schema.js';
-import { kyselyFactory } from './shared/postgres/postgres_factory.js';
 import { registerAuthModule } from './modules/auth/container.js';
 import { authenticated } from './shared/auth/auth.middleware.js';
 import { registerUserModule } from './modules/user/container.js';
 import { registerPsalterModule } from './modules/psalter/container.js';
 import { registerGroupModule } from './modules/group/container.js';
 import { errorHandlerFactory } from './shared/error_handler/error_handler.js';
+import { PostgresAdapter } from './shared/postgres/postgres_adapter.js';
 container.registerSingleton<LoggerPort>('Logger', WinstonLogger);
 container.register<ElasticPort>('ElasticAdapter', {
   useFactory: () =>
@@ -24,18 +24,10 @@ container.register<ElasticPort>('ElasticAdapter', {
       process.env.ELASTIC_PASSWORD,
     ),
 });
-container.register<Kysely<Database>>('PostgresAdapter', {
-  useFactory: () => {
-    const port = Number(process.env.POSTGRES_PORT);
-    return kyselyFactory(
-      process.env.POSTGRES_HOST ?? 'localhost',
-      process.env.POSTGRES_USER ?? 'postgres',
-      process.env.POSTGRES_PASSWORD ?? 'pass',
-      process.env.POSTGRES_DB ?? 'vera',
-      port ?? 5432,
-    );
-  },
-});
+container.registerSingleton<Kysely<Database>>(
+  'PostgresAdapter',
+  PostgresAdapter,
+);
 
 container.registerInstance('requestValidator', requestValidator);
 container.registerInstance(
