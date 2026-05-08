@@ -7,7 +7,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx watch src/index.ts --clear-screen=false",
-    "test": "echo \"Error: no test specified\""
+    "test": "echo \"No test specified\""
   },
   "keywords": [],
   "author": "",
