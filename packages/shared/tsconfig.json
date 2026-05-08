@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
-    "noEmit": true,
+    "skipLibCheck": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["es2022"],
     "composite": true,
     "declaration": true,
     "rootDir": ".",
+    "outDir": "./dist",
   },
 }
