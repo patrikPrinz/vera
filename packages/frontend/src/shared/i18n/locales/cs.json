@@ -67,6 +67,8 @@
     "myPassages": "Moje úryvky"
   },
   "user": {
-    "bookmarks": "Záložky"
+    "bookmarks": "Záložky",
+    "resetPassword": "Obnovit heslo",
+    "newPassword": "Nové heslo"
   }
 }

@@ -28,6 +28,7 @@ import PassageListView from '@/modules/bible/views/PassageListView.vue';
 import ImportTranslationView from '@/modules/admin/views/ImportTranslationView.vue';
 import ImportPsalterView from '@/modules/admin/views/ImportPsalterView.vue';
 import SearchView from '@/modules/bible/views/SearchView.vue';
+import ResetPasswordView from '@/modules/user/views/ResetPasswordView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -89,6 +90,7 @@ const routes: Array<RouteRecordRaw> = [
         path: 'groups',
         component: UserGroupsView,
       },
+      { path: 'reset-password', component: ResetPasswordView },
     ],
   },
   {
@@ -100,6 +102,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: 'groups', component: GroupsAdminView },
       { path: 'import-translation', component: ImportTranslationView },
       { path: 'import-psalter', component: ImportPsalterView },
+      { path: 'reset-password/:id', component: ResetPasswordView },
     ],
   },
   {

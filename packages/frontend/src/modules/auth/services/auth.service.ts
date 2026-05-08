@@ -105,4 +105,17 @@ export class AuthService implements IAuthService {
     }
     throw new HttpError();
   }
+
+  public async resetPassword(
+    userId: string,
+    newPassword: string,
+    newPasswordCheck: string,
+  ): Promise<boolean> {
+    await this.client.post('/auth/reset-password', {
+      userId: userId,
+      newPassword: newPassword,
+      newPasswordCheck: newPasswordCheck,
+    });
+    return true;
+  }
 }
