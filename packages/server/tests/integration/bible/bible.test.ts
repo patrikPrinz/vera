@@ -1,5 +1,4 @@
 import 'reflect-metadata';
-import { closeDb } from '../../../src/bootstrap.js';
 import {
   jest,
   describe,
@@ -22,7 +21,6 @@ import {
 } from '../helpers/initialize_postgres.js';
 import { Kysely } from 'kysely';
 import { Database } from '../../../src/shared/postgres/schema.js';
-import createPassageRequest from '../__fixtures__/bible/create_passage_request.json';
 import fs from 'fs';
 import { rootContainer } from '../../../src/container.js';
 import { PostgresAdapter } from '../../../src/shared/postgres/postgres_adapter.js';
