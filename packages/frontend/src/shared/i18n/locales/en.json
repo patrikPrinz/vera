@@ -67,6 +67,8 @@
     "myPassages": "My passages"
   },
   "user": {
-    "bookmarks": "Bookmarks"
+    "bookmarks": "Bookmarks",
+    "resetPassword": "Reset password",
+    "newPassword": "New password"
   }
 }

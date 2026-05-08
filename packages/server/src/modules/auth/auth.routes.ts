@@ -5,7 +5,11 @@ import type { Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import { type AuthController } from './controllers/auth.controller.js';
 import type { ZodType } from 'zod';
-import { hasRoleSchema, postRegisterSchema } from './auth.schema.js';
+import {
+  hasRoleSchema,
+  postRegisterSchema,
+  resetPasswordSchema,
+} from './auth.schema.js';
 import type { AdminController } from './controllers/admin.controller.js';
 import {
   createGroupSchema,
@@ -53,6 +57,13 @@ export class AuthRouterFactory {
       authenticated,
       requestValidator(hasRoleSchema, 'body'),
       controller.hasRoel,
+    );
+
+    router.post(
+      '/reset-password',
+      authenticated,
+      requestValidator(resetPasswordSchema, 'body'),
+      controller.resetPassword,
     );
 
     return router;

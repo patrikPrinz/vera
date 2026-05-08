@@ -21,3 +21,9 @@ const roles = [
 ] as const;
 
 export const hasRoleSchema = z.array(z.enum(roles));
+
+export const resetPasswordSchema = z.object({
+  userId: z.string(),
+  newPassword: z.string(),
+  newPasswordCheck: z.string(),
+});

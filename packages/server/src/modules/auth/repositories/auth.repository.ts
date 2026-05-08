@@ -176,4 +176,20 @@ export class AuthRepository {
     }
     throw new PostgresError();
   }
+
+  async resetPassword(userId: string, newPassword: string): Promise<void> {
+    const passwordHash = bcrypt.hashSync(newPassword, 10);
+    const authId = (
+      await this.adapter
+        .selectFrom('authentication')
+        .select('id')
+        .where('user_id', '=', userId)
+        .executeTakeFirst()
+    ).id;
+    await this.adapter
+      .updateTable('credentials')
+      .set({ password_hash: passwordHash })
+      .where('authentication_id', '=', authId)
+      .executeTakeFirst();
+  }
 }

@@ -27,13 +27,16 @@
               <BiEdit></BiEdit>
             </button>
           </td>
-          <button
+          <router-link
             :title="i18n.t('admin.resetPassword')"
             class="cursor-pointer text-xl"
-            @click="resetPassword(user.id)"
+            :to="{
+              path: `/admin/reset-password/${user.id}`,
+              query: { redirect: route.fullPath },
+            }"
           >
             <BiRefresh />
-          </button>
+          </router-link>
         </tr>
       </tbody>
     </table>
@@ -48,20 +51,16 @@ import { adminService } from '../services/adminService.provider';
 import ManageRolesModal from '../components/modals/ManageRolesModal.vue';
 import { useModal } from 'vue-final-modal';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
 const i18n = useI18n();
 const users: Ref<UserDetails[]> = ref([]);
+const route = useRoute();
 
 onBeforeMount(async () => {
   console.log(await adminService.listUsers());
   users.value = await adminService.listUsers();
 });
-
-const resetPassword = (userId: string) => {
-  console.log(userId);
-  //await adminService.resetPassword(userId);
-  //toast.success('Password reset sent.');
-};
 
 async function openRolesModal(userId: string | undefined): Promise<void> {
   if (!userId) {
