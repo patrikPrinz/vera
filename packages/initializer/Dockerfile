@@ -33,7 +33,7 @@ COPY packages/initializer/src ./packages/initializer/src
 COPY packages/shared-types ./packages/shared-types
 COPY packages ./packages
 
-RUN pnpm --filter initializer build
+RUN pnpm --filter "...initializer" build
 
 
 # dev: run development initializer
