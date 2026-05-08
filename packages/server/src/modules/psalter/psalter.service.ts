@@ -133,6 +133,13 @@ export class PsalterService {
     } as Prayer;
   }
 
+  listLanguages = async (): Promise<string[]> => {
+    const data = await this.psalterRepository.listPsalterLanguages();
+    return data.map((e) => {
+      return e.language;
+    });
+  };
+
   importPsalter = async (user: User, data: PsalmRecord[]): Promise<void> => {
     if (
       !(await this.rolesService.hasRole(user, ['admin', 'translation_admin']))

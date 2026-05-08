@@ -55,7 +55,9 @@
           </SelectMenuItem>
           <SelectMenuChildLevel>
             <template #trigger>
-              <SelectMenuItem> Změnit překlad </SelectMenuItem>
+              <SelectMenuItem>
+                {{ i18n.t('bible.switchTranslation') }}
+              </SelectMenuItem>
             </template>
             <SelectMenuItem
               v-for="translation in translations"
@@ -97,7 +99,9 @@ import { useBibleStore } from '../../stores/bibleStore';
 import NoteModal from '../modals/NoteModal.vue';
 import BookmarkModal from '../modals/BookmarkModal.vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
+const i18n = useI18n();
 const bibleStore = useBibleStore();
 const authStore = useAuthStore();
 const props = defineProps<{

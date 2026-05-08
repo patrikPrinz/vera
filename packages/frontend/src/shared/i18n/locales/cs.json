@@ -9,19 +9,28 @@
     "operations": "Akce",
     "send": "Odeslat",
     "save": "Uložit",
+    "remove": "Odstranit",
     "title": "Název",
-    "date": "Datum"
+    "date": "Datum",
+    "search": "Vyhledat"
   },
   "bible": {
-    "book": "Kniha"
+    "book": "Kniha",
+    "switchTranslation": "Změnit překlad"
+  },
+  "prayer": {
+    "switchLanguage": "Změnit jazyk"
   },
   "admin": {
     "groups": "Skupiny",
     "users": "Uživatelé",
+    "roles": "Role",
     "translations": "Překlady Bible",
     "psalter": "Žaltář",
     "manageRoles": "Spravovat role",
-    "resetPassword": "Obnovit heslo"
+    "resetPassword": "Obnovit heslo",
+    "importBibleTranslation": "Překlady Bible",
+    "importPsalter": "Překlady Žaltáře"
   },
   "login": {
     "register": "Zaregistrovat",
@@ -50,6 +59,7 @@
     "publish": "Vytvořit"
   },
   "psalter": {
+    "kathisma": "Kaftizma",
     "selectKathisma": "Kaftizmy",
     "selectPsalm": "Žalmy"
   },

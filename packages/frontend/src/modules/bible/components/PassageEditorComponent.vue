@@ -97,6 +97,11 @@ const props = defineProps<{ id?: string; date?: string | null }>();
 const passage: Ref<BiblePassage> = ref(newPassage());
 const booksList: Ref<BibleBookMetadata[]> = ref([]);
 const passageLocation = ref('');
+
+onMounted(async () => {
+  await bibleStore.initialize();
+});
+
 console.log(props.date);
 watch(
   passage,

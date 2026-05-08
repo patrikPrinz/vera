@@ -6,6 +6,7 @@ import type {
   PsalmRecord,
   PsalmsQueryRequest,
 } from './psalter.types.js';
+import type { estypes } from '@elastic/elasticsearch';
 
 interface RawPsalm {
   language: string;
@@ -119,6 +120,30 @@ export class PsalterRepository {
       segments: fields.text_segments,
       stasisEnd: fields.stasis_end,
     } as Psalm;
+  }
+
+  async listPsalterLanguages(): Promise<{ language: string }[]> {
+    const query = {
+      terms: {
+        field: 'language',
+      },
+    };
+    const data = (await this.adapter.aggregate(
+      this.psalmIndex,
+      query,
+    )) as estypes.AggregationsStringTermsAggregate;
+
+    if (!data) {
+      return [];
+    }
+
+    const buckets = data.buckets as estypes.AggregationsStringTermsBucket[];
+
+    const languages: { language: string }[] = buckets.map((element) => ({
+      language: element.key as string,
+    }));
+
+    return languages;
   }
 
   async importPsalter(data: PsalmRecord[]): Promise<void> {

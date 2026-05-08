@@ -26,7 +26,11 @@ import { passageService } from '../services/bibleServices.provider';
 const authStore = useAuthStore();
 const passages: Ref<BiblePassage[]> = ref([]);
 onMounted(async () => {
-  const result = await passageService.findPassagesByAuthor(authStore.getId());
+  const result = (
+    await passageService.findPassagesByAuthor(authStore.getId())
+  ).filter((e) => {
+    return !e.calendarDate;
+  });
   if (result) {
     passages.value = result;
   }
