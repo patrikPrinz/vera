@@ -35,7 +35,6 @@ import ChaptersComponent from '../components/ChaptersComponent.vue';
 import ChapterComponent from '../components/ChapterComponent.vue';
 import type { BibleVerse } from '@/shared/types/bible/bible.types';
 import type { UserVerseMetadata } from '@/shared/types/user/user.types';
-import { useAuthStore } from '@/modules/auth/authStore';
 import ButtonComponent from '@/components/assets/ButtonComponent.vue';
 import { useRouter } from 'vue-router';
 const metadata: Ref<Record<string, UserVerseMetadata> | undefined> = ref({});
