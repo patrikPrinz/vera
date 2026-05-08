@@ -13,13 +13,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs, watch, type Ref } from 'vue';
+import { onMounted, ref, toRefs, watch, type Ref } from 'vue';
 import type { BiblePassage } from '@/shared/types/bible/passage.types';
 import { useBibleReferenceFormatter } from '@/composables/bibleReferenceFormatter';
 import type { BibleVerse } from '@/shared/types/bible/bible.types';
+import { useBibleStore } from '../stores/bibleStore';
 
 const props = defineProps<{ passage?: BiblePassage }>();
 const { passage } = toRefs(props);
+const bibleStore = useBibleStore();
+
+onMounted(async () => {
+  await bibleStore.initialize();
+});
 
 const { passageToText, formatBiblePassageLocation } =
   useBibleReferenceFormatter();

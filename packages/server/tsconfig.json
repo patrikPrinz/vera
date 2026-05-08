@@ -1,17 +1,21 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "rootDir": "src",
+    "outDir": "./dist",
+    "rootDir": "./src",
 
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "verbatimModuleSyntax": false,
+    "esModuleInterop": true,
+
+    "module": "ESNext",
+    "moduleResolution": "node",
 
     "types": ["jest", "node"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "lib": ["es2022"]
+    "lib": ["es2022"],
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "tests"]
+  "include": ["./src"],
+  "exclude": ["./node_modules", "./dist", "./tests"],
+  "references": [{ "path": "../shared" }],
 }

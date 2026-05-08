@@ -57,6 +57,11 @@ export class PsalterController {
     res.json(kathismaData);
   };
 
+  listLanguages = async (_req: Request, res: Response, _next: NextFunction) => {
+    const languages = await this.psalterService.listLanguages();
+    res.json(languages);
+  };
+
   importPsalter = async (req: Request, res: Response, _next: NextFunction) => {
     const fileString = req.file.buffer
       .toString()

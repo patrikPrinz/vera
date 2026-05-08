@@ -33,7 +33,7 @@ export function createMigrator(db?: Kysely<unknown>): Migrator {
     provider: new FileMigrationProvider({
       fs,
       path,
-      migrationFolder: path.join(__dirname, '../../migrations'),
+      migrationFolder: path.join(__dirname, '../../../../shared/migrations'),
     }),
   });
 

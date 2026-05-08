@@ -1,34 +1,74 @@
 {
   "general": {
     "appName": "Vera",
-    "send": "send",
-    "email": "E-mail",
+    "serverError": "Failed loading data from server.",
     "name": "Username",
+    "email": "E-mail",
     "password": "Password",
     "passwordConfirm": "Password confirm",
-    "serverError": "Failed loading data from server."
+    "operations": "Operations",
+    "send": "Send",
+    "save": "Save",
+    "remove": "Remove",
+    "title": "Title",
+    "date": "Date",
+    "search": "Search"
+  },
+  "bible": {
+    "book": "Book",
+    "switchTranslation": "Change translation"
+  },
+  "prayer": {
+    "switchLanguage": "Change language"
   },
   "admin": {
     "groups": "Groups",
     "users": "Users",
+    "roles": "Roles",
+    "translations": "Bible translations",
+    "psalter": "Psalter",
     "manageRoles": "Manage roles",
-    "resetPassword": "Reset password"
+    "resetPassword": "Reset password",
+    "importBibleTranslation": "Bible translations",
+    "importPsalter": "Psalter translations"
   },
   "login": {
     "register": "Register",
+    "registerSuccess": "New user registered successfully.",
     "login": "Log in",
     "logout": "Log out",
-    "missingCredentials": "Fill out the username and password fields.",
-    "incorrectCredentials": "Incorrect credentials.",
-    "duplicateRegisterMethod": "User is already registered,",
+    "missingCredentials": "Please fill out the username and password fields.",
+    "incorrectCredentials": "Incorrect username or password.",
+    "duplicateRegisterMethod": "User is already registered.",
     "wrongPasswordCheck": "Passwords do not match"
   },
   "navigation": {
+    "psalter": "Psalter",
     "home": "Home",
     "bible": "Bible",
-    "adminSection": "Admin panel"
+    "adminSection": "Admin panel",
+    "passagesCalendar": "Passages for the day",
+    "myPassages": "My passages",
+    "groups": "Groups"
+  },
+  "groups": {
+    "groupSelection": "Select groups",
+    "leaveGroupConfirm": "Are you sure you want to leave this group?",
+    "adminGroup": "Manage group",
+    "leaveGroup": "Leave group",
+    "publish": "Create"
+  },
+  "psalter": {
+    "kathisma": "Kathisma",
+    "selectKathisma": "Kathisma",
+    "selectPsalm": "Psalms"
+  },
+  "passages": {
+    "myPassages": "My passages"
   },
   "user": {
-    "bookmarks": "Bookmarks"
+    "bookmarks": "Bookmarks",
+    "resetPassword": "Reset password",
+    "newPassword": "New password"
   }
 }

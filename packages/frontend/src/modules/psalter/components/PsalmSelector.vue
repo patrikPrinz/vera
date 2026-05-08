@@ -18,13 +18,15 @@ import type { PsalmMetadata } from '@/shared/types/psalter/psalter.types';
 import { onMounted, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { psalterService } from '../services/psalterService.provider';
+import { usePrayerStore } from '@/stores/prayerStore';
 
 const psalms: Ref<PsalmMetadata[]> = ref([]);
 
 const i18n = useI18n();
+const prayerStore = usePrayerStore();
 
 onMounted(async () => {
-  const result = await psalterService.listPsalms('CZE');
+  const result = await psalterService.listPsalms(prayerStore.getLanguage());
   psalms.value = result;
 });
 

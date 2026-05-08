@@ -1,0 +1,18 @@
+{
+    "passage": {
+        "authorId": "1",
+        "title": "Úryvek",
+        "calendarDate": "2026-03-30",
+        "priority": 1,
+        "passageLocation": {
+            "book": 1,
+            "segments": [
+                {
+                    "startChapter": 1,
+                    "startVerse": 1,
+                    "endVerse": 5
+                }
+            ]
+        }
+    }
+}

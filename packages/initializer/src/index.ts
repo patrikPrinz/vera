@@ -3,7 +3,7 @@ import { Client } from '@elastic/elasticsearch';
 
 import { migrateToLatest } from './lib/postgres/postgres.js';
 import { createMigrator, db } from './lib/postgres/migrator-provider.js';
-import { MAPPINGS } from './lib/elasticsearch/indices.js';
+import { MAPPINGS } from '@vera/shared/elastic-indices/indices.js';
 import { waitForElastic } from './lib/elasticsearch/elastic.js';
 
 const connection = new Client({
