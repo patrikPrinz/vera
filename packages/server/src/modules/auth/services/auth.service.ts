@@ -2,15 +2,25 @@ import { injectable, inject } from 'tsyringe';
 import type { AuthRepository } from '../repositories/auth.repository.js';
 import type {
   AuthenticationRequest,
+  User,
   UserDetails,
 } from '../../../shared/types/auth/auth.types.js';
-import { ValidationError } from '../../../shared/error_handler/errors.js';
+import {
+  AuthError,
+  ValidationError,
+} from '../../../shared/error_handler/errors.js';
+import { RolesService } from './roles.service.js';
 
 @injectable()
 export class AuthService {
   protected repository: AuthRepository;
-  constructor(@inject('AuthRepository') repository: AuthRepository) {
+  protected rolesService: RolesService;
+  constructor(
+    @inject('AuthRepository') repository: AuthRepository,
+    @inject('RolesService') rolesService: RolesService,
+  ) {
     this.repository = repository;
+    this.rolesService = rolesService;
   }
 
   postRegisterService = async (
@@ -36,4 +46,23 @@ export class AuthService {
   getUserDetails = async (id: string): Promise<UserDetails | undefined> => {
     return await this.repository.findUserById(id);
   };
+
+  async resetUserPassword(
+    author: User,
+    userId: string,
+    newPassword: string,
+    newPasswordCheck: string,
+  ) {
+    if (newPassword !== newPasswordCheck) {
+      throw new ValidationError('Password check is not correct');
+    }
+    if (
+      (await this.rolesService.hasRole(author, ['admin'])) ||
+      author.id == userId
+    ) {
+      await this.repository.resetPassword(userId, newPassword);
+      return true;
+    }
+    throw new AuthError('User not permitted to perform this action.');
+  }
 }

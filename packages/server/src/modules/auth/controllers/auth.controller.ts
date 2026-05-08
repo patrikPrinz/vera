@@ -1,7 +1,11 @@
 import { injectable, inject } from 'tsyringe';
 import type { Request, Response, NextFunction } from 'express';
 import type { ValidatedRequest } from '../../../shared/request_validator/request_validator.types.js';
-import type { hasRoleSchema, postRegisterSchema } from '../auth.schema.js';
+import type {
+  hasRoleSchema,
+  postRegisterSchema,
+  resetPasswordSchema,
+} from '../auth.schema.js';
 import z from 'zod';
 import type { AuthService } from '../services/auth.service.js';
 import { AppError, AuthError } from '../../../shared/error_handler/errors.js';
@@ -77,6 +81,23 @@ export class AuthController {
       res.json(result);
     } else {
       throw new AuthError();
+    }
+  };
+
+  public resetPassword = async (
+    req: ValidatedRequest<z.infer<typeof resetPasswordSchema>>,
+    res: Response,
+    _next: NextFunction,
+  ) => {
+    if (req.user) {
+      const { userId, newPassword, newPasswordCheck } = req.validated;
+      await this.service.resetUserPassword(
+        req.user as User,
+        userId,
+        newPassword,
+        newPasswordCheck,
+      );
+      res.json({ message: 'OK' });
     }
   };
 }
