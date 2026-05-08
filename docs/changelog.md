@@ -1,3 +1,8 @@
+# v1.0.0
+- improve internationalization
+- add password reset functionality
+- improve UX and fix bugs
+
 # v0.6.3
 - add full-text search
 - UI changes
