@@ -23,7 +23,11 @@ COPY packages/initializer/package.json \
   packages/initializer/tsconfig.json \
   ./packages/initializer/
 
-RUN pnpm install --filter initializer
+COPY packages/shared/package.json \
+packages/shared/tsconfig.json \
+./packages/shared/
+RUN pnpm --filter shared install
+RUN pnpm --filter "...initializer" install
 
 
 # build: run typescript build to create production artifacts
@@ -31,8 +35,10 @@ FROM dependencies AS build
 # copy source code files onto the container
 COPY packages/initializer/src ./packages/initializer/src
 COPY packages/shared-types ./packages/shared-types
+COPY packages/shared ./packages/shared
 COPY packages ./packages
 
+RUN pnpm --filter shared build
 RUN pnpm --filter initializer build
 
 
@@ -63,7 +69,7 @@ COPY --chown=node:node \
 RUN corepack enable && corepack prepare pnpm@10 --activate
 
 # install pnpm production packages
-RUN pnpm install --filter initializer --prod --no-optional
+RUN pnpm install --filter "...initializer" --prod --no-optional
 
 # copy source files
 COPY --from=build --chown=node:node /app/packages/initializer/dist ./packages/initializer/dist
