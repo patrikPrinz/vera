@@ -176,8 +176,6 @@ export class BibleRepository implements IBibleRepository {
   ): Promise<BibleVerse[]> {
     const data = await this.adapter.search(this.bibleIndex, query);
 
-    console.log(data);
-
     if (!data || data.length == 0) {
       return [];
     }

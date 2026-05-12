@@ -60,7 +60,6 @@ export class AuthRepository {
   protected async findUserMethods(
     email: string,
   ): Promise<string[] | undefined> {
-    console.log(email);
     const query = await this.adapter
       .selectFrom('user_details')
       .where('user_details.email', '=', email)
@@ -72,7 +71,6 @@ export class AuthRepository {
       )
       .select(['user_details.id', 'auth_provider.code'])
       .execute();
-    console.log(query);
     if (query.length == 0) return [];
     const result = query.map((e) => e.code);
     return result;

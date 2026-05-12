@@ -67,7 +67,6 @@ export class PsalterController {
       .toString()
       .split('\n')
       .map((e) => {
-        console.log(e);
         if (e !== '') {
           try {
             return JSON.parse(e) as PsalmRecord;
