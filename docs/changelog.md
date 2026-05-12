@@ -1,3 +1,7 @@
+# v1.0.1
+- iprove example .env file to contain more helpful sample configuration
+- remove redundant console log statements in server package
+
 # v1.0.0
 - improve internationalization
 - add password reset functionality
