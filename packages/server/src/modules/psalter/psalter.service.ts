@@ -45,7 +45,6 @@ export class PsalterService {
     } else {
       text.push(this.psalmSegmentToPrayerText(psalm.segments[0]));
       if (!standalone && psalm.stasisEnd) {
-        console.log(psalm.stasisEnd);
         text = text.concat(this.stasisEnd(psalm.language));
       }
     }
@@ -67,7 +66,6 @@ export class PsalterService {
   }
 
   stasisEnd(language: string): PrayerVerse[] {
-    console.log('InsertEnding');
     const endings = {
       CZE: [
         {
@@ -100,7 +98,6 @@ export class PsalterService {
       language,
       psalmNumber,
     );
-    console.log(psalmData);
     if (psalmData) {
       return {
         language: language,
@@ -123,7 +120,6 @@ export class PsalterService {
     let kathismaText: PrayerVerse[] = [];
     kathismaPsalmData.forEach((e) => {
       kathismaText = kathismaText.concat(this.psalmToPrayerText(e, false));
-      console.log(e.stasisEnd);
     });
 
     return {
